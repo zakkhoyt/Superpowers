@@ -1,0 +1,39 @@
+Ideas for release:
+// What's new with iOS 8. https://developer.apple.com/ios8/
+
+
+* Display collections on a mapview (collection view map layout)
+* Have a date scrubber (center and pinch to change tolerance)
+
+* video support 
+
+* A photos keyboard?
+
+* Use Blur view
+
+* App extension. Render your images over a map or a map on your images
+
+* App tool for photo editing. Create a photo with a map image embedded within. Camera angles, etc...
+    * Sharing to platforms
+    
+
+* Today widget (one year ago today....). Photo panel right in notification pulldown.
+
+* In app camera supporting the new camera controls?
+
+* Scene/Sprit kit?
+    * Perhaps use the light and normal generation to bring out an interesting lighting photo?
+
+* Swift?
+
+* Are exif tags editable with photokit without needing to make a copy?
+
+
+* Include videos and other media in app store
+
+* Exif/meta? Selfie filter? Light filters?
+
+* Share to instagram and other new popular networks
+
+* iPad and iPhone support
+    * new phone support

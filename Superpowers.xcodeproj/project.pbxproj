@@ -13,6 +13,8 @@
 		CF554ED8195D107B00F043C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF554ED6195D107B00F043C3 /* Main.storyboard */; };
 		CF554EDA195D107B00F043C3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF554ED9195D107B00F043C3 /* Images.xcassets */; };
 		CF554EE6195D107B00F043C3 /* SuperpowersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554EE5195D107B00F043C3 /* SuperpowersTests.m */; };
+		CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */; };
+		CF554EF3195D1A4E00F043C3 /* ideas.txt in Resources */ = {isa = PBXBuildFile; fileRef = CF554EF2195D1A4E00F043C3 /* ideas.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,9 @@
 		CF554EDF195D107B00F043C3 /* SuperpowersTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuperpowersTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF554EE4195D107B00F043C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF554EE5195D107B00F043C3 /* SuperpowersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SuperpowersTests.m; sourceTree = "<group>"; };
+		CF554EEF195D121000F043C3 /* VWWAssetCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWAssetCollectionViewCell.h; sourceTree = "<group>"; };
+		CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWAssetCollectionViewCell.m; sourceTree = "<group>"; };
+		CF554EF2195D1A4E00F043C3 /* ideas.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ideas.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +91,9 @@
 				CF554ED6195D107B00F043C3 /* Main.storyboard */,
 				CF554ED9195D107B00F043C3 /* Images.xcassets */,
 				CF554ECC195D107B00F043C3 /* Supporting Files */,
+				CF554EEF195D121000F043C3 /* VWWAssetCollectionViewCell.h */,
+				CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */,
+				CF554EF2195D1A4E00F043C3 /* ideas.txt */,
 			);
 			path = Superpowers;
 			sourceTree = "<group>";
@@ -198,6 +206,7 @@
 			files = (
 				CF554ED8195D107B00F043C3 /* Main.storyboard in Resources */,
 				CF554EDA195D107B00F043C3 /* Images.xcassets in Resources */,
+				CF554EF3195D1A4E00F043C3 /* ideas.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +226,7 @@
 			files = (
 				CF554ED5195D107B00F043C3 /* ViewController.m in Sources */,
 				CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */,
+				CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */,
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

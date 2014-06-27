@@ -8,6 +8,12 @@
 
 #import "VWWAssetCollectionViewCell.h"
 
+@interface VWWAssetCollectionViewCell ()
+@property (strong) IBOutlet UIImageView *imageView;
+@property (weak) IBOutlet UILabel *label;
+@end
+
+
 @implementation VWWAssetCollectionViewCell
 
 - (instancetype)initWithFrame:(CGRect)frameRect
@@ -18,5 +24,16 @@
     }
     return self;
 }
+
+- (void)setImage:(UIImage *)image{
+    _image = image;
+    self.imageView.image = image;
+}
+
+-(void)setTitle:(NSString*)title{
+    _title = title;
+    self.label.text = title;
+}
+
 
 @end
