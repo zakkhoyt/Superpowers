@@ -37,3 +37,6 @@ Ideas for release:
 
 * iPad and iPhone support
     * new phone support
+
+
+* Reverse time slider support (show all photos on map. tap to see time)

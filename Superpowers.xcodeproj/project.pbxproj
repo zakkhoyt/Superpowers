@@ -15,6 +15,7 @@
 		CF554EE6195D107B00F043C3 /* SuperpowersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554EE5195D107B00F043C3 /* SuperpowersTests.m */; };
 		CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */; };
 		CF554EF3195D1A4E00F043C3 /* ideas.txt in Resources */ = {isa = PBXBuildFile; fileRef = CF554EF2195D1A4E00F043C3 /* ideas.txt */; };
+		CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554EFA195D1D9400F043C3 /* VWWFullScreenViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		CF554EEF195D121000F043C3 /* VWWAssetCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWAssetCollectionViewCell.h; sourceTree = "<group>"; };
 		CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWAssetCollectionViewCell.m; sourceTree = "<group>"; };
 		CF554EF2195D1A4E00F043C3 /* ideas.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ideas.txt; sourceTree = "<group>"; };
+		CF554EF9195D1D9400F043C3 /* VWWFullScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWFullScreenViewController.h; sourceTree = "<group>"; };
+		CF554EFA195D1D9400F043C3 /* VWWFullScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWFullScreenViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,16 +87,12 @@
 		CF554ECB195D107B00F043C3 /* Superpowers */ = {
 			isa = PBXGroup;
 			children = (
-				CF554ED0195D107B00F043C3 /* AppDelegate.h */,
-				CF554ED1195D107B00F043C3 /* AppDelegate.m */,
-				CF554ED3195D107B00F043C3 /* ViewController.h */,
-				CF554ED4195D107B00F043C3 /* ViewController.m */,
-				CF554ED6195D107B00F043C3 /* Main.storyboard */,
+				CF554F01195D1DCD00F043C3 /* Documents */,
+				CF554EFF195D1DB500F043C3 /* Categories */,
+				CF554EF4195D1D4800F043C3 /* Controllers */,
 				CF554ED9195D107B00F043C3 /* Images.xcassets */,
 				CF554ECC195D107B00F043C3 /* Supporting Files */,
-				CF554EEF195D121000F043C3 /* VWWAssetCollectionViewCell.h */,
-				CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */,
-				CF554EF2195D1A4E00F043C3 /* ideas.txt */,
+				CF554F00195D1DBC00F043C3 /* UserInterface */,
 			);
 			path = Superpowers;
 			sourceTree = "<group>";
@@ -101,6 +100,8 @@
 		CF554ECC195D107B00F043C3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CF554ED0195D107B00F043C3 /* AppDelegate.h */,
+				CF554ED1195D107B00F043C3 /* AppDelegate.m */,
 				CF554ECD195D107B00F043C3 /* Info.plist */,
 				CF554ECE195D107B00F043C3 /* main.m */,
 			);
@@ -122,6 +123,98 @@
 				CF554EE4195D107B00F043C3 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CF554EF4195D1D4800F043C3 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CF554EF5195D1D5100F043C3 /* View */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		CF554EF5195D1D5100F043C3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CF554EF8195D1D7B00F043C3 /* Full */,
+				CF554EF6195D1D5A00F043C3 /* Main */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		CF554EF6195D1D5A00F043C3 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				CF554EFE195D1DA700F043C3 /* Layout */,
+				CF554EF7195D1D6000F043C3 /* Cell */,
+				CF554ED3195D107B00F043C3 /* ViewController.h */,
+				CF554ED4195D107B00F043C3 /* ViewController.m */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		CF554EF7195D1D6000F043C3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				CF554EEF195D121000F043C3 /* VWWAssetCollectionViewCell.h */,
+				CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		CF554EF8195D1D7B00F043C3 /* Full */ = {
+			isa = PBXGroup;
+			children = (
+				CF554EFD195D1DA200F043C3 /* Layout */,
+				CF554EFC195D1D9D00F043C3 /* Cell */,
+				CF554EF9195D1D9400F043C3 /* VWWFullScreenViewController.h */,
+				CF554EFA195D1D9400F043C3 /* VWWFullScreenViewController.m */,
+			);
+			name = Full;
+			sourceTree = "<group>";
+		};
+		CF554EFC195D1D9D00F043C3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		CF554EFD195D1DA200F043C3 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Layout;
+			sourceTree = "<group>";
+		};
+		CF554EFE195D1DA700F043C3 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Layout;
+			sourceTree = "<group>";
+		};
+		CF554EFF195D1DB500F043C3 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		CF554F00195D1DBC00F043C3 /* UserInterface */ = {
+			isa = PBXGroup;
+			children = (
+				CF554ED6195D107B00F043C3 /* Main.storyboard */,
+			);
+			name = UserInterface;
+			sourceTree = "<group>";
+		};
+		CF554F01195D1DCD00F043C3 /* Documents */ = {
+			isa = PBXGroup;
+			children = (
+				CF554EF2195D1A4E00F043C3 /* ideas.txt */,
+			);
+			name = Documents;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +321,7 @@
 				CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */,
 				CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */,
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,
+				CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
