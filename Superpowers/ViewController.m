@@ -12,6 +12,8 @@
 @import Photos;
 
 static NSString *VWWSegueCollectionToFull = @"VWWSegueCollectionToFull";
+static NSString *VWWSegueGridToLibrary = @"VWWSegueGridToLibrary";
+
 static CGFloat ViewControllerCellSize = 106;
 
 
@@ -58,10 +60,12 @@ static CGFloat ViewControllerCellSize = 106;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-    VWWFullScreenViewController *assetViewController = segue.destinationViewController;
-    assetViewController.asset = self.assetsFetchResults[indexPath.item];
-    assetViewController.assetCollection = self.assetCollection;
+    if([segue.identifier isEqualToString:VWWSegueCollectionToFull]){
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+        VWWFullScreenViewController *assetViewController = segue.destinationViewController;
+        assetViewController.asset = self.assetsFetchResults[indexPath.item];
+        assetViewController.assetCollection = self.assetCollection;
+    }
 }
 
 
@@ -91,7 +95,9 @@ static CGFloat ViewControllerCellSize = 106;
 
 }
 
-
+-(IBAction)libraryButtonTouchUpInside:(id)sender{
+    [self performSegueWithIdentifier:VWWSegueGridToLibrary sender:self];
+}
 
 
 #pragma mark - UICollectionViewDataSource

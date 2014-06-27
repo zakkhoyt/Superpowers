@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */; };
 		CF554ECF195D107B00F043C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ECE195D107B00F043C3 /* main.m */; };
 		CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ED1195D107B00F043C3 /* AppDelegate.m */; };
 		CF554ED5195D107B00F043C3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ED4195D107B00F043C3 /* ViewController.m */; };
@@ -29,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF423CEB195DFBCD009FE860 /* VWWLibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWLibraryViewController.h; sourceTree = "<group>"; };
+		CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWLibraryViewController.m; sourceTree = "<group>"; };
 		CF554EC9195D107B00F043C3 /* Superpowers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Superpowers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF554ECD195D107B00F043C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF554ECE195D107B00F043C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -138,6 +141,8 @@
 			children = (
 				CF554EF8195D1D7B00F043C3 /* Full */,
 				CF554EF6195D1D5A00F043C3 /* Main */,
+				CF423CEB195DFBCD009FE860 /* VWWLibraryViewController.h */,
+				CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -322,6 +327,7 @@
 				CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */,
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,
 				CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */,
+				CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,6 +516,7 @@
 				CF554EEB195D107B00F043C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF554EEC195D107B00F043C3 /* Build configuration list for PBXNativeTarget "SuperpowersTests" */ = {
 			isa = XCConfigurationList;
@@ -518,6 +525,7 @@
 				CF554EEE195D107B00F043C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
