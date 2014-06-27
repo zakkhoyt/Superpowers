@@ -7,6 +7,7 @@
 //
 
 #import "VWWLibraryViewController.h"
+#import "VWW.h"
 @import Photos;
 
 
@@ -91,43 +92,27 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-////    if ([segue.identifier isEqualToString:AllPhotosSegue]) {
-//    if(indexPath.section == 0){
-////        AAPLAssetGridViewController *assetGridViewController = segue.destinationViewController;
-//        // Fetch all assets, sorted by date created.
-//        PHFetchOptions *options = [[PHFetchOptions alloc] init];
-//        options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:YES]];
-//
-////        NSCalendar *calendar = [NSCalendar currentCalendar];
-////        NSDateComponents *startComponents = [[NSDateComponents alloc]init];
-////        startComponents.year = 2014;
-////        startComponents.month = 1;
-////        startComponents.day = 1;
-////        NSDate *startDate = [calendar dateFromComponents:startComponents];
-////
-////        NSDateComponents *endComponents = [[NSDateComponents alloc]init];
-////        endComponents.year = 2014;
-////        endComponents.month = 2;
-////        endComponents.day = 1;
-////        NSDate *endDate = [calendar dateFromComponents:endComponents];
-////
-////        options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
-////        assetGridViewController.assetsFetchResults = [PHAsset fetchAssetsWithOptions:options];
-//        
-//        
-//    } else if (indexPath.section > 0) {
+//    if ([segue.identifier isEqualToString:AllPhotosSegue]) {
+    if(indexPath.section == 0){
+
+        PHFetchOptions *options = [[PHFetchOptions alloc] init];
+        [self.delegate libraryViewController:self fetchAssetsWithOptions:options];
+        [self.navigationController popViewControllerAnimated:YES];
+    } else if (indexPath.section > 0) {
 //        AAPLAssetGridViewController *assetGridViewController = segue.destinationViewController;
-//
+
 //        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-//        PHFetchResult *fetchResult = self.collectionsFetchResults[indexPath.section - 1];
-//        PHCollection *collection = fetchResult[indexPath.row];
-//        if ([collection isKindOfClass:[PHAssetCollection class]]) {
-//            PHAssetCollection *assetCollection = (PHAssetCollection *)collection;
+        PHFetchResult *fetchResult = self.collectionsFetchResults[indexPath.section - 1];
+        PHCollection *collection = fetchResult[indexPath.row];
+        if ([collection isKindOfClass:[PHAssetCollection class]]) {
+            PHAssetCollection *assetCollection = (PHAssetCollection *)collection;
 //            PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:nil];
+            [self.delegate libraryViewController:self fetchAssetsInAssetCollection:assetCollection options:nil];
+            [self.navigationController popViewControllerAnimated:YES];
 //            assetGridViewController.assetsFetchResults = assetsFetchResult;
 //            assetGridViewController.assetCollection = assetCollection;
-//        }
-//    }
+        }
+    }
 }
 
 #pragma mark - PHPhotoLibraryChangeObserver

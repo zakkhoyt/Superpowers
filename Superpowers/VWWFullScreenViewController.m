@@ -7,7 +7,7 @@
 //
 
 #import "VWWFullScreenViewController.h"
-
+#import "VWW.h"
 @implementation CIImage (Convenience)
 - (NSData *)aapl_jpegRepresentationWithCompressionQuality:(CGFloat)compressionQuality {
     static CIContext *ciContext = nil;

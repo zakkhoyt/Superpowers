@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */; };
 		CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */; };
 		CF554ECF195D107B00F043C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ECE195D107B00F043C3 /* main.m */; };
 		CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ED1195D107B00F043C3 /* AppDelegate.m */; };
@@ -30,6 +31,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF1B5D35195E02C7004F722D /* VWW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWW.h; sourceTree = "<group>"; };
+		CF1B5D36195E02C7004F722D /* VWWBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWBlocks.h; sourceTree = "<group>"; };
+		CF1B5D37195E02C7004F722D /* VWWDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWDefines.h; sourceTree = "<group>"; };
+		CF1B5D38195E02C7004F722D /* VWWTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWTypes.h; sourceTree = "<group>"; };
+		CF1B5D39195E02D1004F722D /* NSTimer+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+Blocks.h"; sourceTree = "<group>"; };
+		CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+Blocks.m"; sourceTree = "<group>"; };
 		CF423CEB195DFBCD009FE860 /* VWWLibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWLibraryViewController.h; sourceTree = "<group>"; };
 		CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWLibraryViewController.m; sourceTree = "<group>"; };
 		CF554EC9195D107B00F043C3 /* Superpowers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Superpowers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +76,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF1B5D33195E0066004F722D /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				CF423CEB195DFBCD009FE860 /* VWWLibraryViewController.h */,
+				CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		CF1B5D34195E02C7004F722D /* Include */ = {
+			isa = PBXGroup;
+			children = (
+				CF1B5D35195E02C7004F722D /* VWW.h */,
+				CF1B5D36195E02C7004F722D /* VWWBlocks.h */,
+				CF1B5D37195E02C7004F722D /* VWWDefines.h */,
+				CF1B5D38195E02C7004F722D /* VWWTypes.h */,
+			);
+			path = Include;
+			sourceTree = "<group>";
+		};
 		CF554EC0195D107B00F043C3 = {
 			isa = PBXGroup;
 			children = (
@@ -90,10 +117,11 @@
 		CF554ECB195D107B00F043C3 /* Superpowers */ = {
 			isa = PBXGroup;
 			children = (
-				CF554F01195D1DCD00F043C3 /* Documents */,
 				CF554EFF195D1DB500F043C3 /* Categories */,
 				CF554EF4195D1D4800F043C3 /* Controllers */,
+				CF554F01195D1DCD00F043C3 /* Documents */,
 				CF554ED9195D107B00F043C3 /* Images.xcassets */,
+				CF1B5D34195E02C7004F722D /* Include */,
 				CF554ECC195D107B00F043C3 /* Supporting Files */,
 				CF554F00195D1DBC00F043C3 /* UserInterface */,
 			);
@@ -140,9 +168,8 @@
 			isa = PBXGroup;
 			children = (
 				CF554EF8195D1D7B00F043C3 /* Full */,
+				CF1B5D33195E0066004F722D /* Library */,
 				CF554EF6195D1D5A00F043C3 /* Main */,
-				CF423CEB195DFBCD009FE860 /* VWWLibraryViewController.h */,
-				CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -202,6 +229,8 @@
 		CF554EFF195D1DB500F043C3 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				CF1B5D39195E02D1004F722D /* NSTimer+Blocks.h */,
+				CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -328,6 +357,7 @@
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,
 				CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */,
 				CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */,
+				CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

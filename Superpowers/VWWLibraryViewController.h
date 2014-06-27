@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+@import Photos;
 
 @class VWWLibraryViewController;
 
 @protocol VWWLibraryViewControllerDelegate <NSObject>
--(void)libraryViewController:(VWWLibraryViewController*)sender fetchResult:(PHFetchResult*)fetchResult;
+-(void)libraryViewController:(VWWLibraryViewController*)sender fetchAssetsWithOptions:(PHFetchOptions*)options;
+-(void)libraryViewController:(VWWLibraryViewController*)sender fetchAssetsInAssetCollection:(PHAssetCollection *)assetCollection options:(PHFetchOptions *)options;
 @end
 
 @interface VWWLibraryViewController : UIViewController

@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "VWWAssetCollectionViewCell.h"
 #import "VWWFullScreenViewController.h"
+#import "VWWLibraryViewController.h"
+#import "VWW.h"
 @import Photos;
 
 static NSString *VWWSegueCollectionToFull = @"VWWSegueCollectionToFull";
@@ -29,12 +31,13 @@ static CGFloat ViewControllerCellSize = 106;
 @end
 
 
-@interface ViewController () <PHPhotoLibraryChangeObserver>
+@interface ViewController () <PHPhotoLibraryChangeObserver, VWWLibraryViewControllerDelegate>
 @property (strong) PHFetchResult *assetsFetchResults;
 @property (strong) PHAssetCollection *assetCollection;
 @property (weak, nonatomic) IBOutlet UISlider *slider;
 @property (strong) PHCachingImageManager *imageManager;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, copy) PHFetchOptions *options;
 @end
 
 @implementation ViewController
@@ -44,7 +47,7 @@ static CGFloat ViewControllerCellSize = 106;
     
     self.imageManager = [[PHCachingImageManager alloc] init];
     
-    [self sliderTouchUpInside:nil];
+    [self fetchResults];
 
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
 }
@@ -62,18 +65,49 @@ static CGFloat ViewControllerCellSize = 106;
 {
     if([segue.identifier isEqualToString:VWWSegueCollectionToFull]){
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-        VWWFullScreenViewController *assetViewController = segue.destinationViewController;
-        assetViewController.asset = self.assetsFetchResults[indexPath.item];
-        assetViewController.assetCollection = self.assetCollection;
+        VWWFullScreenViewController *vc = segue.destinationViewController;
+        vc.asset = self.assetsFetchResults[indexPath.item];
+        vc.assetCollection = self.assetCollection;
+    } else if([segue.identifier isEqualToString:VWWSegueGridToLibrary]){
+        VWWLibraryViewController *vc = segue.destinationViewController;
+        vc.delegate = self;
     }
 }
 
 
 - (IBAction)sliderTouchUpInside:(id)sender {
-    //    AAPLAssetGridViewController *assetGridViewController = segue.destinationViewController;
+    [self fetchResults];
+
+}
+
+-(IBAction)libraryButtonTouchUpInside:(id)sender{
+    [self performSegueWithIdentifier:VWWSegueGridToLibrary sender:self];
+}
+
+
+
+#pragma mark Private methods
+-(void)fetchResults{
+
+    [self applyDateContstraintsToOptions];
+    if(self.assetCollection){
+        self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:self.assetCollection options:nil];
+    } else {
+        self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:self.options];
+    }
+    
+    [self.collectionView reloadData];
+
+}
+
+-(void)applyDateContstraintsToOptions{
     // Fetch all assets, sorted by date created.
-    PHFetchOptions *options = [[PHFetchOptions alloc] init];
-    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]];
+    if(self.options == nil){
+        self.options = [[PHFetchOptions alloc] init];
+    } else {
+        
+    }
+    self.options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]];
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *startComponents = [[NSDateComponents alloc]init];
@@ -88,17 +122,9 @@ static CGFloat ViewControllerCellSize = 106;
     endComponents.day = 1;
     NSDate *endDate = [calendar dateFromComponents:endComponents];
     
-    options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
-    self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:options];
+    self.options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
     
-    [self.collectionView reloadData];
-
 }
-
--(IBAction)libraryButtonTouchUpInside:(id)sender{
-    [self performSegueWithIdentifier:VWWSegueGridToLibrary sender:self];
-}
-
 
 #pragma mark - UICollectionViewDataSource
 
@@ -265,6 +291,17 @@ static CGFloat ViewControllerCellSize = 106;
 }
 
 
+#pragma mark VWWLibraryViewControllerDelegate
+-(void)libraryViewController:(VWWLibraryViewController*)sender fetchAssetsWithOptions:(PHFetchOptions*)options{
+    self.options = options;
+    self.assetCollection = nil;
+    [self fetchResults];
+}
+-(void)libraryViewController:(VWWLibraryViewController*)sender fetchAssetsInAssetCollection:(PHAssetCollection *)assetCollection options:(PHFetchOptions *)options{
+    self.options = options;
+    self.assetCollection = assetCollection;
+    [self fetchResults];
+}
 
 
 
