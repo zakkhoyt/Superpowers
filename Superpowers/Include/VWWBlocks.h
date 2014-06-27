@@ -13,6 +13,7 @@
 @class VWWToken;
 typedef void (^VWWArrayBlock)(NSArray *array);
 typedef void (^VWWBoolBlock)(BOOL success);
+typedef void (^VWWBoolPointBlock)(BOOL success, CGPoint point);
 typedef void (^VWWCLLocationBlock)(CLLocation *location);
 typedef void (^VWWDictionaryBlock)(NSDictionary *dictionary);
 typedef void (^VWWEmptyBlock)();

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596437.049297"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "-collectionView:cellForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596437.049297"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "-collectionView:cellForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596437.049297"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
             landmarkName = "-collectionView:numberOfItemsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596437.049297"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
             landmarkName = "-collectionView:cellForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596437.049297"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
+            startingLineNumber = "451"
+            endingLineNumber = "451"
             landmarkName = "-photoLibraryDidChange:"
             landmarkType = "5">
             <Locations>
@@ -120,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596437.049297"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
             landmarkName = "-photoLibraryDidChange:"
             landmarkType = "5">
          </BreakpointContent>
@@ -136,11 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596437.049297"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "348"
-            endingLineNumber = "348"
+            startingLineNumber = "455"
+            endingLineNumber = "455"
             landmarkName = "-photoLibraryDidChange:"
             landmarkType = "5">
          </BreakpointContent>
@@ -162,11 +162,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425595901.681747"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "5">
          </BreakpointContent>
@@ -210,11 +210,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596437.049297"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "208"
-            endingLineNumber = "208"
+            startingLineNumber = "257"
+            endingLineNumber = "257"
             landmarkName = "-applyDateContstraintsToOptions"
             landmarkType = "5">
          </BreakpointContent>
@@ -226,12 +226,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Superpowers/ViewController.m"
-            timestampString = "425596428.978607"
+            timestampString = "425599192.405366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
             landmarkName = "-applyDateContstraintsToOptions"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Superpowers/VWWAssetCollectionViewCell.m"
+            timestampString = "425599479.226391"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "-longPress:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

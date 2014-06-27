@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		CF06284F195E0C040005F178 /* VWWUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06284C195E0C040005F178 /* VWWUserDefaults.m */; };
 		CF062850195E0C040005F178 /* VWWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06284E195E0C040005F178 /* VWWUtility.m */; };
+		CF062858195E1B330005F178 /* RDGridviewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF062855195E1B330005F178 /* RDGridviewFlowLayout.m */; };
+		CF062859195E1B330005F178 /* RDMapviewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF062857195E1B330005F178 /* RDMapviewLayout.m */; };
+		CF06285C195E1B3C0005F178 /* RDCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06285B195E1B3C0005F178 /* RDCollectionView.m */; };
+		CF06285F195E1E260005F178 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF06285E195E1E260005F178 /* MapKit.framework */; };
 		CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */; };
 		CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF236A56195E070200F0CBEB /* VWWWelcomeViewController.m */; };
 		CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */; };
@@ -38,6 +42,13 @@
 		CF06284C195E0C040005F178 /* VWWUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUserDefaults.m; sourceTree = "<group>"; };
 		CF06284D195E0C040005F178 /* VWWUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUtility.h; sourceTree = "<group>"; };
 		CF06284E195E0C040005F178 /* VWWUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUtility.m; sourceTree = "<group>"; };
+		CF062854195E1B330005F178 /* RDGridviewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDGridviewFlowLayout.h; sourceTree = "<group>"; };
+		CF062855195E1B330005F178 /* RDGridviewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDGridviewFlowLayout.m; sourceTree = "<group>"; };
+		CF062856195E1B330005F178 /* RDMapviewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDMapviewLayout.h; sourceTree = "<group>"; };
+		CF062857195E1B330005F178 /* RDMapviewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDMapviewLayout.m; sourceTree = "<group>"; };
+		CF06285A195E1B3C0005F178 /* RDCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCollectionView.h; sourceTree = "<group>"; };
+		CF06285B195E1B3C0005F178 /* RDCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDCollectionView.m; sourceTree = "<group>"; };
+		CF06285E195E1E260005F178 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		CF1B5D35195E02C7004F722D /* VWW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWW.h; sourceTree = "<group>"; };
 		CF1B5D36195E02C7004F722D /* VWWBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWBlocks.h; sourceTree = "<group>"; };
 		CF1B5D37195E02C7004F722D /* VWWDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWDefines.h; sourceTree = "<group>"; };
@@ -72,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF06285F195E1E260005F178 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +106,15 @@
 				CF06284E195E0C040005F178 /* VWWUtility.m */,
 			);
 			name = Utility;
+			sourceTree = "<group>";
+		};
+		CF06285D195E1B400005F178 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CF06285A195E1B3C0005F178 /* RDCollectionView.h */,
+				CF06285B195E1B3C0005F178 /* RDCollectionView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		CF1B5D33195E0066004F722D /* Library */ = {
@@ -128,6 +149,7 @@
 		CF554EC0195D107B00F043C3 = {
 			isa = PBXGroup;
 			children = (
+				CF06285E195E1E260005F178 /* MapKit.framework */,
 				CF554ECB195D107B00F043C3 /* Superpowers */,
 				CF554EE2195D107B00F043C3 /* SuperpowersTests */,
 				CF554ECA195D107B00F043C3 /* Products */,
@@ -154,6 +176,7 @@
 				CF554ECC195D107B00F043C3 /* Supporting Files */,
 				CF554F00195D1DBC00F043C3 /* UserInterface */,
 				CF062851195E0C070005F178 /* Utility */,
+				CF06285D195E1B400005F178 /* View */,
 			);
 			path = Superpowers;
 			sourceTree = "<group>";
@@ -253,6 +276,10 @@
 		CF554EFE195D1DA700F043C3 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
+				CF062854195E1B330005F178 /* RDGridviewFlowLayout.h */,
+				CF062855195E1B330005F178 /* RDGridviewFlowLayout.m */,
+				CF062856195E1B330005F178 /* RDMapviewLayout.h */,
+				CF062857195E1B330005F178 /* RDMapviewLayout.m */,
 			);
 			name = Layout;
 			sourceTree = "<group>";
@@ -385,12 +412,15 @@
 				CF554ED5195D107B00F043C3 /* ViewController.m in Sources */,
 				CF062850195E0C040005F178 /* VWWUtility.m in Sources */,
 				CF06284F195E0C040005F178 /* VWWUserDefaults.m in Sources */,
+				CF06285C195E1B3C0005F178 /* RDCollectionView.m in Sources */,
 				CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */,
 				CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */,
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,
 				CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */,
 				CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */,
 				CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */,
+				CF062859195E1B330005F178 /* RDMapviewLayout.m in Sources */,
+				CF062858195E1B330005F178 /* RDGridviewFlowLayout.m in Sources */,
 				CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

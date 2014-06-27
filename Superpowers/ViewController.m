@@ -11,6 +11,10 @@
 #import "VWWFullScreenViewController.h"
 #import "VWWLibraryViewController.h"
 #import "VWW.h"
+#import "RDCollectionView.h"
+#import "RDMapviewLayout.h"
+#import "RDGridviewFlowLayout.h"
+
 @import Photos;
 
 static NSString *VWWSegueCollectionToFull = @"VWWSegueCollectionToFull";
@@ -31,12 +35,19 @@ static CGFloat ViewControllerCellSize = 106;
 @end
 
 
-@interface ViewController () <PHPhotoLibraryChangeObserver, VWWLibraryViewControllerDelegate>
+@interface ViewController () <PHPhotoLibraryChangeObserver,
+VWWLibraryViewControllerDelegate,
+VWWAssetCollectionViewCellDelegate,
+RDMapviewLayoutCoordinateDelegate>
 @property (strong) PHFetchResult *assetsFetchResults;
 @property (strong) PHAssetCollection *assetCollection;
-
 @property (strong) PHCachingImageManager *imageManager;
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet RDCollectionView *collectionView;
+@property (nonatomic, strong) RDMapviewLayout *mapviewLayout;
+@property (nonatomic, strong) RDGridviewFlowLayout *gridLayout;
+
 @property (nonatomic, copy) PHFetchOptions *options;
 
 @property (weak, nonatomic) IBOutlet UISlider *toleranceSlider;
@@ -53,6 +64,7 @@ static CGFloat ViewControllerCellSize = 106;
 @property (nonatomic) NSUInteger searchDay;
 @property (nonatomic) NSUInteger searchMonth;
 @property (nonatomic) NSUInteger searchYear;
+
 @end
 
 @implementation ViewController
@@ -72,6 +84,30 @@ static CGFloat ViewControllerCellSize = 106;
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
     
     [self setupSliders];
+    
+    
+    self.mapviewLayout = [[RDMapviewLayout alloc]init];
+    self.mapviewLayout.mapView = self.mapView;
+    self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, 0, 0);
+    self.mapviewLayout.coorinateDelegate = self;
+    
+    self.gridLayout = [[RDGridviewFlowLayout alloc]init];
+//    self.collectionView.collectionViewLayout = self.mapviewLayout;
+//    self.collectionView.mapMode = YES;
+    self.collectionView.collectionViewLayout = self.gridLayout;
+    self.collectionView.mapMode = NO;
+    self.collectionView.backgroundColor = [UIColor clearColor];
+
+    self.collectionView.alwaysBounceVertical = YES;
+    
+    self.mapView.showsUserLocation = YES;
+    self.mapView.pitchEnabled = YES;
+    
+    
+    CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateViewsBasedOnMapRegion:)];
+    [link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -110,18 +146,17 @@ static CGFloat ViewControllerCellSize = 106;
 
 - (IBAction)toleranceSliderValueChanged:(UISlider *)sender {
     self.searchTolerance = sender.value;
-    self.toleranceLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchTolerance];
-
+    self.toleranceLabel.text = [NSString stringWithFormat:@"+/- %.1f days", (long)self.searchTolerance / 2.0];
 }
 
 - (IBAction)daySliderValueChanged:(UISlider *)sender {
     self.searchDay = sender.value;
-    self.dayLabel.text = [NSString stringWithFormat:@"%ld", (long)sender.value];
+    self.dayLabel.text = [NSString stringWithFormat:@"%ld%@", (long)self.searchDay, [self stringPostfixForDay:self.searchDay]];
 }
 
 - (IBAction)monthSliderValueChanged:(UISlider *)sender {
     self.searchMonth = sender.value;
-    self.monthLabel.text = [NSString stringWithFormat:@"%ld", (long)sender.value];
+    self.monthLabel.text = [NSString stringWithFormat:@"%@", [self stringFromMonth:self.searchMonth]];
 }
 
 - (IBAction)yearSliderValueChanged:(UISlider *)sender {
@@ -158,6 +193,20 @@ static CGFloat ViewControllerCellSize = 106;
 
 #pragma mark Private methods
 
+- (void)updateViewsBasedOnMapRegion:(CADisplayLink *)link
+{
+    static MKCoordinateRegion lastRegion;
+    // Only re-render the layover if region has changed
+    if(lastRegion.center.latitude != self.mapView.region.center.latitude ||
+       lastRegion.center.longitude != self.mapView.region.center.longitude ||
+       lastRegion.span.latitudeDelta != self.mapView.region.span.latitudeDelta  ||
+       lastRegion.span.longitudeDelta != self.mapView.region.span.longitudeDelta){
+        [self.collectionView.collectionViewLayout invalidateLayout];
+        lastRegion = self.mapView.region;
+    }
+}
+
+
 -(void)setupSliders{
     self.toleranceSlider.value = self.searchTolerance;
     self.daySlider.value = self.searchDay;
@@ -172,7 +221,7 @@ static CGFloat ViewControllerCellSize = 106;
     VWW_LOG_INFO(@"Refreshing photos");
     [self applyDateContstraintsToOptions];
     if(self.assetCollection){
-        self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:self.assetCollection options:nil];
+        self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:self.assetCollection options:self.options];
     } else {
         self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:self.options];
     }
@@ -228,7 +277,8 @@ static CGFloat ViewControllerCellSize = 106;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     VWWAssetCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VWWAssetCollectionViewCell" forIndexPath:indexPath];
-
+    cell.delegate = self;
+    
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
     
     CGFloat scale = [UIScreen mainScreen].scale;
@@ -255,6 +305,63 @@ static CGFloat ViewControllerCellSize = 106;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{\
     return CGSizeMake(106, 106);
 }
+
+
+-(NSString*)stringFromMonth:(NSUInteger)month{
+    if(month == 1){
+        return @"January";
+    } else if(month == 2){
+        return @"February";
+    } else if(month == 3){
+        return @"March";
+    } else if(month == 4){
+        return @"April";
+    } else if(month == 5){
+        return @"May";
+    } else if(month == 6){
+        return @"June";
+    } else if(month == 7){
+        return @"July";
+    } else if(month == 8){
+        return @"August";
+    } else if(month == 9){
+        return @"September";
+    } else if(month == 10){
+        return @"October";
+    } else if(month == 11){
+        return @"November";
+    } else if(month == 12){
+        return @"December";
+    }
+    return [NSString stringWithFormat:@"Error: %lu", month];
+}
+
+-(NSString*)stringPostfixForDay:(NSUInteger)day{
+    if(day % 10 == 0){
+        return @"th";
+    } else if(day % 10 == 1){
+        return @"st";
+    } else if(day % 10 == 2){
+        return @"nd";
+    } else if(day % 10 == 3){
+        return @"rd";
+    } else if(day % 10 == 4){
+        return @"th";
+    } else if(day % 10 == 5){
+        return @"th";
+    } else if(day % 10 == 6){
+        return @"th";
+    } else if(day % 10 == 7){
+        return @"th";
+    } else if(day % 10 == 8){
+        return @"th";
+    } else if(day % 10 == 9){
+        return @"th";
+    }
+    return [NSString stringWithFormat:@"Error: %lu", day];
+}
+
+
 
 -(NSString*)stringFromAssetSource:(PHAssetSource)assetSource{
     switch (assetSource) {
@@ -394,6 +501,68 @@ static CGFloat ViewControllerCellSize = 106;
     [self fetchResults];
 }
 
+#pragma mark VWWAssetCollectionViewCellDelegate
+-(void)assetCollectionViewCellTouchBegan:(VWWAssetCollectionViewCell*)sender{
+    [UIView animateWithDuration:0.1 animations:^{
+        sender.alpha = 0.5;
+        sender.transform = CGAffineTransformMakeScale(1.5, 1.5);
+    }];
 
+}
+-(void)assetCollectionViewCellTouchEnded:(VWWAssetCollectionViewCell*)sender{
+    [UIView animateWithDuration:0.1 animations:^{
+        sender.alpha = 1.0;
+        sender.transform = CGAffineTransformIdentity;
+    }];
+    
+    
+//    SMCluster *cluster = sender.cluster;
+//    CGPoint point =[self.mapView convertCoordinate:cluster.coordinate toPointToView:self.mapView];
+//    
+//    if(CGRectContainsPoint(self.mapView.frame, point)){
+//        [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:cluster];
+//    } else {
+//        // Center in screen
+//        CLLocationCoordinate2D coordinate = cluster.coordinate;
+//        [self.mapView setCenterCoordinate:coordinate animated:YES];
+//    }
+
+}
+-(void)assetCollectionViewCellLongPress:(VWWAssetCollectionViewCell*)sender{
+    if(self.collectionView.collectionViewLayout == self.gridLayout){
+        [self.collectionView performBatchUpdates:^{
+            self.collectionView.mapMode = YES;
+            self.collectionView.alpha = 1.0;
+            self.collectionView.contentInset = UIEdgeInsetsZero;
+            [self.collectionView setCollectionViewLayout:self.mapviewLayout animated:YES];
+        } completion:^(BOOL finished) {}];
+    } else {
+        [self.collectionView performBatchUpdates:^{
+            self.collectionView.mapMode = NO;
+            //            self.collectionView.alpha = 0.7;
+            self.collectionView.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, 0, 0);
+            [self.collectionView setCollectionViewLayout:self.gridLayout animated:YES];
+        } completion:^(BOOL finished) {}];
+    }
+}
+
+
+
+#pragma mark RDMapviewLayoutCoordinateDelegate
+-(CLLocationCoordinate2D)mapviewLayoutCoodinateForIndexPath:(NSIndexPath*)indexPath{
+//    SMCluster *cluster = self.clusters[indexPath.item];
+//    return cluster.coordinate;
+    //    RDAsset *asset = cluster.assets[indexPath.item];
+    //    return asset.coordinate;
+    return CLLocationCoordinate2DMake(37.5, -122.0);
+}
+
+
+-(CLLocationCoordinate2D)mapviewLayoutCoodinateForSection:(NSUInteger)section{
+//    SMCluster *cluster = self.clusters[section];
+//    return cluster.coordinate;
+    
+    return CLLocationCoordinate2DMake(37.5, -121.0);
+}
 
 @end

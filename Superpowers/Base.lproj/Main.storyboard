@@ -16,7 +16,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView appearanceType="aqua" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Dm6-D1-p8b">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="d3g-Vj-2fJ">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                            </mapView>
+                            <collectionView appearanceType="aqua" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Dm6-D1-p8b" customClass="RDCollectionView">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="2v8-iY-CnM">
                                     <size key="itemSize" width="50" height="50"/>
@@ -77,30 +80,6 @@
                             <view appearanceType="aqua" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eep-kM-BzV">
                                 <rect key="frame" x="0.0" y="279" width="480" height="201"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tolerance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7x-y4-nw2">
-                                        <rect key="frame" x="20" y="27" width="440" height="31"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gAX-Oy-qed">
-                                        <rect key="frame" x="20" y="70" width="440" height="31"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G37-m9-2IK">
-                                        <rect key="frame" x="20" y="112" width="440" height="31"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yeah" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gdS-Qq-FBN">
-                                        <rect key="frame" x="20" y="150" width="440" height="31"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <slider appearanceType="aqua" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="365" translatesAutoresizingMaskIntoConstraints="NO" id="39n-cg-zD9">
                                         <rect key="frame" x="18" y="27" width="444" height="31"/>
                                         <connections>
@@ -129,6 +108,30 @@
                                             <action selector="yearSliderValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="5y9-o8-5rM"/>
                                         </connections>
                                     </slider>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tolerance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7x-y4-nw2">
+                                        <rect key="frame" x="20" y="27" width="440" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gAX-Oy-qed">
+                                        <rect key="frame" x="20" y="70" width="440" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G37-m9-2IK">
+                                        <rect key="frame" x="20" y="112" width="440" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yeah" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gdS-Qq-FBN">
+                                        <rect key="frame" x="20" y="150" width="440" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -166,10 +169,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="d3g-Vj-2fJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="66G-gD-LFg"/>
+                            <constraint firstItem="d3g-Vj-2fJ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="7pL-9j-pYX"/>
                             <constraint firstItem="Eep-kM-BzV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="9B4-Eu-QZc"/>
                             <constraint firstAttribute="trailing" secondItem="Dm6-D1-p8b" secondAttribute="trailing" id="FX6-sh-mca"/>
                             <constraint firstItem="Dm6-D1-p8b" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="TWu-8k-hHh"/>
                             <constraint firstItem="Dm6-D1-p8b" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Wi5-xa-0ol"/>
+                            <constraint firstAttribute="trailing" secondItem="d3g-Vj-2fJ" secondAttribute="trailing" id="YRj-Q3-rmB"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="d3g-Vj-2fJ" secondAttribute="bottom" id="diX-Ge-bWU"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Dm6-D1-p8b" secondAttribute="bottom" id="pM5-6t-E8K"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Eep-kM-BzV" secondAttribute="bottom" id="qeg-ps-BEV"/>
                             <constraint firstAttribute="trailing" secondItem="Eep-kM-BzV" secondAttribute="trailing" id="vFN-Ur-NRo"/>
@@ -187,6 +194,7 @@
                         <outlet property="collectionView" destination="Dm6-D1-p8b" id="UE6-sJ-3rN"/>
                         <outlet property="dayLabel" destination="gAX-Oy-qed" id="FSu-Ws-JER"/>
                         <outlet property="daySlider" destination="WF3-FF-hu5" id="yG9-ac-Xhy"/>
+                        <outlet property="mapView" destination="d3g-Vj-2fJ" id="7cG-nq-FA3"/>
                         <outlet property="monthLabel" destination="G37-m9-2IK" id="3d3-MN-TNf"/>
                         <outlet property="monthSlider" destination="U17-bh-ong" id="G6a-rM-CDV"/>
                         <outlet property="toleranceLabel" destination="b7x-y4-nw2" id="lFX-Sd-HEi"/>
