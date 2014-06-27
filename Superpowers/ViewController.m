@@ -34,10 +34,25 @@ static CGFloat ViewControllerCellSize = 106;
 @interface ViewController () <PHPhotoLibraryChangeObserver, VWWLibraryViewControllerDelegate>
 @property (strong) PHFetchResult *assetsFetchResults;
 @property (strong) PHAssetCollection *assetCollection;
-@property (weak, nonatomic) IBOutlet UISlider *slider;
+
 @property (strong) PHCachingImageManager *imageManager;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, copy) PHFetchOptions *options;
+
+@property (weak, nonatomic) IBOutlet UISlider *toleranceSlider;
+@property (weak, nonatomic) IBOutlet UISlider *daySlider;
+@property (weak, nonatomic) IBOutlet UISlider *yearSlider;
+@property (weak, nonatomic) IBOutlet UISlider *monthSlider;
+
+@property (weak, nonatomic) IBOutlet UILabel *toleranceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dayLabel;
+@property (weak, nonatomic) IBOutlet UILabel *monthLabel;
+@property (weak, nonatomic) IBOutlet UILabel *yearLabel;
+
+@property (nonatomic) NSUInteger searchTolerance;
+@property (nonatomic) NSUInteger searchDay;
+@property (nonatomic) NSUInteger searchMonth;
+@property (nonatomic) NSUInteger searchYear;
 @end
 
 @implementation ViewController
@@ -45,11 +60,23 @@ static CGFloat ViewControllerCellSize = 106;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.searchTolerance = [VWWUserDefaults searchTolerance];
+    self.searchDay = [VWWUserDefaults searchDay];
+    self.searchMonth = [VWWUserDefaults searchMonth];
+    self.searchYear = [VWWUserDefaults searchYear];
+    
     self.imageManager = [[PHCachingImageManager alloc] init];
     
     [self fetchResults];
 
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+    
+    [self setupSliders];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationItem setHidesBackButton:YES animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -75,20 +102,74 @@ static CGFloat ViewControllerCellSize = 106;
 }
 
 
-- (IBAction)sliderTouchUpInside:(id)sender {
-    [self fetchResults];
-
-}
 
 -(IBAction)libraryButtonTouchUpInside:(id)sender{
     [self performSegueWithIdentifier:VWWSegueGridToLibrary sender:self];
 }
 
 
+- (IBAction)toleranceSliderValueChanged:(UISlider *)sender {
+    self.searchTolerance = sender.value;
+    self.toleranceLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchTolerance];
+
+}
+
+- (IBAction)daySliderValueChanged:(UISlider *)sender {
+    self.searchDay = sender.value;
+    self.dayLabel.text = [NSString stringWithFormat:@"%ld", (long)sender.value];
+}
+
+- (IBAction)monthSliderValueChanged:(UISlider *)sender {
+    self.searchMonth = sender.value;
+    self.monthLabel.text = [NSString stringWithFormat:@"%ld", (long)sender.value];
+}
+
+- (IBAction)yearSliderValueChanged:(UISlider *)sender {
+    self.searchYear = sender.value;
+    self.yearLabel.text = [NSString stringWithFormat:@"%ld", (long)sender.value];
+}
+
+
+
+- (IBAction)toleranceSliderTouchUpInside:(UISlider*)sender {
+    [self toleranceSliderValueChanged:sender];
+    [VWWUserDefaults setSearchTolerance:self.searchTolerance];
+    [self fetchResults];
+}
+
+- (IBAction)daySliderTouchUpInside:(UISlider*)sender {
+    [self daySliderValueChanged:sender];
+    [VWWUserDefaults setSearchDay:self.searchDay];
+    [self fetchResults];
+}
+
+- (IBAction)monthSliderTouchUpInside:(UISlider*)sender {
+    [self monthSliderValueChanged:sender];
+    [VWWUserDefaults setSearchMonth:sender.value];
+    [self fetchResults];
+}
+
+- (IBAction)yearSliderTouchUpInside:(UISlider*)sender {
+    [self yearSliderValueChanged:sender];
+    [VWWUserDefaults setSearchYear:sender.value];
+    [self fetchResults];
+}
+
 
 #pragma mark Private methods
--(void)fetchResults{
 
+-(void)setupSliders{
+    self.toleranceSlider.value = self.searchTolerance;
+    self.daySlider.value = self.searchDay;
+    self.monthSlider.value = self.searchMonth;
+    self.yearSlider.value = self.searchYear;
+    self.toleranceLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchTolerance];
+    self.dayLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchDay];
+    self.monthLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchMonth];
+    self.yearLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchYear];
+}
+-(void)fetchResults{
+    VWW_LOG_INFO(@"Refreshing photos");
     [self applyDateContstraintsToOptions];
     if(self.assetCollection){
         self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:self.assetCollection options:nil];
@@ -108,19 +189,29 @@ static CGFloat ViewControllerCellSize = 106;
         
     }
     self.options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]];
+
     
+    
+    // Calculate start and end dates. Create date with day, month, year
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *startComponents = [[NSDateComponents alloc]init];
-    startComponents.year = 2014;
-    startComponents.month = 5;
-    startComponents.day = 1;
-    NSDate *startDate = [calendar dateFromComponents:startComponents];
+    NSDateComponents *components = [[NSDateComponents alloc]init];
+    components.year = self.searchYear;
+    components.month = self.searchMonth;
+    components.day = self.searchDay;
+    NSDate *searchDate = [calendar dateFromComponents:components];
+    VWW_LOG_INFO(@"searchDate: %@", searchDate);
     
-    NSDateComponents *endComponents = [[NSDateComponents alloc]init];
-    endComponents.year = 2014;
-    endComponents.month = 7;
-    endComponents.day = 1;
-    NSDate *endDate = [calendar dateFromComponents:endComponents];
+    
+    // Subtract tolerance / 2
+    NSUInteger halfTolerance = self.searchTolerance / 2;
+    NSTimeInterval offset = 60 * 60 * 24 * halfTolerance;
+    NSDate *startDate = [searchDate dateByAddingTimeInterval:-offset];
+    VWW_LOG_INFO(@"startDate: %@", startDate);
+    
+    // Add tolerance / 2
+    NSDate *endDate = [searchDate dateByAddingTimeInterval:offset];
+    VWW_LOG_INFO(@"endDate: %@", endDate);
+    
     
     self.options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
     

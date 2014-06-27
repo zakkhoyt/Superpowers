@@ -31,6 +31,10 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
 }
 
+
+
+
+
 - (void)dealloc
 {
     [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];

@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF06284F195E0C040005F178 /* VWWUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06284C195E0C040005F178 /* VWWUserDefaults.m */; };
+		CF062850195E0C040005F178 /* VWWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06284E195E0C040005F178 /* VWWUtility.m */; };
 		CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */; };
+		CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF236A56195E070200F0CBEB /* VWWWelcomeViewController.m */; };
 		CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */; };
 		CF554ECF195D107B00F043C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ECE195D107B00F043C3 /* main.m */; };
 		CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ED1195D107B00F043C3 /* AppDelegate.m */; };
@@ -31,12 +34,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF06284B195E0C040005F178 /* VWWUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUserDefaults.h; sourceTree = "<group>"; };
+		CF06284C195E0C040005F178 /* VWWUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUserDefaults.m; sourceTree = "<group>"; };
+		CF06284D195E0C040005F178 /* VWWUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUtility.h; sourceTree = "<group>"; };
+		CF06284E195E0C040005F178 /* VWWUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUtility.m; sourceTree = "<group>"; };
 		CF1B5D35195E02C7004F722D /* VWW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWW.h; sourceTree = "<group>"; };
 		CF1B5D36195E02C7004F722D /* VWWBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWBlocks.h; sourceTree = "<group>"; };
 		CF1B5D37195E02C7004F722D /* VWWDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWDefines.h; sourceTree = "<group>"; };
 		CF1B5D38195E02C7004F722D /* VWWTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWTypes.h; sourceTree = "<group>"; };
 		CF1B5D39195E02D1004F722D /* NSTimer+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+Blocks.h"; sourceTree = "<group>"; };
 		CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+Blocks.m"; sourceTree = "<group>"; };
+		CF236A55195E070200F0CBEB /* VWWWelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWWelcomeViewController.h; sourceTree = "<group>"; };
+		CF236A56195E070200F0CBEB /* VWWWelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWWelcomeViewController.m; sourceTree = "<group>"; };
 		CF423CEB195DFBCD009FE860 /* VWWLibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWLibraryViewController.h; sourceTree = "<group>"; };
 		CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWLibraryViewController.m; sourceTree = "<group>"; };
 		CF554EC9195D107B00F043C3 /* Superpowers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Superpowers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +85,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF062851195E0C070005F178 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				CF06284B195E0C040005F178 /* VWWUserDefaults.h */,
+				CF06284C195E0C040005F178 /* VWWUserDefaults.m */,
+				CF06284D195E0C040005F178 /* VWWUtility.h */,
+				CF06284E195E0C040005F178 /* VWWUtility.m */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
 		CF1B5D33195E0066004F722D /* Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +114,15 @@
 				CF1B5D38195E02C7004F722D /* VWWTypes.h */,
 			);
 			path = Include;
+			sourceTree = "<group>";
+		};
+		CF236A58195E078400F0CBEB /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				CF236A55195E070200F0CBEB /* VWWWelcomeViewController.h */,
+				CF236A56195E070200F0CBEB /* VWWWelcomeViewController.m */,
+			);
+			name = Welcome;
 			sourceTree = "<group>";
 		};
 		CF554EC0195D107B00F043C3 = {
@@ -124,6 +153,7 @@
 				CF1B5D34195E02C7004F722D /* Include */,
 				CF554ECC195D107B00F043C3 /* Supporting Files */,
 				CF554F00195D1DBC00F043C3 /* UserInterface */,
+				CF062851195E0C070005F178 /* Utility */,
 			);
 			path = Superpowers;
 			sourceTree = "<group>";
@@ -170,6 +200,7 @@
 				CF554EF8195D1D7B00F043C3 /* Full */,
 				CF1B5D33195E0066004F722D /* Library */,
 				CF554EF6195D1D5A00F043C3 /* Main */,
+				CF236A58195E078400F0CBEB /* Welcome */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -352,9 +383,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF554ED5195D107B00F043C3 /* ViewController.m in Sources */,
+				CF062850195E0C040005F178 /* VWWUtility.m in Sources */,
+				CF06284F195E0C040005F178 /* VWWUserDefaults.m in Sources */,
 				CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */,
 				CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */,
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,
+				CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */,
 				CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */,
 				CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */,
 				CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */,
