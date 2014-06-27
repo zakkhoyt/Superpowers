@@ -192,6 +192,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="Dm6-D1-p8b" id="UE6-sJ-3rN"/>
+                        <outlet property="dateView" destination="Eep-kM-BzV" id="sSd-cE-A66"/>
                         <outlet property="dayLabel" destination="gAX-Oy-qed" id="FSu-Ws-JER"/>
                         <outlet property="daySlider" destination="WF3-FF-hu5" id="yG9-ac-Xhy"/>
                         <outlet property="mapView" destination="d3g-Vj-2fJ" id="7cG-nq-FA3"/>

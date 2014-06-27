@@ -25,6 +25,10 @@
         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
         longPressGesture.minimumPressDuration = 1.0;
         [self addGestureRecognizer:longPressGesture];
+        
+        UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(doubleTap:)];
+        doubleTapGesture.numberOfTapsRequired = 2;
+        [self addGestureRecognizer:doubleTapGesture];
     }
     return self;
 }
@@ -85,6 +89,12 @@
     }
 }
 
+
+-(void)doubleTap:(UITapGestureRecognizer*)sender{
+    if(sender.state == UIGestureRecognizerStateEnded){
+        [self.delegate assetCollectionViewCellDoubleTap:self];
+    }
+}
 
 
 

@@ -14,6 +14,7 @@
 -(void)assetCollectionViewCellTouchBegan:(VWWAssetCollectionViewCell*)sender;
 -(void)assetCollectionViewCellTouchEnded:(VWWAssetCollectionViewCell*)sender;
 -(void)assetCollectionViewCellLongPress:(VWWAssetCollectionViewCell*)sender;
+-(void)assetCollectionViewCellDoubleTap:(VWWAssetCollectionViewCell*)sender;
 @end
 
 

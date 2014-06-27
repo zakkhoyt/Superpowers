@@ -39,6 +39,9 @@ static CGFloat ViewControllerCellSize = 106;
 VWWLibraryViewControllerDelegate,
 VWWAssetCollectionViewCellDelegate,
 RDMapviewLayoutCoordinateDelegate>
+
+@property (nonatomic) BOOL hasLoaded;
+
 @property (strong) PHFetchResult *assetsFetchResults;
 @property (strong) PHAssetCollection *assetCollection;
 @property (strong) PHCachingImageManager *imageManager;
@@ -64,6 +67,7 @@ RDMapviewLayoutCoordinateDelegate>
 @property (nonatomic) NSUInteger searchDay;
 @property (nonatomic) NSUInteger searchMonth;
 @property (nonatomic) NSUInteger searchYear;
+@property (weak, nonatomic) IBOutlet UIView *dateView;
 
 @end
 
@@ -88,7 +92,6 @@ RDMapviewLayoutCoordinateDelegate>
     
     self.mapviewLayout = [[RDMapviewLayout alloc]init];
     self.mapviewLayout.mapView = self.mapView;
-    self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, 0, 0);
     self.mapviewLayout.coorinateDelegate = self;
     
     self.gridLayout = [[RDGridviewFlowLayout alloc]init];
@@ -103,6 +106,8 @@ RDMapviewLayoutCoordinateDelegate>
     self.mapView.showsUserLocation = YES;
     self.mapView.pitchEnabled = YES;
     
+
+    
     
     CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateViewsBasedOnMapRegion:)];
     [link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
@@ -113,6 +118,36 @@ RDMapviewLayoutCoordinateDelegate>
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationItem setHidesBackButton:YES animated:NO];
+    
+    
+}
+
+
+-(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    
+    if(self.hasLoaded == NO){
+        self.hasLoaded = YES;
+        self.dateView.backgroundColor = [UIColor clearColor];
+        UIVisualEffect *visualEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc]initWithEffect:visualEffect];
+        visualEffectView.frame = self.dateView.bounds;
+        [self.dateView addSubview:visualEffectView];
+
+        [self.dateView bringSubviewToFront:self.toleranceSlider];
+        [self.dateView bringSubviewToFront:self.daySlider];
+        [self.dateView bringSubviewToFront:self.monthSlider];
+        [self.dateView bringSubviewToFront:self.yearSlider];
+
+        [self.dateView bringSubviewToFront:self.toleranceLabel];
+        [self.dateView bringSubviewToFront:self.dayLabel];
+        [self.dateView bringSubviewToFront:self.monthLabel];
+        [self.dateView bringSubviewToFront:self.yearLabel];
+        
+        self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, self.dateView.frame.size.height, 0);
+    }
+    
+    [self.view layoutSubviews];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -161,7 +196,7 @@ RDMapviewLayoutCoordinateDelegate>
 
 - (IBAction)yearSliderValueChanged:(UISlider *)sender {
     self.searchYear = sender.value;
-    self.yearLabel.text = [NSString stringWithFormat:@"%ld", (long)sender.value];
+    self.yearLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchYear];
 }
 
 
@@ -212,9 +247,9 @@ RDMapviewLayoutCoordinateDelegate>
     self.daySlider.value = self.searchDay;
     self.monthSlider.value = self.searchMonth;
     self.yearSlider.value = self.searchYear;
-    self.toleranceLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchTolerance];
-    self.dayLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchDay];
-    self.monthLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchMonth];
+    self.toleranceLabel.text = [NSString stringWithFormat:@"+/- %.1f days", (long)self.searchTolerance / 2.0];
+    self.dayLabel.text = [NSString stringWithFormat:@"%ld%@", (long)self.searchDay, [self stringPostfixForDay:self.searchDay]];
+    self.monthLabel.text = [NSString stringWithFormat:@"%@", [self stringFromMonth:self.searchMonth]];
     self.yearLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchYear];
 }
 -(void)fetchResults{
@@ -280,7 +315,6 @@ RDMapviewLayoutCoordinateDelegate>
     cell.delegate = self;
     
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
-    
     CGFloat scale = [UIScreen mainScreen].scale;
     CGSize size = CGSizeMake(ViewControllerCellSize * scale, ViewControllerCellSize * scale);
     [self.imageManager requestImageForAsset:asset
@@ -514,18 +548,20 @@ RDMapviewLayoutCoordinateDelegate>
         sender.alpha = 1.0;
         sender.transform = CGAffineTransformIdentity;
     }];
-    
-    
-//    SMCluster *cluster = sender.cluster;
-//    CGPoint point =[self.mapView convertCoordinate:cluster.coordinate toPointToView:self.mapView];
-//    
-//    if(CGRectContainsPoint(self.mapView.frame, point)){
-//        [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:cluster];
-//    } else {
-//        // Center in screen
-//        CLLocationCoordinate2D coordinate = cluster.coordinate;
-//        [self.mapView setCenterCoordinate:coordinate animated:YES];
-//    }
+
+    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+    if(asset.location.coordinate.latitude != 0 &&
+       asset.location.coordinate.longitude != 0){
+        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
+        if(CGRectContainsPoint(self.mapView.frame, point)){
+            //        [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:cluster];
+        } else {
+        // Center in screen
+        CLLocationCoordinate2D coordinate = asset.location.coordinate;
+        [self.mapView setCenterCoordinate:coordinate animated:YES];
+        }
+    }
 
 }
 -(void)assetCollectionViewCellLongPress:(VWWAssetCollectionViewCell*)sender{
@@ -546,23 +582,34 @@ RDMapviewLayoutCoordinateDelegate>
     }
 }
 
+-(void)assetCollectionViewCellDoubleTap:(VWWAssetCollectionViewCell*)sender{
+    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+    if(asset.location.coordinate.latitude != 0 &&
+       asset.location.coordinate.longitude != 0){
+        //        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
+        //        if(CGRectContainsPoint(self.mapView.frame, point)){
+        //            //        [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:cluster];
+        //        } else {
+        // Center in screen
+        CLLocationCoordinate2D coordinate = asset.location.coordinate;
+        [self.mapView setCenterCoordinate:coordinate animated:YES];
+        //        }
+    }
+}
+
 
 
 #pragma mark RDMapviewLayoutCoordinateDelegate
 -(CLLocationCoordinate2D)mapviewLayoutCoodinateForIndexPath:(NSIndexPath*)indexPath{
-//    SMCluster *cluster = self.clusters[indexPath.item];
-//    return cluster.coordinate;
-    //    RDAsset *asset = cluster.assets[indexPath.item];
-    //    return asset.coordinate;
-    return CLLocationCoordinate2DMake(37.5, -122.0);
+    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+    return asset.location.coordinate;
 }
 
 
 -(CLLocationCoordinate2D)mapviewLayoutCoodinateForSection:(NSUInteger)section{
-//    SMCluster *cluster = self.clusters[section];
-//    return cluster.coordinate;
-    
     return CLLocationCoordinate2DMake(37.5, -121.0);
+
 }
 
 @end
