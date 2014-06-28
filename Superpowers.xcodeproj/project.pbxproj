@@ -7,12 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CF06284F195E0C040005F178 /* VWWUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06284C195E0C040005F178 /* VWWUserDefaults.m */; };
-		CF062850195E0C040005F178 /* VWWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06284E195E0C040005F178 /* VWWUtility.m */; };
 		CF062858195E1B330005F178 /* RDGridviewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF062855195E1B330005F178 /* RDGridviewFlowLayout.m */; };
 		CF062859195E1B330005F178 /* RDMapviewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF062857195E1B330005F178 /* RDMapviewLayout.m */; };
 		CF06285C195E1B3C0005F178 /* RDCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06285B195E1B3C0005F178 /* RDCollectionView.m */; };
-		CF06285F195E1E260005F178 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF06285E195E1E260005F178 /* MapKit.framework */; };
 		CF062867195E366F0005F178 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF062866195E366F0005F178 /* PhotosUI.framework */; };
 		CF062869195E366F0005F178 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF062868195E366F0005F178 /* Photos.framework */; };
 		CF06286F195E366F0005F178 /* PhotoEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06286E195E366F0005F178 /* PhotoEditingViewController.m */; };
@@ -20,6 +17,10 @@
 		CF062875195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CF062864195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex */; };
 		CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */; };
 		CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF236A56195E070200F0CBEB /* VWWWelcomeViewController.m */; };
+		CF400E59195F4F120044E4FB /* VWWUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = CF730922195F4EB30062F811 /* VWWUserDefaults.m */; };
+		CF400E5A195F4F120044E4FB /* VWWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CF73091F195F4EB30062F811 /* VWWUtility.m */; };
+		CF400E5C195F4F590044E4FB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF400E5B195F4F590044E4FB /* MapKit.framework */; };
+		CF400E5D195F4F590044E4FB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF400E5B195F4F590044E4FB /* MapKit.framework */; };
 		CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */; };
 		CF554ECF195D107B00F043C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ECE195D107B00F043C3 /* main.m */; };
 		CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554ED1195D107B00F043C3 /* AppDelegate.m */; };
@@ -30,6 +31,10 @@
 		CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */; };
 		CF554EF3195D1A4E00F043C3 /* ideas.txt in Resources */ = {isa = PBXBuildFile; fileRef = CF554EF2195D1A4E00F043C3 /* ideas.txt */; };
 		CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF554EFA195D1D9400F043C3 /* VWWFullScreenViewController.m */; };
+		CF730916195F4D1C0062F811 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF730915195F4D1C0062F811 /* CoreLocation.framework */; };
+		CF730919195F4D2A0062F811 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF730918195F4D2A0062F811 /* MapKit.framework */; };
+		CF730923195F4EB30062F811 /* VWWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CF73091F195F4EB30062F811 /* VWWUtility.m */; };
+		CF730924195F4EB30062F811 /* VWWUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = CF730922195F4EB30062F811 /* VWWUserDefaults.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,17 +76,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CF06284B195E0C040005F178 /* VWWUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUserDefaults.h; sourceTree = "<group>"; };
-		CF06284C195E0C040005F178 /* VWWUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUserDefaults.m; sourceTree = "<group>"; };
-		CF06284D195E0C040005F178 /* VWWUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUtility.h; sourceTree = "<group>"; };
-		CF06284E195E0C040005F178 /* VWWUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUtility.m; sourceTree = "<group>"; };
 		CF062854195E1B330005F178 /* RDGridviewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDGridviewFlowLayout.h; sourceTree = "<group>"; };
 		CF062855195E1B330005F178 /* RDGridviewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDGridviewFlowLayout.m; sourceTree = "<group>"; };
 		CF062856195E1B330005F178 /* RDMapviewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDMapviewLayout.h; sourceTree = "<group>"; };
 		CF062857195E1B330005F178 /* RDMapviewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDMapviewLayout.m; sourceTree = "<group>"; };
 		CF06285A195E1B3C0005F178 /* RDCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCollectionView.h; sourceTree = "<group>"; };
 		CF06285B195E1B3C0005F178 /* RDCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDCollectionView.m; sourceTree = "<group>"; };
-		CF06285E195E1E260005F178 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		CF062864195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF062866195E366F0005F178 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		CF062868195E366F0005F178 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
@@ -97,6 +97,7 @@
 		CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+Blocks.m"; sourceTree = "<group>"; };
 		CF236A55195E070200F0CBEB /* VWWWelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWWelcomeViewController.h; sourceTree = "<group>"; };
 		CF236A56195E070200F0CBEB /* VWWWelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWWelcomeViewController.m; sourceTree = "<group>"; };
+		CF400E5B195F4F590044E4FB /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		CF423CEB195DFBCD009FE860 /* VWWLibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWLibraryViewController.h; sourceTree = "<group>"; };
 		CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWLibraryViewController.m; sourceTree = "<group>"; };
 		CF554EC9195D107B00F043C3 /* Superpowers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Superpowers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,6 +117,12 @@
 		CF554EF2195D1A4E00F043C3 /* ideas.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ideas.txt; sourceTree = "<group>"; };
 		CF554EF9195D1D9400F043C3 /* VWWFullScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWFullScreenViewController.h; sourceTree = "<group>"; };
 		CF554EFA195D1D9400F043C3 /* VWWFullScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWFullScreenViewController.m; sourceTree = "<group>"; };
+		CF730915195F4D1C0062F811 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CF730918195F4D2A0062F811 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		CF73091F195F4EB30062F811 /* VWWUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUtility.m; sourceTree = "<group>"; };
+		CF730920195F4EB30062F811 /* VWWUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUtility.h; sourceTree = "<group>"; };
+		CF730921195F4EB30062F811 /* VWWUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUserDefaults.h; sourceTree = "<group>"; };
+		CF730922195F4EB30062F811 /* VWWUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUserDefaults.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +130,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF730919195F4D2A0062F811 /* MapKit.framework in Frameworks */,
+				CF730916195F4D1C0062F811 /* CoreLocation.framework in Frameworks */,
+				CF400E5D195F4F590044E4FB /* MapKit.framework in Frameworks */,
 				CF062867195E366F0005F178 /* PhotosUI.framework in Frameworks */,
 				CF062869195E366F0005F178 /* Photos.framework in Frameworks */,
 			);
@@ -132,7 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF06285F195E1E260005F178 /* MapKit.framework in Frameworks */,
+				CF400E5C195F4F590044E4FB /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,17 +156,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		CF062851195E0C070005F178 /* Utility */ = {
-			isa = PBXGroup;
-			children = (
-				CF06284B195E0C040005F178 /* VWWUserDefaults.h */,
-				CF06284C195E0C040005F178 /* VWWUserDefaults.m */,
-				CF06284D195E0C040005F178 /* VWWUtility.h */,
-				CF06284E195E0C040005F178 /* VWWUtility.m */,
-			);
-			name = Utility;
-			sourceTree = "<group>";
-		};
 		CF06285D195E1B400005F178 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +168,8 @@
 		CF062865195E366F0005F178 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF730918195F4D2A0062F811 /* MapKit.framework */,
+				CF730915195F4D1C0062F811 /* CoreLocation.framework */,
 				CF062866195E366F0005F178 /* PhotosUI.framework */,
 				CF062868195E366F0005F178 /* Photos.framework */,
 			);
@@ -210,6 +211,10 @@
 				CF1B5D36195E02C7004F722D /* VWWBlocks.h */,
 				CF1B5D37195E02C7004F722D /* VWWDefines.h */,
 				CF1B5D38195E02C7004F722D /* VWWTypes.h */,
+				CF730921195F4EB30062F811 /* VWWUserDefaults.h */,
+				CF730922195F4EB30062F811 /* VWWUserDefaults.m */,
+				CF730920195F4EB30062F811 /* VWWUtility.h */,
+				CF73091F195F4EB30062F811 /* VWWUtility.m */,
 			);
 			path = Include;
 			sourceTree = "<group>";
@@ -226,7 +231,7 @@
 		CF554EC0195D107B00F043C3 = {
 			isa = PBXGroup;
 			children = (
-				CF06285E195E1E260005F178 /* MapKit.framework */,
+				CF400E5B195F4F590044E4FB /* MapKit.framework */,
 				CF554ECB195D107B00F043C3 /* Superpowers */,
 				CF554EE2195D107B00F043C3 /* SuperpowersTests */,
 				CF06286A195E366F0005F178 /* SuperpowersEditor */,
@@ -255,7 +260,6 @@
 				CF1B5D34195E02C7004F722D /* Include */,
 				CF554ECC195D107B00F043C3 /* Supporting Files */,
 				CF554F00195D1DBC00F043C3 /* UserInterface */,
-				CF062851195E0C070005F178 /* Utility */,
 				CF06285D195E1B400005F178 /* View */,
 			);
 			path = Superpowers;
@@ -521,7 +525,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF400E5A195F4F120044E4FB /* VWWUtility.m in Sources */,
 				CF06286F195E366F0005F178 /* PhotoEditingViewController.m in Sources */,
+				CF400E59195F4F120044E4FB /* VWWUserDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,10 +536,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF554ED5195D107B00F043C3 /* ViewController.m in Sources */,
-				CF062850195E0C040005F178 /* VWWUtility.m in Sources */,
-				CF06284F195E0C040005F178 /* VWWUserDefaults.m in Sources */,
+				CF730924195F4EB30062F811 /* VWWUserDefaults.m in Sources */,
 				CF06285C195E1B3C0005F178 /* RDCollectionView.m in Sources */,
 				CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */,
+				CF730923195F4EB30062F811 /* VWWUtility.m in Sources */,
 				CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */,
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,
 				CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */,
@@ -757,6 +763,7 @@
 				CF06287A195E366F0005F178 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF554EC4195D107B00F043C3 /* Build configuration list for PBXProject "Superpowers" */ = {
 			isa = XCConfigurationList;

@@ -7,7 +7,8 @@
 //
 
 #import "VWWUtility.h"
-@import Photos;
+
+@import CoreLocation;
 
 @interface VWWUtility  () {
     NSDateFormatter *internetDateFormatter;
@@ -218,5 +219,98 @@
         default:
             break;
     }
+}
+@end
+
+
+
+@implementation VWWUtility (Location)
+
++(void)placemarksFromLocation:(CLLocation*)location completionBlock:(VWWArrayBlock)completionBlock{
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+    [geocoder reverseGeocodeLocation:location
+                   completionHandler:^(NSArray *placemarks, NSError *error) {
+                       if(placemarks.count){
+                           completionBlock(placemarks);
+                       }
+                   }];
+}
+
+
++(void)stringFromLocation:(CLLocation*)location completionBlock:(VWWStringBlock)completionBlock{
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+    [geocoder reverseGeocodeLocation:location
+                   completionHandler:^(NSArray *placemarks, NSError *error) {
+                       if(placemarks.count){
+                           CLPlacemark *placemark = placemarks[0];
+                           if(placemark.name)
+                               return completionBlock(placemark.name);
+                           if(placemark.thoroughfare)
+                               return completionBlock(placemark.thoroughfare);
+                           if(placemark.subThoroughfare)
+                               return completionBlock(placemark.subThoroughfare);
+                           if(placemark.locality)
+                               return completionBlock(placemark.locality);
+                           if(placemark.subLocality)
+                               return completionBlock(placemark.subLocality);
+                           if(placemark.administrativeArea)
+                               return completionBlock(placemark.administrativeArea);
+                           if(placemark.subAdministrativeArea)
+                               return completionBlock(placemark.subAdministrativeArea);
+                           if(placemark.postalCode)
+                               return completionBlock(placemark.postalCode);
+                           if(placemark.ISOcountryCode)
+                               return completionBlock(placemark.ISOcountryCode);
+                           if(placemark.country)
+                               return completionBlock(placemark.country);
+                           if(placemark.inlandWater)
+                               return completionBlock(placemark.inlandWater);
+                           if(placemark.ocean)
+                               return completionBlock(placemark.ocean);
+                           if(placemark.areasOfInterest.count){
+                               return completionBlock(placemark.areasOfInterest[0]);
+                           }
+                       }
+                   }];
+}
+
+
++(void)stringFromLocation2:(CLLocation*)location completionBlock:(VWWStringBlock)completionBlock{
+    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+    [geocoder reverseGeocodeLocation:location
+                   completionHandler:^(NSArray *placemarks, NSError *error) {
+                       if(placemarks.count){
+                           CLPlacemark *placemark = placemarks[0];
+                           if(placemark.locality)
+                               return completionBlock(placemark.locality);
+                           if(placemark.subAdministrativeArea)
+                               return completionBlock(placemark.subAdministrativeArea);
+                           if(placemark.name)
+                               return completionBlock(placemark.name);
+                           if(placemark.thoroughfare)
+                               return completionBlock(placemark.thoroughfare);
+                           if(placemark.subThoroughfare)
+                               return completionBlock(placemark.subThoroughfare);
+                           if(placemark.subLocality)
+                               return completionBlock(placemark.subLocality);
+                           if(placemark.administrativeArea)
+                               return completionBlock(placemark.administrativeArea);
+                           if(placemark.postalCode)
+                               return completionBlock(placemark.postalCode);
+                           if(placemark.ISOcountryCode)
+                               return completionBlock(placemark.ISOcountryCode);
+                           if(placemark.country)
+                               return completionBlock(placemark.country);
+                           if(placemark.inlandWater)
+                               return completionBlock(placemark.inlandWater);
+                           if(placemark.ocean)
+                               return completionBlock(placemark.ocean);
+                           if(placemark.areasOfInterest.count){
+                               return completionBlock(placemark.areasOfInterest[0]);
+                           }
+                       }
+                   }];
 }
 @end

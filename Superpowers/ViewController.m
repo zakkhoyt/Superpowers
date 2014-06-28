@@ -50,8 +50,11 @@ RDMapviewLayoutCoordinateDelegate>
 @property (weak, nonatomic) IBOutlet RDCollectionView *collectionView;
 @property (nonatomic, strong) RDMapviewLayout *mapviewLayout;
 @property (nonatomic, strong) RDGridviewFlowLayout *gridLayout;
-
+@property (nonatomic) BOOL mapviewLayoutNeedsUpdate;
 @property (nonatomic, copy) PHFetchOptions *options;
+
+
+@property (nonatomic, strong) UIBarButtonItem *toggleButton;
 
 @property (weak, nonatomic) IBOutlet UISlider *toleranceSlider;
 @property (weak, nonatomic) IBOutlet UISlider *daySlider;
@@ -68,6 +71,7 @@ RDMapviewLayoutCoordinateDelegate>
 @property (nonatomic) NSUInteger searchMonth;
 @property (nonatomic) NSUInteger searchYear;
 @property (weak, nonatomic) IBOutlet UIView *dateView;
+@property (weak, nonatomic) IBOutlet UIButton *libraryButton;
 
 @end
 
@@ -88,6 +92,12 @@ RDMapviewLayoutCoordinateDelegate>
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
     
     [self setupSliders];
+    
+    
+    self.toggleButton = [[UIBarButtonItem alloc]initWithTitle:@"Map" style:UIBarButtonItemStylePlain target:self action:@selector(toggleButtonTouchUpInside:)];
+    [self.navigationItem setLeftBarButtonItem:self.toggleButton animated:NO];
+
+    
     
     
     self.mapviewLayout = [[RDMapviewLayout alloc]init];
@@ -144,6 +154,7 @@ RDMapviewLayoutCoordinateDelegate>
         [self.dateView bringSubviewToFront:self.monthLabel];
         [self.dateView bringSubviewToFront:self.yearLabel];
         
+        [self.dateView bringSubviewToFront:self.libraryButton];
         self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, self.dateView.frame.size.height, 0);
     }
     
@@ -159,6 +170,18 @@ RDMapviewLayoutCoordinateDelegate>
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark IBActions
+
+-(void)toggleButtonTouchUpInside:(id)sender{
+    if(self.assetsFetchResults.count >= 50 &&
+       self.collectionView.collectionViewLayout == self.gridLayout){
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Are you sure?" message:@"You have more than 50 photos. This can cause performance problems" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yep, do it", nil];
+        [alertView show];
+    } else {
+        [self toggleLayout];
+    }
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if([segue.identifier isEqualToString:VWWSegueCollectionToFull]){
@@ -172,6 +195,37 @@ RDMapviewLayoutCoordinateDelegate>
     }
 }
 
+- (IBAction)organizeButtonTouchUpInside:(id)sender {
+    if(self.dateView.hidden){
+        self.dateView.hidden = NO;
+        CGRect frame = self.dateView.frame;
+        frame.origin.y = self.view.bounds.size.height - frame.size.height;
+        frame.origin.x = 0;
+        
+        [UIView animateWithDuration:3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.dateView.frame = frame;
+            self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, self.view.bounds.size.height - self.dateView.frame.origin.y, 0);
+            self.mapviewLayoutNeedsUpdate = YES;
+
+        } completion:^(BOOL finished) {
+        }];
+    } else {
+        
+        CGRect frame = self.dateView.frame;
+        frame.origin.y = self.view.bounds.size.height;
+        frame.origin.x = 0;
+        
+        [UIView animateWithDuration:3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.dateView.frame = frame;
+            self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, self.view.bounds.size.height - self.dateView.frame.origin.y, 0);
+            self.mapviewLayoutNeedsUpdate = YES;
+
+        } completion:^(BOOL finished) {
+            self.dateView.hidden = YES;
+        }];
+        
+    }
+}
 
 
 -(IBAction)libraryButtonTouchUpInside:(id)sender{
@@ -228,6 +282,30 @@ RDMapviewLayoutCoordinateDelegate>
 
 #pragma mark Private methods
 
+-(void)toggleLayout{
+    if(self.collectionView.collectionViewLayout == self.gridLayout){
+        [self.collectionView performBatchUpdates:^{
+            self.collectionView.mapMode = YES;
+            self.collectionView.alpha = 1.0;
+            self.collectionView.contentInset = UIEdgeInsetsZero;
+            [self.collectionView setCollectionViewLayout:self.mapviewLayout animated:YES];
+        } completion:^(BOOL finished) {
+            [self.toggleButton setTitle:@"Grid"];
+        }];
+    } else {
+        [self.collectionView performBatchUpdates:^{
+            self.collectionView.mapMode = NO;
+            //            self.collectionView.alpha = 0.7;
+            self.collectionView.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, 0, 0);
+            [self.collectionView setCollectionViewLayout:self.gridLayout animated:YES];
+        } completion:^(BOOL finished) {
+            [self.toggleButton setTitle:@"Map"];
+        }];
+    }
+    
+    
+}
+
 - (void)updateViewsBasedOnMapRegion:(CADisplayLink *)link
 {
     static MKCoordinateRegion lastRegion;
@@ -235,7 +313,9 @@ RDMapviewLayoutCoordinateDelegate>
     if(lastRegion.center.latitude != self.mapView.region.center.latitude ||
        lastRegion.center.longitude != self.mapView.region.center.longitude ||
        lastRegion.span.latitudeDelta != self.mapView.region.span.latitudeDelta  ||
-       lastRegion.span.longitudeDelta != self.mapView.region.span.longitudeDelta){
+       lastRegion.span.longitudeDelta != self.mapView.region.span.longitudeDelta ||
+       self.mapviewLayoutNeedsUpdate){
+        self.mapviewLayoutNeedsUpdate = NO;
         [self.collectionView.collectionViewLayout invalidateLayout];
         lastRegion = self.mapView.region;
     }
@@ -261,6 +341,11 @@ RDMapviewLayoutCoordinateDelegate>
         self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:self.options];
     }
     
+    // Update UI
+    NSString *libraryName = self.assetCollection.localizedTitle ? self.assetCollection.localizedTitle : @"All Photos";
+    NSString *libraryButtonTitle = [NSString stringWithFormat:@"Library (%@)", libraryName];
+    [self.libraryButton setTitle:libraryButtonTitle forState:UIControlStateNormal];
+    self.title = [NSString stringWithFormat:@"%lu", self.assetsFetchResults.count];
     [self.collectionView reloadData];
 
 }
@@ -476,21 +561,7 @@ RDMapviewLayoutCoordinateDelegate>
 
 }
 -(void)assetCollectionViewCellLongPress:(VWWAssetCollectionViewCell*)sender{
-    if(self.collectionView.collectionViewLayout == self.gridLayout){
-        [self.collectionView performBatchUpdates:^{
-            self.collectionView.mapMode = YES;
-            self.collectionView.alpha = 1.0;
-            self.collectionView.contentInset = UIEdgeInsetsZero;
-            [self.collectionView setCollectionViewLayout:self.mapviewLayout animated:YES];
-        } completion:^(BOOL finished) {}];
-    } else {
-        [self.collectionView performBatchUpdates:^{
-            self.collectionView.mapMode = NO;
-            //            self.collectionView.alpha = 0.7;
-            self.collectionView.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, 0, 0);
-            [self.collectionView setCollectionViewLayout:self.gridLayout animated:YES];
-        } completion:^(BOOL finished) {}];
-    }
+    [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:sender];
 }
 
 -(void)assetCollectionViewCellDoubleTap:(VWWAssetCollectionViewCell*)sender{
@@ -521,6 +592,17 @@ RDMapviewLayoutCoordinateDelegate>
 -(CLLocationCoordinate2D)mapviewLayoutCoodinateForSection:(NSUInteger)section{
     return CLLocationCoordinate2DMake(37.5, -121.0);
 
+}
+
+
+#pragma mark UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(buttonIndex == 0){
+        
+    } else if(buttonIndex == 1){
+        [self toggleLayout];
+    }
 }
 
 @end

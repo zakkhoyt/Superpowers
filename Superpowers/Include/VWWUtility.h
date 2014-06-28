@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VWW.h"
+
 @import Photos;
+@import CoreLocation;
+
 @interface VWWUtility : NSObject
 
 @end
@@ -33,4 +37,11 @@
 +(NSString*)stringFromMonth:(NSUInteger)month;
 +(NSString*)stringPostfixForDay:(NSUInteger)day;
 +(NSString*)stringFromAssetSource:(PHAssetSource)assetSource;
+@end
+
+
+@interface VWWUtility (Location)
++(void)placemarksFromLocation:(CLLocation*)location completionBlock:(VWWArrayBlock)completionBlock;
++(void)stringFromLocation:(CLLocation*)location completionBlock:(VWWStringBlock)completionBlock;
++(void)stringFromLocation2:(CLLocation*)location completionBlock:(VWWStringBlock)completionBlock;
 @end
