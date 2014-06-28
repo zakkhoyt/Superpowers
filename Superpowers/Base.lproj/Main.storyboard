@@ -117,25 +117,25 @@
                                             <constraint firstAttribute="height" constant="31" id="6Fz-Iz-pgZ"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.0" green="1" blue="1" alpha="0.70999999999999996" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gAX-Oy-qed">
                                         <rect key="frame" x="20" y="95" width="440" height="31"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.0" green="1" blue="1" alpha="0.70999999999999996" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G37-m9-2IK">
                                         <rect key="frame" x="20" y="137" width="440" height="31"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.0" green="1" blue="1" alpha="0.70999999999999996" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yeah" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gdS-Qq-FBN">
                                         <rect key="frame" x="20" y="175" width="440" height="31"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.0" green="1" blue="1" alpha="0.70999999999999996" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="StL-bZ-yNw">
@@ -219,6 +219,7 @@
                         <outlet property="mapView" destination="d3g-Vj-2fJ" id="7cG-nq-FA3"/>
                         <outlet property="monthLabel" destination="G37-m9-2IK" id="3d3-MN-TNf"/>
                         <outlet property="monthSlider" destination="U17-bh-ong" id="G6a-rM-CDV"/>
+                        <outlet property="organizeButton" destination="XDx-yA-ZqA" id="J3j-sL-wcF"/>
                         <outlet property="toleranceLabel" destination="b7x-y4-nw2" id="lFX-Sd-HEi"/>
                         <outlet property="toleranceSlider" destination="39n-cg-zD9" id="rrQ-oE-JB2"/>
                         <outlet property="yearLabel" destination="gdS-Qq-FBN" id="Ugn-z1-zoT"/>
@@ -436,4 +437,5 @@
             <point key="canvasLocation" x="535" y="364"/>
         </scene>
     </scenes>
+    <color key="tintColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
 </document>

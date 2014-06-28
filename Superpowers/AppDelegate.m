@@ -17,7 +17,12 @@
             
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    [[UINavigationBar appearance] setBarTintColor:[UIColor blackColor]];
+
+    NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName : [UIColor cyanColor]};
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     return YES;
 }
 

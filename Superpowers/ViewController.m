@@ -54,6 +54,7 @@ RDMapviewLayoutCoordinateDelegate>
 @property (nonatomic, copy) PHFetchOptions *options;
 
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *organizeButton;
 @property (nonatomic, strong) UIBarButtonItem *toggleButton;
 
 @property (weak, nonatomic) IBOutlet UISlider *toleranceSlider;
@@ -76,7 +77,8 @@ RDMapviewLayoutCoordinateDelegate>
 @end
 
 @implementation ViewController
-            
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -127,6 +129,7 @@ RDMapviewLayoutCoordinateDelegate>
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = NO;
     [self.navigationItem setHidesBackButton:YES animated:NO];
     
     
@@ -139,7 +142,7 @@ RDMapviewLayoutCoordinateDelegate>
     if(self.hasLoaded == NO){
         self.hasLoaded = YES;
         self.dateView.backgroundColor = [UIColor clearColor];
-        UIVisualEffect *visualEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        UIVisualEffect *visualEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
         UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc]initWithEffect:visualEffect];
         visualEffectView.frame = self.dateView.bounds;
         [self.dateView addSubview:visualEffectView];
@@ -185,7 +188,7 @@ RDMapviewLayoutCoordinateDelegate>
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if([segue.identifier isEqualToString:VWWSegueCollectionToFull]){
-        NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+        NSIndexPath *indexPath = sender;
         VWWFullScreenViewController *vc = segue.destinationViewController;
         vc.asset = self.assetsFetchResults[indexPath.item];
         vc.assetCollection = self.assetCollection;
@@ -196,18 +199,20 @@ RDMapviewLayoutCoordinateDelegate>
 }
 
 - (IBAction)organizeButtonTouchUpInside:(id)sender {
+    self.organizeButton.enabled = NO;
     if(self.dateView.hidden){
         self.dateView.hidden = NO;
         CGRect frame = self.dateView.frame;
         frame.origin.y = self.view.bounds.size.height - frame.size.height;
         frame.origin.x = 0;
         
-        [UIView animateWithDuration:3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.dateView.frame = frame;
             self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, self.view.bounds.size.height - self.dateView.frame.origin.y, 0);
             self.mapviewLayoutNeedsUpdate = YES;
 
         } completion:^(BOOL finished) {
+            self.organizeButton.enabled = YES;
         }];
     } else {
         
@@ -215,13 +220,14 @@ RDMapviewLayoutCoordinateDelegate>
         frame.origin.y = self.view.bounds.size.height;
         frame.origin.x = 0;
         
-        [UIView animateWithDuration:3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.dateView.frame = frame;
             self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, self.view.bounds.size.height - self.dateView.frame.origin.y, 0);
             self.mapviewLayoutNeedsUpdate = YES;
 
         } completion:^(BOOL finished) {
             self.dateView.hidden = YES;
+            self.organizeButton.enabled = YES;
         }];
         
     }
@@ -283,6 +289,7 @@ RDMapviewLayoutCoordinateDelegate>
 #pragma mark Private methods
 
 -(void)toggleLayout{
+    self.toggleButton.enabled = NO;
     if(self.collectionView.collectionViewLayout == self.gridLayout){
         [self.collectionView performBatchUpdates:^{
             self.collectionView.mapMode = YES;
@@ -291,15 +298,23 @@ RDMapviewLayoutCoordinateDelegate>
             [self.collectionView setCollectionViewLayout:self.mapviewLayout animated:YES];
         } completion:^(BOOL finished) {
             [self.toggleButton setTitle:@"Grid"];
+            self.toggleButton.enabled = YES;
         }];
+        [UIView animateWithDuration:0.3 animations:^{
+            self.collectionView.backgroundColor = [UIColor clearColor];
+        }];
+
     } else {
         [self.collectionView performBatchUpdates:^{
             self.collectionView.mapMode = NO;
-            //            self.collectionView.alpha = 0.7;
             self.collectionView.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, 0, 0);
             [self.collectionView setCollectionViewLayout:self.gridLayout animated:YES];
         } completion:^(BOOL finished) {
             [self.toggleButton setTitle:@"Map"];
+        }];
+        [UIView animateWithDuration:0.3 animations:^{
+            self.collectionView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+            self.toggleButton.enabled = YES;
         }];
     }
     
@@ -422,6 +437,25 @@ RDMapviewLayoutCoordinateDelegate>
 
 
 
+#pragma mark UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+
+    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+//    if(asset.location.coordinate.latitude != 0 &&
+//       asset.location.coordinate.longitude != 0){
+        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
+        if(CGRectContainsPoint(self.mapView.frame, point)){
+            if(self.collectionView.collectionViewLayout == self.gridLayout){
+                [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
+            }
+        } else {
+        // Center in screen
+        CLLocationCoordinate2D coordinate = asset.location.coordinate;
+        [self.mapView setCenterCoordinate:coordinate animated:YES];
+        }
+//    }
+}
 #pragma mark - Asset Caching
 
 - (void)resetCachedAssets
@@ -561,7 +595,8 @@ RDMapviewLayoutCoordinateDelegate>
 
 }
 -(void)assetCollectionViewCellLongPress:(VWWAssetCollectionViewCell*)sender{
-    [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:sender];
+    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+    [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
 }
 
 -(void)assetCollectionViewCellDoubleTap:(VWWAssetCollectionViewCell*)sender{
