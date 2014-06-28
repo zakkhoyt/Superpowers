@@ -9,9 +9,19 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>SuperpowersEditor.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>CF062863195E366F0005F178</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>CF554EC8195D107B00F043C3</key>
 		<dict>
 			<key>primary</key>

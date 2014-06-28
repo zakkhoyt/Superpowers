@@ -13,6 +13,11 @@
 		CF062859195E1B330005F178 /* RDMapviewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF062857195E1B330005F178 /* RDMapviewLayout.m */; };
 		CF06285C195E1B3C0005F178 /* RDCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06285B195E1B3C0005F178 /* RDCollectionView.m */; };
 		CF06285F195E1E260005F178 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF06285E195E1E260005F178 /* MapKit.framework */; };
+		CF062867195E366F0005F178 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF062866195E366F0005F178 /* PhotosUI.framework */; };
+		CF062869195E366F0005F178 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF062868195E366F0005F178 /* Photos.framework */; };
+		CF06286F195E366F0005F178 /* PhotoEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06286E195E366F0005F178 /* PhotoEditingViewController.m */; };
+		CF062871195E366F0005F178 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF062870195E366F0005F178 /* MainInterface.storyboard */; };
+		CF062875195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CF062864195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex */; };
 		CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */; };
 		CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF236A56195E070200F0CBEB /* VWWWelcomeViewController.m */; };
 		CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF423CEC195DFBCD009FE860 /* VWWLibraryViewController.m */; };
@@ -28,6 +33,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		CF062872195E366F0005F178 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CF554EC1195D107B00F043C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CF062863195E366F0005F178;
+			remoteInfo = SuperpowersEditor;
+		};
+		CF062876195E366F0005F178 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CF554EC1195D107B00F043C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CF062863195E366F0005F178;
+			remoteInfo = SuperpowersEditor;
+		};
 		CF554EE0195D107B00F043C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CF554EC1195D107B00F043C3 /* Project object */;
@@ -36,6 +55,20 @@
 			remoteInfo = Superpowers;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CF062874195E366F0005F178 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CF062875195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		CF06284B195E0C040005F178 /* VWWUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUserDefaults.h; sourceTree = "<group>"; };
@@ -49,6 +82,13 @@
 		CF06285A195E1B3C0005F178 /* RDCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCollectionView.h; sourceTree = "<group>"; };
 		CF06285B195E1B3C0005F178 /* RDCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDCollectionView.m; sourceTree = "<group>"; };
 		CF06285E195E1E260005F178 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		CF062864195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF062866195E366F0005F178 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
+		CF062868195E366F0005F178 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		CF06286C195E366F0005F178 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF06286D195E366F0005F178 /* PhotoEditingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoEditingViewController.h; sourceTree = "<group>"; };
+		CF06286E195E366F0005F178 /* PhotoEditingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoEditingViewController.m; sourceTree = "<group>"; };
+		CF062870195E366F0005F178 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		CF1B5D35195E02C7004F722D /* VWW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWW.h; sourceTree = "<group>"; };
 		CF1B5D36195E02C7004F722D /* VWWBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWBlocks.h; sourceTree = "<group>"; };
 		CF1B5D37195E02C7004F722D /* VWWDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWDefines.h; sourceTree = "<group>"; };
@@ -79,6 +119,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		CF062861195E366F0005F178 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF062867195E366F0005F178 /* PhotosUI.framework in Frameworks */,
+				CF062869195E366F0005F178 /* Photos.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF554EC6195D107B00F043C3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -117,6 +166,34 @@
 			name = View;
 			sourceTree = "<group>";
 		};
+		CF062865195E366F0005F178 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CF062866195E366F0005F178 /* PhotosUI.framework */,
+				CF062868195E366F0005F178 /* Photos.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CF06286A195E366F0005F178 /* SuperpowersEditor */ = {
+			isa = PBXGroup;
+			children = (
+				CF06286D195E366F0005F178 /* PhotoEditingViewController.h */,
+				CF06286E195E366F0005F178 /* PhotoEditingViewController.m */,
+				CF062870195E366F0005F178 /* MainInterface.storyboard */,
+				CF06286B195E366F0005F178 /* Supporting Files */,
+			);
+			path = SuperpowersEditor;
+			sourceTree = "<group>";
+		};
+		CF06286B195E366F0005F178 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CF06286C195E366F0005F178 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		CF1B5D33195E0066004F722D /* Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +229,8 @@
 				CF06285E195E1E260005F178 /* MapKit.framework */,
 				CF554ECB195D107B00F043C3 /* Superpowers */,
 				CF554EE2195D107B00F043C3 /* SuperpowersTests */,
+				CF06286A195E366F0005F178 /* SuperpowersEditor */,
+				CF062865195E366F0005F178 /* Frameworks */,
 				CF554ECA195D107B00F043C3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -161,6 +240,7 @@
 			children = (
 				CF554EC9195D107B00F043C3 /* Superpowers.app */,
 				CF554EDF195D107B00F043C3 /* SuperpowersTests.xctest */,
+				CF062864195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -312,6 +392,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		CF062863195E366F0005F178 /* SuperpowersEditor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CF062878195E366F0005F178 /* Build configuration list for PBXNativeTarget "SuperpowersEditor" */;
+			buildPhases = (
+				CF062860195E366F0005F178 /* Sources */,
+				CF062861195E366F0005F178 /* Frameworks */,
+				CF062862195E366F0005F178 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SuperpowersEditor;
+			productName = SuperpowersEditor;
+			productReference = CF062864195E366F0005F178 /* VaporWareWolf-Software.Superpowers.SuperpowersEditor.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		CF554EC8195D107B00F043C3 /* Superpowers */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CF554EE9195D107B00F043C3 /* Build configuration list for PBXNativeTarget "Superpowers" */;
@@ -319,10 +416,13 @@
 				CF554EC5195D107B00F043C3 /* Sources */,
 				CF554EC6195D107B00F043C3 /* Frameworks */,
 				CF554EC7195D107B00F043C3 /* Resources */,
+				CF062874195E366F0005F178 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CF062873195E366F0005F178 /* PBXTargetDependency */,
+				CF062877195E366F0005F178 /* PBXTargetDependency */,
 			);
 			name = Superpowers;
 			productName = Superpowers;
@@ -356,6 +456,9 @@
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Zakk Hoyt";
 				TargetAttributes = {
+					CF062863195E366F0005F178 = {
+						CreatedOnToolsVersion = 6.0;
+					};
 					CF554EC8195D107B00F043C3 = {
 						CreatedOnToolsVersion = 6.0;
 					};
@@ -380,11 +483,20 @@
 			targets = (
 				CF554EC8195D107B00F043C3 /* Superpowers */,
 				CF554EDE195D107B00F043C3 /* SuperpowersTests */,
+				CF062863195E366F0005F178 /* SuperpowersEditor */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CF062862195E366F0005F178 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF062871195E366F0005F178 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF554EC7195D107B00F043C3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -405,6 +517,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CF062860195E366F0005F178 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF06286F195E366F0005F178 /* PhotoEditingViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF554EC5195D107B00F043C3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -436,6 +556,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		CF062873195E366F0005F178 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CF062863195E366F0005F178 /* SuperpowersEditor */;
+			targetProxy = CF062872195E366F0005F178 /* PBXContainerItemProxy */;
+		};
+		CF062877195E366F0005F178 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CF062863195E366F0005F178 /* SuperpowersEditor */;
+			targetProxy = CF062876195E366F0005F178 /* PBXContainerItemProxy */;
+		};
 		CF554EE1195D107B00F043C3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CF554EC8195D107B00F043C3 /* Superpowers */;
@@ -455,6 +585,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		CF062879195E366F0005F178 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SuperpowersEditor/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				METAL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "VaporWareWolf-Software.Superpowers.$(TARGET_NAME:rfc1034identifier)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		CF06287A195E366F0005F178 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SuperpowersEditor/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				METAL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "VaporWareWolf-Software.Superpowers.$(TARGET_NAME:rfc1034identifier)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		CF554EE7195D107B00F043C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -594,6 +750,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CF062878195E366F0005F178 /* Build configuration list for PBXNativeTarget "SuperpowersEditor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF062879195E366F0005F178 /* Debug */,
+				CF06287A195E366F0005F178 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		CF554EC4195D107B00F043C3 /* Build configuration list for PBXProject "Superpowers" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

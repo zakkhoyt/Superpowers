@@ -127,17 +127,21 @@
     UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     attributes.size = CGSizeMake(70, 70);
     
-    CGPoint point = [self pointForCoordinate:[self coordinateForIndexPath:indexPath]];
-    
-    [self isPointWithinBounds:point completionBlock:^(BOOL withinLayout, CGPoint point) {
-        VWWAssetCollectionViewCell *cell = (VWWAssetCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
-        cell.withinLayout = withinLayout;
-        attributes.center = point;
-        if(withinLayout == YES){
-            attributes.zIndex = 100;
-        }
-    }];
-    
+    CLLocationCoordinate2D coordinate = [self coordinateForIndexPath:indexPath];
+    if(coordinate.latitude == 0 && coordinate.longitude == 0){
+        attributes.hidden = YES;
+    } else {
+        CGPoint point = [self pointForCoordinate:coordinate];
+        attributes.hidden = NO;
+        [self isPointWithinBounds:point completionBlock:^(BOOL withinLayout, CGPoint point) {
+            VWWAssetCollectionViewCell *cell = (VWWAssetCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+            cell.withinLayout = withinLayout;
+            attributes.center = point;
+            if(withinLayout == YES){
+                attributes.zIndex = 100;
+            }
+        }];
+    }
     return attributes;
 }
 

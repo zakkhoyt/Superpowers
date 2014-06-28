@@ -38,8 +38,8 @@
 
 -(void)setupClass{
     self.scrollDirection = UICollectionViewScrollDirectionVertical;
-    self.minimumLineSpacing = 8.0f;
-    self.minimumInteritemSpacing = 8.0f;
+    self.minimumLineSpacing = 1.0f;
+    self.minimumInteritemSpacing = 1.0f;
 }
 
 

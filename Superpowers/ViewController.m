@@ -186,12 +186,12 @@ RDMapviewLayoutCoordinateDelegate>
 
 - (IBAction)daySliderValueChanged:(UISlider *)sender {
     self.searchDay = sender.value;
-    self.dayLabel.text = [NSString stringWithFormat:@"%ld%@", (long)self.searchDay, [self stringPostfixForDay:self.searchDay]];
+    self.dayLabel.text = [NSString stringWithFormat:@"%ld%@", (long)self.searchDay, [VWWUtility stringPostfixForDay:self.searchDay]];
 }
 
 - (IBAction)monthSliderValueChanged:(UISlider *)sender {
     self.searchMonth = sender.value;
-    self.monthLabel.text = [NSString stringWithFormat:@"%@", [self stringFromMonth:self.searchMonth]];
+    self.monthLabel.text = [NSString stringWithFormat:@"%@", [VWWUtility stringFromMonth:self.searchMonth]];
 }
 
 - (IBAction)yearSliderValueChanged:(UISlider *)sender {
@@ -248,8 +248,8 @@ RDMapviewLayoutCoordinateDelegate>
     self.monthSlider.value = self.searchMonth;
     self.yearSlider.value = self.searchYear;
     self.toleranceLabel.text = [NSString stringWithFormat:@"+/- %.1f days", (long)self.searchTolerance / 2.0];
-    self.dayLabel.text = [NSString stringWithFormat:@"%ld%@", (long)self.searchDay, [self stringPostfixForDay:self.searchDay]];
-    self.monthLabel.text = [NSString stringWithFormat:@"%@", [self stringFromMonth:self.searchMonth]];
+    self.dayLabel.text = [NSString stringWithFormat:@"%ld%@", (long)self.searchDay, [VWWUtility stringPostfixForDay:self.searchDay]];
+    self.monthLabel.text = [NSString stringWithFormat:@"%@", [VWWUtility stringFromMonth:self.searchMonth]];
     self.yearLabel.text = [NSString stringWithFormat:@"%ld", (long)self.searchYear];
 }
 -(void)fetchResults{
@@ -274,8 +274,6 @@ RDMapviewLayoutCoordinateDelegate>
     }
     self.options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]];
 
-    
-    
     // Calculate start and end dates. Create date with day, month, year
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [[NSDateComponents alloc]init];
@@ -298,7 +296,6 @@ RDMapviewLayoutCoordinateDelegate>
     
     
     self.options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
-    
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -317,21 +314,18 @@ RDMapviewLayoutCoordinateDelegate>
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
     CGFloat scale = [UIScreen mainScreen].scale;
     CGSize size = CGSizeMake(ViewControllerCellSize * scale, ViewControllerCellSize * scale);
+
     [self.imageManager requestImageForAsset:asset
                                  targetSize:size
                                 contentMode:PHImageContentModeAspectFill
                                     options:nil
                               resultHandler:^(UIImage *image, NSDictionary *info) {
-                                  
-//                                  // Only update the thumbnail if the cell tag hasn't changed. Otherwise, the cell has been re-used.
-//                                  if (cell.tag == currentTag) {
-                                      cell.image = image;
-//                                  }
-                                  
+                                  NSLog(@"info: %@", info);
+                                  cell.image = image;
                               }];
     
     
-    cell.title = [self stringFromAssetSource:asset.assetSource];
+    cell.title = [VWWUtility stringFromAssetSource:asset.assetSource];
     
     return cell;
 }
@@ -341,92 +335,7 @@ RDMapviewLayoutCoordinateDelegate>
 }
 
 
--(NSString*)stringFromMonth:(NSUInteger)month{
-    if(month == 1){
-        return @"January";
-    } else if(month == 2){
-        return @"February";
-    } else if(month == 3){
-        return @"March";
-    } else if(month == 4){
-        return @"April";
-    } else if(month == 5){
-        return @"May";
-    } else if(month == 6){
-        return @"June";
-    } else if(month == 7){
-        return @"July";
-    } else if(month == 8){
-        return @"August";
-    } else if(month == 9){
-        return @"September";
-    } else if(month == 10){
-        return @"October";
-    } else if(month == 11){
-        return @"November";
-    } else if(month == 12){
-        return @"December";
-    }
-    return [NSString stringWithFormat:@"Error: %lu", month];
-}
 
--(NSString*)stringPostfixForDay:(NSUInteger)day{
-    if(day % 10 == 0){
-        return @"th";
-    } else if(day % 10 == 1){
-        return @"st";
-    } else if(day % 10 == 2){
-        return @"nd";
-    } else if(day % 10 == 3){
-        return @"rd";
-    } else if(day % 10 == 4){
-        return @"th";
-    } else if(day % 10 == 5){
-        return @"th";
-    } else if(day % 10 == 6){
-        return @"th";
-    } else if(day % 10 == 7){
-        return @"th";
-    } else if(day % 10 == 8){
-        return @"th";
-    } else if(day % 10 == 9){
-        return @"th";
-    }
-    return [NSString stringWithFormat:@"Error: %lu", day];
-}
-
-
-
--(NSString*)stringFromAssetSource:(PHAssetSource)assetSource{
-    switch (assetSource) {
-        case PHAssetSourceUnknown:
-            return @"?";
-            break;
-        case PHAssetSourcePhotoBooth:
-            return @"photoBooth";
-            break;
-        case PHAssetSourcePhotoStream:
-            return @"photoStream";
-            break;
-        case PHAssetSourceCamera:
-            return @"camera";
-            break;
-        case PHAssetSourceCloudShared:
-            return @"cloudShared";
-            break;
-        case PHAssetSourceCameraConnectionKit:
-            return @"camConnKit";
-            break;
-        case PHAssetSourceCloudPhotoLibrary:
-            return @"cloudPhotoLib";
-            break;
-        case PHAssetSourceiTunesSync:
-            return @"iTunes";
-            break;
-        default:
-            break;
-    }
-}
 
 #pragma mark - Asset Caching
 
@@ -549,19 +458,21 @@ RDMapviewLayoutCoordinateDelegate>
         sender.transform = CGAffineTransformIdentity;
     }];
 
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-    PHAsset *asset = self.assetsFetchResults[indexPath.item];
-    if(asset.location.coordinate.latitude != 0 &&
-       asset.location.coordinate.longitude != 0){
-        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
-        if(CGRectContainsPoint(self.mapView.frame, point)){
-            //        [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:cluster];
-        } else {
-        // Center in screen
-        CLLocationCoordinate2D coordinate = asset.location.coordinate;
-        [self.mapView setCenterCoordinate:coordinate animated:YES];
-        }
-    }
+//    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+//    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+//    if(asset.location.coordinate.latitude != 0 &&
+//       asset.location.coordinate.longitude != 0){
+//        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
+//        if(CGRectContainsPoint(self.mapView.frame, point)){
+//            if(self.collectionView.collectionViewLayout == self.gridLayout){
+//                [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:sender];
+//            }
+//        } else {
+//        // Center in screen
+//        CLLocationCoordinate2D coordinate = asset.location.coordinate;
+//        [self.mapView setCenterCoordinate:coordinate animated:YES];
+//        }
+//    }
 
 }
 -(void)assetCollectionViewCellLongPress:(VWWAssetCollectionViewCell*)sender{

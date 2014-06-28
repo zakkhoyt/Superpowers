@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@import Photos;
 @interface VWWUtility : NSObject
 
 @end
@@ -27,4 +27,10 @@
 +(float)floatForKey:(NSString *)key fromDictionary:(NSDictionary*)dictionary;
 +(NSDictionary*)dictionaryForKey:(NSString*)key fromDictionary:(NSDictionary*)dictionary;
 +(NSArray*)arrayForKey:(NSString*)key fromDictionary:(NSDictionary*)dictionary;
+@end
+
+@interface VWWUtility (NSString)
++(NSString*)stringFromMonth:(NSUInteger)month;
++(NSString*)stringPostfixForDay:(NSUInteger)day;
++(NSString*)stringFromAssetSource:(PHAssetSource)assetSource;
 @end

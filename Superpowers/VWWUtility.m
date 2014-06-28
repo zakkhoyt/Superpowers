@@ -7,7 +7,7 @@
 //
 
 #import "VWWUtility.h"
-
+@import Photos;
 
 @interface VWWUtility  () {
     NSDateFormatter *internetDateFormatter;
@@ -129,4 +129,94 @@
 }
 
 
+@end
+
+
+@implementation VWWUtility (NSString)
++(NSString*)stringFromMonth:(NSUInteger)month{
+    if(month == 1){
+        return @"January";
+    } else if(month == 2){
+        return @"February";
+    } else if(month == 3){
+        return @"March";
+    } else if(month == 4){
+        return @"April";
+    } else if(month == 5){
+        return @"May";
+    } else if(month == 6){
+        return @"June";
+    } else if(month == 7){
+        return @"July";
+    } else if(month == 8){
+        return @"August";
+    } else if(month == 9){
+        return @"September";
+    } else if(month == 10){
+        return @"October";
+    } else if(month == 11){
+        return @"November";
+    } else if(month == 12){
+        return @"December";
+    }
+    return [NSString stringWithFormat:@"Error: %lu", month];
+}
+
++(NSString*)stringPostfixForDay:(NSUInteger)day{
+    if(day % 10 == 0){
+        return @"th";
+    } else if(day % 10 == 1){
+        return @"st";
+    } else if(day % 10 == 2){
+        return @"nd";
+    } else if(day % 10 == 3){
+        return @"rd";
+    } else if(day % 10 == 4){
+        return @"th";
+    } else if(day % 10 == 5){
+        return @"th";
+    } else if(day % 10 == 6){
+        return @"th";
+    } else if(day % 10 == 7){
+        return @"th";
+    } else if(day % 10 == 8){
+        return @"th";
+    } else if(day % 10 == 9){
+        return @"th";
+    }
+    return [NSString stringWithFormat:@"Error: %lu", day];
+}
+
+
+
++(NSString*)stringFromAssetSource:(PHAssetSource)assetSource{
+    switch (assetSource) {
+        case PHAssetSourceUnknown:
+            return @"?";
+            break;
+        case PHAssetSourcePhotoBooth:
+            return @"photoBooth";
+            break;
+        case PHAssetSourcePhotoStream:
+            return @"photoStream";
+            break;
+        case PHAssetSourceCamera:
+            return @"camera";
+            break;
+        case PHAssetSourceCloudShared:
+            return @"cloudShared";
+            break;
+        case PHAssetSourceCameraConnectionKit:
+            return @"camConnKit";
+            break;
+        case PHAssetSourceCloudPhotoLibrary:
+            return @"cloudPhotoLib";
+            break;
+        case PHAssetSourceiTunesSync:
+            return @"iTunes";
+            break;
+        default:
+            break;
+    }
+}
 @end
