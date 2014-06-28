@@ -8,6 +8,9 @@
 
 #import "VWWFullScreenViewController.h"
 #import "VWW.h"
+#import "PhotoEditingViewController.h"
+static NSString *VWWSegueFullToEdit = @"VWWSegueFullToEdit";
+
 @implementation CIImage (Convenience)
 - (NSData *)aapl_jpegRepresentationWithCompressionQuality:(CGFloat)compressionQuality {
     static CIContext *ciContext = nil;
@@ -33,7 +36,7 @@
 @property (strong) IBOutlet UIBarButtonItem *editButton;
 @property (strong) IBOutlet UIProgressView *progressView;
 @property (strong) AVPlayerLayer *playerLayer;
-
+@property (nonatomic, strong) UIImage *currentImage;
 @end
 
 @implementation VWWFullScreenViewController
@@ -60,7 +63,8 @@ static NSString * const AdjustmentFormatIdentifier = @"com.example.apple-samplec
         self.toolbarItems = @[self.space, self.trashButton];
     }
     
-    BOOL isEditable = ([self.asset canPerformEditOperation:PHAssetEditOperationProperties] || [self.asset canPerformEditOperation:PHAssetEditOperationContent]);
+//    BOOL isEditable = ([self.asset canPerformEditOperation:PHAssetEditOperationProperties] || [self.asset canPerformEditOperation:PHAssetEditOperationContent]);
+    BOOL isEditable = self.asset.location != nil;
     self.editButton.enabled = isEditable;
     
     BOOL isTrashable = NO;
@@ -78,6 +82,14 @@ static NSString * const AdjustmentFormatIdentifier = @"com.example.apple-samplec
 {
     [super viewWillLayoutSubviews];
     [self updateImage];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if([segue.identifier isEqualToString:VWWSegueFullToEdit]){
+        PhotoEditingViewController *vc = segue.destinationViewController;
+        vc.devImage = self.currentImage;
+        vc.devLocation = self.asset.location;
+    }
 }
 
 - (void)updateImage
@@ -99,9 +111,15 @@ static NSString * const AdjustmentFormatIdentifier = @"com.example.apple-samplec
     [[PHImageManager defaultManager] requestImageForAsset:self.asset targetSize:targetSize contentMode:PHImageContentModeAspectFit options:options resultHandler:^(UIImage *result, NSDictionary *info) {
         if (result) {
             self.imageView.image = result;
+            self.currentImage = result;
         }
     }];
 }
+
+- (IBAction)editButtonTouchUpInside:(id)sender {
+    [self performSegueWithIdentifier:VWWSegueFullToEdit sender:self];
+}
+
 
 #pragma mark - PHPhotoLibraryChangeObserver
 

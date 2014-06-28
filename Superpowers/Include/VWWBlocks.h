@@ -32,6 +32,7 @@ typedef void (^VWWProgessBlock)(NSInteger totalBytesSent, NSInteger totalBytesEx
 typedef void (^VWWSetBlock)(NSOrderedSet *set);
 typedef void (^VWWStringBlock)(NSString *string);
 typedef void (^VWWTokenBlock)(VWWToken *token);
+typedef void (^VWWUIImageBlock)(UIImage *image);
 typedef void (^VWWUIntegerBlock)(NSUInteger index);
 typedef void (^VWWURLErrorBlock)(NSURL *url, NSError *error);
 #endif

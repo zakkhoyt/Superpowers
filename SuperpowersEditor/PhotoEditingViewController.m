@@ -11,23 +11,28 @@
 #import <Photos/Photos.h>
 #import <PhotosUI/PhotosUI.h>
 #import <CoreLocation/CoreLocation.h>
+#import "PhotoEditorCollectionViewCell.h"
+#import "SMMapClipController.h"
 
 
 typedef enum {
     PhotoEditingViewControllerTypeMapOnImage = 0,
     PhotoEditingViewControllerTypeImageOnMap = 1,
     PhotoEditingViewControllerTypeTextOnImage = 2,
+    PhotoEditingViewControllerTypeCoordinatesOnImage = 3,
+    PhotoEditingViewControllerTypeTextAndCoordinatesOnImage = 4,
 } PhotoEditingViewControllerType;
 
-@interface PhotoEditingViewController () <PHContentEditingController>
+@interface PhotoEditingViewController () <PHContentEditingController, UIActionSheetDelegate>
 @property (strong) PHContentEditingInput *input;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationNameLabel;
+@property (nonatomic, strong) UIActionSheet *actionSheet;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityView;
 
 @end
 
@@ -36,6 +41,10 @@ typedef enum {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.collectionView.alwaysBounceHorizontal = YES;
+    self.collectionView.backgroundColor = [UIColor blueColor];
+    self.imageView.image = self.devImage;
+    self.activityView.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -93,31 +102,93 @@ typedef enum {
 }
 
 
-#pragma mark Private methods
-- (IBAction)buttonTouchUpInside:(id)sender {
-}
 
-
-#pragma mark UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+#pragma mark UICollectionViewDatasource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+
+- (NSInteger)collectionView:(UICollectionView *)cv numberOfItemsInSection:(NSInteger)section {
+    return 5;
 }
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    if(indexPath.row == PhotoEditingViewControllerTypeImageOnMap){
-        cell.textLabel.text = @"Image on Map";
-    } else if(indexPath.row == PhotoEditingViewControllerTypeMapOnImage){
-        cell.textLabel.text = @"Map on Image";
-    } else if(indexPath.row == PhotoEditingViewControllerTypeTextOnImage){
-        cell.textLabel.text = @"Text on Image";
+
+
+
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    PhotoEditorCollectionViewCell *cell = (PhotoEditorCollectionViewCell*)[cv dequeueReusableCellWithReuseIdentifier:@"PhotoEditorCollectionViewCell" forIndexPath:indexPath];
+    
+    if(indexPath.item == PhotoEditingViewControllerTypeMapOnImage){
+        cell.title = @"Image on Map";
+    } else if(indexPath.item == PhotoEditingViewControllerTypeImageOnMap) {
+        cell.title = @"Map on Image";
+    } else if(indexPath.item == PhotoEditingViewControllerTypeTextOnImage) {
+        cell.title = @"Text on Image";
+    } else if(indexPath.item == PhotoEditingViewControllerTypeCoordinatesOnImage) {
+        cell.title = @"Coords on Image";
+    } else if(indexPath.item == PhotoEditingViewControllerTypeTextAndCoordinatesOnImage) {
+        cell.title = @"Text & Coords on Image";
     }
+    
+
+    cell.backgroundColor = [UIColor darkGrayColor];
     return cell;
 }
 
+
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    return UIEdgeInsetsMake(8, 8, 8, 8);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    return  CGSizeMake(70, 70);
+}
+
+
+#pragma mark UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.activityView startAnimating];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.activityView.hidden = NO;
+    }];
+    
+    
+    if(indexPath.item == 0){
+        CGSize size = CGSizeMake(self.devImage.size.width / 4.0, self.devImage.size.height / 4.0);
+        CGFloat width = size.width / 4.0;
+        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.devLocation.coordinate size:size type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
+            
+            if(mapImage){
+                // Resize main image to a smaller one
+                UIImage *resizedImage = [[SMMapClipController sharedInstance] resizeImage:self.devImage size:size];
+                UIImage *mergedImage = [[SMMapClipController sharedInstance] renderImage:resizedImage onImage:mapImage atRect:CGRectMake(size.width - 1.25*width, size.height - 1.25*width, width, width)];
+                self.imageView.image = mergedImage;
+            }
+            [UIView animateWithDuration:0.3 animations:^{
+                self.activityView.hidden = YES;
+            }];
+            
+            [self.activityView stopAnimating];
+        }];
+        
+    } else if(indexPath.item == 1){
+        CGFloat width = self.devImage.size.width / 4.0;
+        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.devLocation.coordinate size:CGSizeMake(width, width) type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
+            UIImage *mergedImage = [[SMMapClipController sharedInstance] renderImage:mapImage onImage:self.devImage atRect:CGRectMake(self.devImage.size.width - 1.25*width, self.devImage.size.height - 1.25*width, width, width)];
+            self.imageView.image = mergedImage;
+            [UIView animateWithDuration:0.3 animations:^{
+                self.activityView.hidden = YES;
+            }];
+
+            [self.activityView stopAnimating];
+        }];
+    } else if(indexPath.item == 2){
+//        UILabel *label = [UILabel alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height);
+    }
+}
 
 
 @end

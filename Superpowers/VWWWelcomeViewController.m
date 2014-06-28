@@ -20,6 +20,7 @@
 @property (strong) PHCachingImageManager *imageManager;
 @property (nonatomic, strong) VWWLocationController *locationController;
 @property (nonatomic, strong) UIAlertView *alertView;
+@property (nonatomic, strong) UIActionSheet *actionSheet;
 @end
 
 @implementation VWWWelcomeViewController
@@ -105,8 +106,16 @@
 }
 
 
-- (IBAction)promptButtonTouchUpInside:(id)sender {
-    self.imageManager = [[PHCachingImageManager alloc] init];
+- (IBAction)promptButtonTouchUpInside:(UIButton*)sender {
+//    self.imageManager = [[PHCachingImageManager alloc] init];
+    self.actionSheet = [[UIActionSheet alloc] initWithTitle:@"Select Sharing option:" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:
+                        @"Share on Facebook",
+                        @"Share on Twitter",
+                        @"Share via E-mail",
+                        @"Save to Camera Roll",
+                        @"Rate this App",
+                        nil];
+    [self.actionSheet showFromRect:sender.frame inView:self.view animated:YES];
 }
 
 
