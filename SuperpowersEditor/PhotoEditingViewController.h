@@ -10,5 +10,6 @@
 @import CoreLocation;
 
 @interface PhotoEditingViewController : UIViewController
-
+@property (nonatomic, strong) UIImage *inAppImage;
+@property (nonatomic, strong) CLLocation *inAppLocation;
 @end

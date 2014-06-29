@@ -220,12 +220,9 @@
 		CF06286A195E366F0005F178 /* SuperpowersEditor */ = {
 			isa = PBXGroup;
 			children = (
-				CF06286D195E366F0005F178 /* PhotoEditingViewController.h */,
-				CF06286E195E366F0005F178 /* PhotoEditingViewController.m */,
-				CF062870195E366F0005F178 /* MainInterface.storyboard */,
+				CF16155B1960961C00A66C9D /* UserInterface */,
+				CF16155A1960961100A66C9D /* Controller */,
 				CF06286B195E366F0005F178 /* Supporting Files */,
-				CF16153A195F733F00A66C9D /* PhotoEditorCollectionViewCell.h */,
-				CF16153B195F733F00A66C9D /* PhotoEditorCollectionViewCell.m */,
 			);
 			path = SuperpowersEditor;
 			sourceTree = "<group>";
@@ -252,6 +249,41 @@
 			children = (
 			);
 			name = ThirdParty;
+			sourceTree = "<group>";
+		};
+		CF16155A1960961100A66C9D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				CF16155C1960962800A66C9D /* Main */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		CF16155B1960961C00A66C9D /* UserInterface */ = {
+			isa = PBXGroup;
+			children = (
+				CF062870195E366F0005F178 /* MainInterface.storyboard */,
+			);
+			name = UserInterface;
+			sourceTree = "<group>";
+		};
+		CF16155C1960962800A66C9D /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				CF16155D1960962F00A66C9D /* Cell */,
+				CF06286D195E366F0005F178 /* PhotoEditingViewController.h */,
+				CF06286E195E366F0005F178 /* PhotoEditingViewController.m */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		CF16155D1960962F00A66C9D /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				CF16153A195F733F00A66C9D /* PhotoEditorCollectionViewCell.h */,
+				CF16153B195F733F00A66C9D /* PhotoEditorCollectionViewCell.m */,
+			);
+			name = Cell;
 			sourceTree = "<group>";
 		};
 		CF1B5D33195E0066004F722D /* Library */ = {
@@ -696,6 +728,8 @@
 		CF062879195E366F0005F178 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -713,6 +747,8 @@
 		CF06287A195E366F0005F178 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SuperpowersEditor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -806,6 +842,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Superpowers/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -817,6 +854,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Superpowers/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -37,18 +37,18 @@
 
 
 #pragma mark UIView
-
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self.delegate assetCollectionViewCellTouchBegan:self];
-}
-
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self.delegate assetCollectionViewCellTouchEnded:self];
-}
-
--(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self.delegate assetCollectionViewCellTouchEnded:self];
-}
+//
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+//    [self.delegate assetCollectionViewCellTouchBegan:self];
+//}
+//
+//-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+//    [self.delegate assetCollectionViewCellTouchEnded:self];
+//}
+//
+//-(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
+//    [self.delegate assetCollectionViewCellTouchEnded:self];
+//}
 
 #pragma mark Public methods
 

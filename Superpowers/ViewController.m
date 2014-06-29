@@ -441,20 +441,26 @@ RDMapviewLayoutCoordinateDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
 
-    PHAsset *asset = self.assetsFetchResults[indexPath.item];
-//    if(asset.location.coordinate.latitude != 0 &&
-//       asset.location.coordinate.longitude != 0){
-        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
-        if(CGRectContainsPoint(self.mapView.frame, point)){
-            if(self.collectionView.collectionViewLayout == self.gridLayout){
-                [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
-            }
-        } else {
-        // Center in screen
-        CLLocationCoordinate2D coordinate = asset.location.coordinate;
-        [self.mapView setCenterCoordinate:coordinate animated:YES];
-        }
-//    }
+
+    if(self.collectionView.collectionViewLayout == self.gridLayout){
+        [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
+    } else if(self.collectionView.collectionViewLayout == self.mapviewLayout){
+        PHAsset *asset = self.assetsFetchResults[indexPath.item];
+//        if(asset.location.coordinate.latitude != 0 &&
+//           asset.location.coordinate.longitude != 0){
+//            CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
+//            if(CGRectContainsPoint(self.mapView.frame, point)){
+//            } else {
+                // Center in screen
+                CLLocationCoordinate2D coordinate = asset.location.coordinate;
+                [self.mapView setCenterCoordinate:coordinate animated:YES];
+//            }
+//
+//        }
+
+    }
+
+
 }
 #pragma mark - Asset Caching
 
@@ -595,24 +601,24 @@ RDMapviewLayoutCoordinateDelegate>
 
 }
 -(void)assetCollectionViewCellLongPress:(VWWAssetCollectionViewCell*)sender{
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-    [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
+//    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+//    [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
 }
 
 -(void)assetCollectionViewCellDoubleTap:(VWWAssetCollectionViewCell*)sender{
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-    PHAsset *asset = self.assetsFetchResults[indexPath.item];
-    if(asset.location.coordinate.latitude != 0 &&
-       asset.location.coordinate.longitude != 0){
-        //        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
-        //        if(CGRectContainsPoint(self.mapView.frame, point)){
-        //            //        [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:cluster];
-        //        } else {
-        // Center in screen
-        CLLocationCoordinate2D coordinate = asset.location.coordinate;
-        [self.mapView setCenterCoordinate:coordinate animated:YES];
-        //        }
-    }
+//    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+//    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+//    if(asset.location.coordinate.latitude != 0 &&
+//       asset.location.coordinate.longitude != 0){
+//        //        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
+//        //        if(CGRectContainsPoint(self.mapView.frame, point)){
+//        //            //        [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:cluster];
+//        //        } else {
+//        // Center in screen
+//        CLLocationCoordinate2D coordinate = asset.location.coordinate;
+//        [self.mapView setCenterCoordinate:coordinate animated:YES];
+//        //        }
+//    }
 }
 
 

@@ -68,7 +68,6 @@
                                         <connections>
                                             <outlet property="imageView" destination="GDe-yu-e0f" id="PZN-6S-Ohy"/>
                                             <outlet property="label" destination="zSW-3b-X59" id="qqu-Dc-eVP"/>
-                                            <segue destination="dNi-KD-cUz" kind="show" identifier="VWWSegueCollectionToFull" id="1JI-6C-yOJ"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -225,6 +224,7 @@
                         <outlet property="yearLabel" destination="gdS-Qq-FBN" id="Ugn-z1-zoT"/>
                         <outlet property="yearSlider" destination="oN2-hw-JFF" id="z1D-hs-ZBk"/>
                         <segue destination="2FE-gh-Md7" kind="show" identifier="VWWSegueGridToLibrary" id="miH-NE-mvb"/>
+                        <segue destination="dNi-KD-cUz" kind="show" identifier="VWWSegueCollectionToFull" id="ADc-s2-Uhc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

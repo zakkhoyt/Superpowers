@@ -37,8 +37,10 @@ typedef enum {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.collectionView.alwaysBounceHorizontal = YES;
-    self.collectionView.backgroundColor = [UIColor blueColor];
+    self.collectionView.backgroundColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
     self.activityView.hidden = YES;
+    
+    self.imageView.image = self.theImage;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -110,7 +112,22 @@ typedef enum {
     // May be called after finishContentEditingWithCompletionHandler: while you prepare output.
 }
 
+-(UIImage*)theImage{
+    if(self.input){
+        return self.input.displaySizeImage;
+    } else {
+        return self.inAppImage;
+    }
+}
 
+
+-(CLLocation*)theLocation{
+    if(self.input){
+        return self.input.location;
+    } else {
+        return self.inAppLocation;
+    }
+}
 
 #pragma mark UICollectionViewDatasource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv {
@@ -118,7 +135,7 @@ typedef enum {
 }
 
 - (NSInteger)collectionView:(UICollectionView *)cv numberOfItemsInSection:(NSInteger)section {
-    return 5;
+    return 4;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -163,13 +180,13 @@ typedef enum {
     
     if(indexPath.item == 0){
         
-        CGSize size = CGSizeMake(self.input.displaySizeImage.size.width, self.input.displaySizeImage.size.height);
+        CGSize size = CGSizeMake(self.theImage.size.width, self.theImage.size.height);
         CGFloat width = size.width / 4.0;
-        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.input.location.coordinate size:size type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
+        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.theLocation.coordinate size:size type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
             
             if(mapImage){
                 // Resize main image to a smaller one
-                UIImage *resizedImage = [[SMMapClipController sharedInstance] resizeImage:self.input.displaySizeImage size:size];
+                UIImage *resizedImage = [[SMMapClipController sharedInstance] resizeImage:self.theImage size:size];
                 UIImage *mergedImage = [[SMMapClipController sharedInstance] renderImage:resizedImage onImage:mapImage atRect:CGRectMake(size.width - 1.25*width, size.height - 1.25*width, width, width)];
                 self.imageView.image = mergedImage;
             }
@@ -181,9 +198,9 @@ typedef enum {
         }];
         
     } else if(indexPath.item == 1){
-        CGFloat width = self.input.displaySizeImage.size.width / 4.0;
-        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.input.location.coordinate size:CGSizeMake(width, width) type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
-            UIImage *mergedImage = [[SMMapClipController sharedInstance] renderImage:mapImage onImage:self.input.displaySizeImage atRect:CGRectMake(self.input.displaySizeImage.size.width - 1.25*width, self.input.displaySizeImage.size.height - 1.25*width, width, width)];
+        CGFloat width = self.theImage.size.width / 4.0;
+        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.theLocation.coordinate size:CGSizeMake(width, width) type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
+            UIImage *mergedImage = [[SMMapClipController sharedInstance] renderImage:mapImage onImage:self.theImage atRect:CGRectMake(self.theImage.size.width - 1.25*width, self.theImage.size.height - 1.25*width, width, width)];
             self.imageView.image = mergedImage;
             [UIView animateWithDuration:0.3 animations:^{
                 self.activityView.hidden = YES;
@@ -192,17 +209,57 @@ typedef enum {
             [self.activityView stopAnimating];
         }];
     } else if(indexPath.item == 2){
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.input.displaySizeImage.size.width, self.input.displaySizeImage.size.height)];
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.theImage.size.width, self.theImage.size.height)];
         label.textAlignment = NSTextAlignmentCenter;
         label.textColor = [UIColor whiteColor];
+        label.shadowColor = [UIColor blackColor];
+        label.shadowOffset = CGSizeMake(1, 1);
         label.numberOfLines = 0;
-        label.text = [NSString stringWithFormat:@"%f,%f", self.input.location.coordinate.latitude, self.input.location.coordinate.longitude];
-        //[self.imageView addSubview:label];
-        [[SMMapClipController sharedInstance] renderView:label onImage:self.input.displaySizeImage];
+        UIFont *font = [UIFont systemFontOfSize:36];
+        label.font = font;
         
-        // Perhaps we can make a UIView subclass, override drawRect with code from:
-        // http://www.zsiegel.com/2012/10/22/Core-Text-on-iOS/
-        // Then render that UIVIew on the image
+        [VWWUtility placemarksFromLocation:self.theLocation completionBlock:^(NSArray *placemarks) {
+            NSMutableString *labelText = [[NSMutableString alloc]init];
+            CLPlacemark *placemark = placemarks[0];
+            if(placemark.subThoroughfare)
+                [labelText appendFormat:@"%@ ", placemark.subThoroughfare];
+            if(placemark.thoroughfare)
+                [labelText appendFormat:@"%@\n", placemark.thoroughfare];
+            if(placemark.locality)
+                [labelText appendFormat:@"%@ ", placemark.locality];
+            if(placemark.administrativeArea)
+                [labelText appendFormat:@"%@", placemark.administrativeArea];
+            if(placemark.postalCode)
+                [labelText appendFormat:@", %@\n", placemark.postalCode];
+            if(placemark.country)
+                [labelText appendFormat:@"%@\n", placemark.country];
+            label.text = labelText;
+            UIImage *mergedImage = [[SMMapClipController sharedInstance] renderView:label onImage:self.theImage];
+            self.imageView.image = mergedImage;
+            [UIView animateWithDuration:0.3 animations:^{
+                self.activityView.hidden = YES;
+            }];
+            
+            [self.activityView stopAnimating];
+        }];
+    } else if(indexPath.item == 3){
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.theImage.size.width, self.theImage.size.height)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = [UIColor whiteColor];
+        label.shadowColor = [UIColor blackColor];
+        label.shadowOffset = CGSizeMake(1, 1);
+        label.numberOfLines = 0;
+        UIFont *font = [UIFont systemFontOfSize:36];
+        label.font = font;
+        label.text = [NSString stringWithFormat:@"%.4f,%.4f", self.theLocation.coordinate.latitude, self.theLocation.coordinate.longitude];
+        //[self.imageView addSubview:label];
+        UIImage *mergedImage = [[SMMapClipController sharedInstance] renderView:label onImage:self.theImage];
+        self.imageView.image = mergedImage;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.activityView.hidden = YES;
+        }];
+        
+        [self.activityView stopAnimating];
     }
 }
 
