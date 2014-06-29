@@ -19,9 +19,10 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HAT-Wg-Xal">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="528"/>
                             </imageView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Bqt-Kw-9Tz">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Bqt-Kw-9Tz">
                                 <rect key="frame" x="0.0" y="442" width="320" height="86"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="fYr-I0-JbA">
+                                <inset key="scrollIndicatorInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="8" minimumInteritemSpacing="8" id="fYr-I0-JbA">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -73,8 +74,11 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="n38-gi-rB5" firstAttribute="top" secondItem="HAT-Wg-Xal" secondAttribute="bottom" id="8Ir-HX-kfe"/>
+                            <constraint firstItem="Bqt-Kw-9Tz" firstAttribute="leading" secondItem="zMn-AG-sqS" secondAttribute="leading" id="OhV-dm-mOA"/>
                             <constraint firstItem="HAT-Wg-Xal" firstAttribute="top" secondItem="zMn-AG-sqS" secondAttribute="top" id="TMY-zj-IZJ"/>
                             <constraint firstItem="HAT-Wg-Xal" firstAttribute="leading" secondItem="zMn-AG-sqS" secondAttribute="leading" id="dfK-WD-30I"/>
+                            <constraint firstItem="n38-gi-rB5" firstAttribute="top" secondItem="Bqt-Kw-9Tz" secondAttribute="bottom" id="oYT-HE-Y7b"/>
+                            <constraint firstAttribute="trailing" secondItem="Bqt-Kw-9Tz" secondAttribute="trailing" id="qND-lk-AtC"/>
                             <constraint firstAttribute="trailing" secondItem="HAT-Wg-Xal" secondAttribute="trailing" id="sp4-2W-d3d"/>
                         </constraints>
                     </view>

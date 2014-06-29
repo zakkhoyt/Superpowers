@@ -85,11 +85,11 @@ static NSString * const AdjustmentFormatIdentifier = @"com.example.apple-samplec
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if([segue.identifier isEqualToString:VWWSegueFullToEdit]){
-        PhotoEditingViewController *vc = segue.destinationViewController;
-        vc.devImage = self.currentImage;
-        vc.devLocation = self.asset.location;
-    }
+//    if([segue.identifier isEqualToString:VWWSegueFullToEdit]){
+//        PhotoEditingViewController *vc = segue.destinationViewController;
+//        vc.devImage = self.currentImage;
+//        vc.devLocation = self.asset.location;
+//    }
 }
 
 - (void)updateImage

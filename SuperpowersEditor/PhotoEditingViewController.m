@@ -23,17 +23,12 @@ typedef enum {
     PhotoEditingViewControllerTypeTextAndCoordinatesOnImage = 4,
 } PhotoEditingViewControllerType;
 
-@interface PhotoEditingViewController () <PHContentEditingController, UIActionSheetDelegate>
+@interface PhotoEditingViewController () <PHContentEditingController>
 @property (strong) PHContentEditingInput *input;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-
+@property (nonatomic, strong) NSString *selectedFilterName;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-
-@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
-@property (weak, nonatomic) IBOutlet UILabel *locationNameLabel;
-@property (nonatomic, strong) UIActionSheet *actionSheet;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityView;
-
 @end
 
 @implementation PhotoEditingViewController
@@ -43,7 +38,6 @@ typedef enum {
     // Do any additional setup after loading the view.
     self.collectionView.alwaysBounceHorizontal = YES;
     self.collectionView.backgroundColor = [UIColor blueColor];
-    self.imageView.image = self.devImage;
     self.activityView.hidden = YES;
 }
 
@@ -55,13 +49,10 @@ typedef enum {
 #pragma mark - PHContentEditingController
 
 - (BOOL)canHandleAdjustmentData:(PHAdjustmentData *)adjustmentData {
-//    // Inspect the adjustmentData to determine whether your extension can work with past edits.
-//    // (Typically, you use its formatIdentifier and formatVersion properties to do this.)
-//    return NO;
-
-    BOOL result = [adjustmentData.formatIdentifier isEqualToString:@"com.example.apple-samplecode.photofilter"];
-    result &= [adjustmentData.formatVersion isEqualToString:@"1.0"];
-    return result;
+//    BOOL result = [adjustmentData.formatIdentifier isEqualToString:@"com.vaporwarewolf.photofilter"];
+//    result &= [adjustmentData.formatVersion isEqualToString:@"1.0"];
+//    return result;
+    return NO; // always get past edits baked in
 }
 
 - (void)startContentEditingWithInput:(PHContentEditingInput *)contentEditingInput placeholderImage:(UIImage *)placeholderImage {
@@ -70,31 +61,49 @@ typedef enum {
     // If you returned NO, the contentEditingInput has past edits "baked in".
     self.input = contentEditingInput;
     self.imageView.image = placeholderImage;
-    self.locationLabel.text = [NSString stringWithFormat:@"%.4f,%.4f", contentEditingInput.location.coordinate.latitude, contentEditingInput.location.coordinate.longitude];
-    [VWWUtility stringFromLocation:contentEditingInput.location completionBlock:^(NSString *name) {
-        self.locationNameLabel.text = name;
-    }];
     
+    // Load adjustment data, if any
+    @try {
+        PHAdjustmentData *adjustmentData = self.input.adjustmentData;
+        if (adjustmentData) {
+            self.selectedFilterName = [NSKeyedUnarchiver unarchiveObjectWithData:adjustmentData.data];
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception decoding adjustment data: %@", exception);
+    }
+    if (!self.selectedFilterName) {
+        NSString *defaultFilterName = @"No Additions";
+        self.selectedFilterName = defaultFilterName;
+    }
+
 }
+
+
+
+
 - (void)finishContentEditingWithCompletionHandler:(void (^)(PHContentEditingOutput *))completionHandler {
-    // Update UI to reflect that editing has finished and output is being rendered.
+    PHContentEditingOutput *contentEditingOutput = [[PHContentEditingOutput alloc] initWithContentEditingInput:self.input];
     
-    // Render and provide output on a background queue.
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // Create editing output from the editing input.
-        PHContentEditingOutput *output = [[PHContentEditingOutput alloc] initWithContentEditingInput:self.input];
-        
-        // Provide new adjustments and render output to given location.
-        // output.adjustmentData = <#new adjustment data#>;
-        // NSData *renderedJPEGData = <#output JPEG#>;
-        // [renderedJPEGData writeToURL:output.renderedContentURL atomically:YES];
-        
-        // Call completion handler to commit edit to Photos.
-        completionHandler(output);
-        
-        // Clean up temporary files, etc.
-    });
+    // Adjustment data
+    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:self.selectedFilterName];
+    PHAdjustmentData *adjustmentData = [[PHAdjustmentData alloc] initWithFormatIdentifier:@"com.vaporwarewolf.photofilter"
+                                                                            formatVersion:@"1.0"
+                                                                                     data:archivedData];
+    contentEditingOutput.adjustmentData = adjustmentData;
+    NSData *renderedJPEGData = UIImageJPEGRepresentation(self.imageView.image, 0.9f);
+    
+    // Save JPEG data
+    NSError *error = nil;
+    BOOL success = [renderedJPEGData writeToURL:contentEditingOutput.renderedContentURL options:NSDataWritingAtomic error:&error];
+    if (success) {
+        completionHandler(contentEditingOutput);
+    } else {
+        NSLog(@"An error occured: %@", error);
+        completionHandler(nil);
+    }
 }
+
 
 - (void)cancelContentEditing {
     // Clean up temporary files, etc.
@@ -108,13 +117,9 @@ typedef enum {
     return 1;
 }
 
-
 - (NSInteger)collectionView:(UICollectionView *)cv numberOfItemsInSection:(NSInteger)section {
     return 5;
 }
-
-
-
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PhotoEditorCollectionViewCell *cell = (PhotoEditorCollectionViewCell*)[cv dequeueReusableCellWithReuseIdentifier:@"PhotoEditorCollectionViewCell" forIndexPath:indexPath];
@@ -157,13 +162,14 @@ typedef enum {
     
     
     if(indexPath.item == 0){
-        CGSize size = CGSizeMake(self.devImage.size.width / 4.0, self.devImage.size.height / 4.0);
+        
+        CGSize size = CGSizeMake(self.input.displaySizeImage.size.width, self.input.displaySizeImage.size.height);
         CGFloat width = size.width / 4.0;
-        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.devLocation.coordinate size:size type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
+        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.input.location.coordinate size:size type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
             
             if(mapImage){
                 // Resize main image to a smaller one
-                UIImage *resizedImage = [[SMMapClipController sharedInstance] resizeImage:self.devImage size:size];
+                UIImage *resizedImage = [[SMMapClipController sharedInstance] resizeImage:self.input.displaySizeImage size:size];
                 UIImage *mergedImage = [[SMMapClipController sharedInstance] renderImage:resizedImage onImage:mapImage atRect:CGRectMake(size.width - 1.25*width, size.height - 1.25*width, width, width)];
                 self.imageView.image = mergedImage;
             }
@@ -175,9 +181,9 @@ typedef enum {
         }];
         
     } else if(indexPath.item == 1){
-        CGFloat width = self.devImage.size.width / 4.0;
-        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.devLocation.coordinate size:CGSizeMake(width, width) type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
-            UIImage *mergedImage = [[SMMapClipController sharedInstance] renderImage:mapImage onImage:self.devImage atRect:CGRectMake(self.devImage.size.width - 1.25*width, self.devImage.size.height - 1.25*width, width, width)];
+        CGFloat width = self.input.displaySizeImage.size.width / 4.0;
+        [[SMMapClipController sharedInstance] loadMapSnapshotAtCoordinate:self.input.location.coordinate size:CGSizeMake(width, width) type:MKMapTypeStandard completionBlock:^(UIImage *mapImage) {
+            UIImage *mergedImage = [[SMMapClipController sharedInstance] renderImage:mapImage onImage:self.input.displaySizeImage atRect:CGRectMake(self.input.displaySizeImage.size.width - 1.25*width, self.input.displaySizeImage.size.height - 1.25*width, width, width)];
             self.imageView.image = mergedImage;
             [UIView animateWithDuration:0.3 animations:^{
                 self.activityView.hidden = YES;
