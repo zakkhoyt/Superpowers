@@ -252,7 +252,7 @@
                                     <segue destination="BYZ-38-t0r" kind="show" id="HYz-7o-VFM"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Superpowers" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="qQS-hQ-reA">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to this app..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="qQS-hQ-reA">
                                 <rect key="frame" x="20" y="80" width="440" height="89"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="89" id="Xw8-hd-Suw"/>
@@ -271,7 +271,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="dgI-CL-y4N" firstAttribute="leading" secondItem="a8B-z6-FdV" secondAttribute="leading" constant="20" id="4g2-cM-uiV"/>
                             <constraint firstAttribute="trailing" secondItem="dgI-CL-y4N" secondAttribute="trailing" constant="20" id="54R-AR-ZS5"/>

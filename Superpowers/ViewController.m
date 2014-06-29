@@ -142,9 +142,12 @@ RDMapviewLayoutCoordinateDelegate>
     if(self.hasLoaded == NO){
         self.hasLoaded = YES;
         self.dateView.backgroundColor = [UIColor clearColor];
+//        self.dateView.backgroundColor = [UIColor greenColor ];
         UIVisualEffect *visualEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
         UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc]initWithEffect:visualEffect];
         visualEffectView.frame = self.dateView.bounds;
+        visualEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        visualEffectView.constraints =
         [self.dateView addSubview:visualEffectView];
 
         [self.dateView bringSubviewToFront:self.toleranceSlider];
