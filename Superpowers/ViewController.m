@@ -82,6 +82,8 @@ RDMapviewLayoutCoordinateDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     self.searchTolerance = [VWWUserDefaults searchTolerance];
     self.searchDay = [VWWUserDefaults searchDay];
     self.searchMonth = [VWWUserDefaults searchMonth];
@@ -126,6 +128,11 @@ RDMapviewLayoutCoordinateDelegate>
 
     
 }
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
+
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -278,6 +285,7 @@ RDMapviewLayoutCoordinateDelegate>
 
 - (IBAction)monthSliderTouchUpInside:(UISlider*)sender {
     [self monthSliderValueChanged:sender];
+    [self updateDaysSliderForMonthAndYear];
     [VWWUserDefaults setSearchMonth:sender.value];
     [self fetchResults];
 }
@@ -290,6 +298,43 @@ RDMapviewLayoutCoordinateDelegate>
 
 
 #pragma mark Private methods
+
+-(void)updateDaysSliderForMonthAndYear{
+//
+//    if(self.searchMonth == 1){
+//        self.daySlider.maximumValue = 31;
+//    } else if(self.searchMonth == 2){
+//        self.daySlider.maximumValue = 28;
+//    } else if(self.searchMonth == 3){
+//        self.daySlider.maximumValue = 31;
+//    } else if(self.searchMonth == 4){
+//        self.daySlider.maximumValue = 30;
+//    } else if(self.searchMonth == 5){
+//        self.daySlider.maximumValue = 31;
+//    } else if(self.searchMonth == 6){
+//        self.daySlider.maximumValue = 30;
+//    } else if(self.searchMonth == 7){
+//        self.daySlider.maximumValue = 31;
+//    } else if(self.searchMonth == 8){
+//        self.daySlider.maximumValue = 31;
+//    } else if(self.searchMonth == 9){
+//        self.daySlider.maximumValue = 30;
+//    } else if(self.searchMonth == 10){
+//        self.daySlider.maximumValue = 31;
+//    } else if(self.searchMonth == 11){
+//        self.daySlider.maximumValue = 30;
+//    } else if(self.searchMonth == 12){
+//        self.daySlider.maximumValue = 31;
+//    }
+//    if(self.daySlider.value > self.daySlider.maximumValue){
+//        self.daySlider.value = self.daySlider.maximumValue;
+//        self.searchDay = self.daySlider.maximumValue;
+//    }
+//
+//    self.dayLabel.text = [NSString stringWithFormat:@"%ld%@", (long)self.searchDay, [VWWUtility stringPostfixForDay:self.searchDay]];
+}
+
+
 
 -(void)toggleLayout{
     self.toggleButton.enabled = NO;

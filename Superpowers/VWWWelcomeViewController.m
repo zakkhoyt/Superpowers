@@ -40,6 +40,7 @@
 //    self.promptButton.hidden = YES;
 //    self.startButton.hidden = YES;
         self.locationController = [VWWLocationController sharedInstance];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -59,6 +60,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 /*
 #pragma mark - Navigation

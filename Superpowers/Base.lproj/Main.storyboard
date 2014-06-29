@@ -203,7 +203,7 @@
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <navigationItem key="navigationItem" id="7lw-PG-GHb">
-                        <barButtonItem key="rightBarButtonItem" systemItem="organize" id="XDx-yA-ZqA">
+                        <barButtonItem key="rightBarButtonItem" title="Dates" id="XDx-yA-ZqA">
                             <connections>
                                 <action selector="organizeButtonTouchUpInside:" destination="BYZ-38-t0r" id="U7h-nk-bNK"/>
                             </connections>
@@ -261,7 +261,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUx-Ku-Ddw">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUx-Ku-Ddw">
                                 <rect key="frame" x="20" y="392" width="440" height="30"/>
                                 <state key="normal" title="Prompt Me">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -427,6 +427,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lRp-3T-KTz" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="o3Y-if-HeD">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Zakk Hoyt. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "VWWViewController.h"
 @import Photos;
 
 @class VWWLibraryViewController;
@@ -16,6 +16,6 @@
 -(void)libraryViewController:(VWWLibraryViewController*)sender fetchAssetsInAssetCollection:(PHAssetCollection *)assetCollection options:(PHFetchOptions *)options;
 @end
 
-@interface VWWLibraryViewController : UIViewController
+@interface VWWLibraryViewController : VWWViewController
 @property (nonatomic, weak) id <VWWLibraryViewControllerDelegate> delegate;
 @end

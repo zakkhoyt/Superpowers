@@ -20,6 +20,7 @@
 		CF161548195F768F00A66C9D /* SMMapClipController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF161546195F768F00A66C9D /* SMMapClipController.m */; };
 		CF16154A195F7E6A00A66C9D /* PhotoEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06286E195E366F0005F178 /* PhotoEditingViewController.m */; };
 		CF16154B195F7E6E00A66C9D /* PhotoEditorCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF16153B195F733F00A66C9D /* PhotoEditorCollectionViewCell.m */; };
+		CF1615601960BAB000A66C9D /* VWWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF16155F1960BAB000A66C9D /* VWWViewController.m */; };
 		CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = CF1B5D3A195E02D1004F722D /* NSTimer+Blocks.m */; };
 		CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF236A56195E070200F0CBEB /* VWWWelcomeViewController.m */; };
 		CF400E59195F4F120044E4FB /* VWWUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = CF730922195F4EB30062F811 /* VWWUserDefaults.m */; };
@@ -128,6 +129,8 @@
 		CF16153B195F733F00A66C9D /* PhotoEditorCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoEditorCollectionViewCell.m; sourceTree = "<group>"; };
 		CF161545195F768F00A66C9D /* SMMapClipController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMMapClipController.h; sourceTree = "<group>"; };
 		CF161546195F768F00A66C9D /* SMMapClipController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMMapClipController.m; sourceTree = "<group>"; };
+		CF16155E1960BAB000A66C9D /* VWWViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWViewController.h; sourceTree = "<group>"; };
+		CF16155F1960BAB000A66C9D /* VWWViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWViewController.m; sourceTree = "<group>"; };
 		CF1B5D35195E02C7004F722D /* VWW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWW.h; sourceTree = "<group>"; };
 		CF1B5D36195E02C7004F722D /* VWWBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWBlocks.h; sourceTree = "<group>"; };
 		CF1B5D37195E02C7004F722D /* VWWDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWDefines.h; sourceTree = "<group>"; };
@@ -411,6 +414,8 @@
 				CF1B5D33195E0066004F722D /* Library */,
 				CF554EF6195D1D5A00F043C3 /* Main */,
 				CF236A58195E078400F0CBEB /* Welcome */,
+				CF16155E1960BAB000A66C9D /* VWWViewController.h */,
+				CF16155F1960BAB000A66C9D /* VWWViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -660,6 +665,7 @@
 				CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */,
 				CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */,
 				CF062859195E1B330005F178 /* RDMapviewLayout.m in Sources */,
+				CF1615601960BAB000A66C9D /* VWWViewController.m in Sources */,
 				CF062858195E1B330005F178 /* RDGridviewFlowLayout.m in Sources */,
 				CF1B5D3B195E02D1004F722D /* NSTimer+Blocks.m in Sources */,
 			);

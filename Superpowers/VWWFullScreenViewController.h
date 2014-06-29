@@ -9,9 +9,9 @@
 @import UIKit;
 @import Photos;
 
+#import "VWWViewController.h"
 
-
-@interface VWWFullScreenViewController : UIViewController
+@interface VWWFullScreenViewController : VWWViewController
 
 @property (strong) PHAsset *asset;
 @property (strong) PHAssetCollection *assetCollection;
