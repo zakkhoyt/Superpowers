@@ -360,7 +360,7 @@ RDMapviewLayoutCoordinateDelegate>
     NSString *libraryName = self.assetCollection.localizedTitle ? self.assetCollection.localizedTitle : @"All Photos";
     NSString *libraryButtonTitle = [NSString stringWithFormat:@"Library (%@)", libraryName];
     [self.libraryButton setTitle:libraryButtonTitle forState:UIControlStateNormal];
-    self.title = [NSString stringWithFormat:@"%lu", self.assetsFetchResults.count];
+    self.title = [NSString stringWithFormat:@"%lu", (unsigned long)(unsigned long)self.assetsFetchResults.count];
     [self.collectionView reloadData];
 
 }

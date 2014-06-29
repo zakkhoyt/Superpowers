@@ -226,7 +226,7 @@
         
         NSUInteger index = [self.deleteIndexPaths indexOfObject:indexPath];
         NSIndexPath *deletedIndexPath = self.deleteIndexPaths[index];
-        NSLog(@"deletedIndexPath: %ld:%ld", deletedIndexPath.item, deletedIndexPath.section);
+        NSLog(@"deletedIndexPath: %ld:%ld", (long)deletedIndexPath.item, (long)deletedIndexPath.section);
         
         attributes.alpha = 0.0;
         attributes.transform = CGAffineTransformMakeRotation(3*M_PI);

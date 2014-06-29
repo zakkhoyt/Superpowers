@@ -66,10 +66,10 @@
     } else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
         VWW_LOG_INFO(@"CoreLocation authorization state denied or denied");
         state = VWWCLStateUserNeedsToTakeAction;
-    } else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized){
+    }/* else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized){
         VWW_LOG_INFO(@"CoreLocation authorization is authorized");
         state = VWWCLStateOkay;
-    } else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways){
+    }*/ else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways){
         VWW_LOG_INFO(@"CoreLocation authorization is authorized always");
         state = VWWCLStateOkay;
     } else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse){

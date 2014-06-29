@@ -192,7 +192,17 @@ typedef enum {
             [self.activityView stopAnimating];
         }];
     } else if(indexPath.item == 2){
-//        UILabel *label = [UILabel alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height);
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.input.displaySizeImage.size.width, self.input.displaySizeImage.size.height)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = [UIColor whiteColor];
+        label.numberOfLines = 0;
+        label.text = [NSString stringWithFormat:@"%f,%f", self.input.location.coordinate.latitude, self.input.location.coordinate.longitude];
+        //[self.imageView addSubview:label];
+        [[SMMapClipController sharedInstance] renderView:label onImage:self.input.displaySizeImage];
+        
+        // Perhaps we can make a UIView subclass, override drawRect with code from:
+        // http://www.zsiegel.com/2012/10/22/Core-Text-on-iOS/
+        // Then render that UIVIew on the image
     }
 }
 

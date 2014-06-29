@@ -16,5 +16,6 @@
 -(void)loadMapSnapshotAtCoordinate:(CLLocationCoordinate2D)coordinate size:(CGSize)size type:(MKMapType)type completionBlock:(VWWUIImageBlock)completionBlock;
 -(void)clearCache;
 -(UIImage*)renderImage:(UIImage*)smallImage onImage:(UIImage*)mainImage atRect:(CGRect)rect;
+-(UIImage*)renderView:(UIView*)view onImage:(UIImage*)mainImage;
 -(UIImage*)resizeImage:(UIImage *)image size:(CGSize)newSize;
 @end

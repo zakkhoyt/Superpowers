@@ -99,7 +99,8 @@
 
 
 -(UIImage*)renderImage:(UIImage*)smallImage onImage:(UIImage*)mainImage atRect:(CGRect)rect{
-    
+
+
     // create a new bitmap image context at the device resolution (retina/non-retina)
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(mainImage.size.width, mainImage.size.height), YES, 0.0);
     
@@ -115,6 +116,36 @@
     // this example draws the inputImage into the context
     [mainImage drawInRect:CGRectMake(0, 0, mainImage.size.width, mainImage.size.height)];
     [smallImage drawInRect:rect];
+    
+    // pop context
+    UIGraphicsPopContext();
+    
+    // get a UIImage from the image context- enjoy!!!
+    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // clean up drawing environment
+    UIGraphicsEndImageContext();
+    return outputImage;
+}
+
+-(UIImage*)renderView:(UIView*)view onImage:(UIImage*)mainImage{
+    
+    
+    // create a new bitmap image context at the device resolution (retina/non-retina)
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(mainImage.size.width, mainImage.size.height), YES, 0.0);
+
+    // get context
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // push context to make it current
+    // (need to do this manually because we are not drawing in a UIView)
+    UIGraphicsPushContext(context);
+    
+    // drawing code comes here- look at CGContext reference
+    // for available operations
+    // this example draws the inputImage into the context
+    [mainImage drawInRect:CGRectMake(0, 0, mainImage.size.width, mainImage.size.height)];
+    [view.layer renderInContext:context];
     
     // pop context
     UIGraphicsPopContext();

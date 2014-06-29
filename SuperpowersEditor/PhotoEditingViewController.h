@@ -10,4 +10,5 @@
 @import CoreLocation;
 
 @interface PhotoEditingViewController : UIViewController
+
 @end

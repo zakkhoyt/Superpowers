@@ -160,7 +160,7 @@
     } else if(month == 12){
         return @"December";
     }
-    return [NSString stringWithFormat:@"Error: %lu", month];
+    return [NSString stringWithFormat:@"Error: %lu", (unsigned long)month];
 }
 
 +(NSString*)stringPostfixForDay:(NSUInteger)day{
@@ -185,7 +185,7 @@
     } else if(day % 10 == 9){
         return @"th";
     }
-    return [NSString stringWithFormat:@"Error: %lu", day];
+    return [NSString stringWithFormat:@"Error: %lu", (unsigned long)day];
 }
 
 
