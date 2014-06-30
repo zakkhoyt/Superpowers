@@ -186,9 +186,9 @@ RDMapviewLayoutCoordinateDelegate>
 #pragma mark IBActions
 
 -(void)toggleButtonTouchUpInside:(id)sender{
-    if(self.assetsFetchResults.count >= 50 &&
+    if(self.assetsFetchResults.count >= 100 &&
        self.collectionView.collectionViewLayout == self.gridLayout){
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Are you sure?" message:@"You have more than 50 photos. This can cause performance problems" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yep, do it", nil];
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Are you sure?" message:@"You have more than 100 photos. This can cause performance problems" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yep, do it", nil];
         [alertView show];
     } else {
         [self toggleLayout];
@@ -298,6 +298,47 @@ RDMapviewLayoutCoordinateDelegate>
 
 
 #pragma mark Private methods
+
+
+-(MKCoordinateRegion)calculateRegionFromAssets{
+
+    // If no coordinates, do nothing
+    if(self.assetsFetchResults.count == 0){
+        return self.mapView.region;
+    }
+    
+    
+    float minLatitude = 180.0, minLongitude = 180.0, maxLatitude = -180.0, maxLongitude = -180.0;
+
+    for(PHAsset *asset in self.assetsFetchResults){
+        if(asset.location == nil) continue;
+        CLLocationCoordinate2D coordinate = asset.location.coordinate;
+        if(coordinate.latitude < minLatitude){
+            minLatitude = coordinate.latitude;
+        }
+        if(coordinate.latitude > maxLatitude){
+            maxLatitude = coordinate.latitude;
+        }
+        
+        if(coordinate.longitude < minLongitude){
+            minLongitude = coordinate.longitude;
+        }
+        if(coordinate.longitude > maxLongitude){
+            maxLongitude = coordinate.longitude;
+        }
+    }
+    
+    float deltaLatitude = maxLatitude - minLatitude;
+    float deltaLongitude = maxLongitude - minLongitude;
+    MKCoordinateSpan span = MKCoordinateSpanMake(deltaLatitude * 1.1, deltaLongitude * 1.1);
+    float centerLatitude = minLatitude + ((maxLatitude - minLatitude) / 2.0);
+    float centerLongitude = minLongitude + ((maxLongitude - minLongitude) / 2.0);
+    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(centerLatitude, centerLongitude);
+    MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
+    
+    return region;
+}
+
 
 -(void)updateDaysSliderForMonthAndYear{
 //
@@ -410,6 +451,9 @@ RDMapviewLayoutCoordinateDelegate>
     [self.libraryButton setTitle:libraryButtonTitle forState:UIControlStateNormal];
     self.title = [NSString stringWithFormat:@"%lu", (unsigned long)(unsigned long)self.assetsFetchResults.count];
     [self.collectionView reloadData];
+    
+    MKCoordinateRegion region = [self calculateRegionFromAssets];
+    [self.mapView setRegion:region animated:YES];
 
 }
 

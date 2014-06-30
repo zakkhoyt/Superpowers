@@ -103,7 +103,7 @@
                                             <action selector="monthSliderValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="YQG-3t-Pol"/>
                                         </connections>
                                     </slider>
-                                    <slider appearanceType="aqua" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2000" minValue="2000" maxValue="2014" translatesAutoresizingMaskIntoConstraints="NO" id="oN2-hw-JFF">
+                                    <slider appearanceType="aqua" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2010" minValue="2010" maxValue="2014" translatesAutoresizingMaskIntoConstraints="NO" id="oN2-hw-JFF">
                                         <rect key="frame" x="18" y="176" width="444" height="36"/>
                                         <connections>
                                             <action selector="yearSliderTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NCZ-v4-soK"/>
@@ -309,7 +309,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="73X-gJ-YRD">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="AllPhotosCell" id="kuF-v6-P5b">
                                         <autoresizingMask key="autoresizingMask"/>
@@ -379,7 +379,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="m5J-7l-tU5" firstAttribute="top" secondItem="5N2-EB-6bF" secondAttribute="top" id="02b-zr-WmZ"/>
                             <constraint firstItem="m5J-7l-tU5" firstAttribute="top" secondItem="5N2-EB-6bF" secondAttribute="top" id="6dt-QA-F1U"/>

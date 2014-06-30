@@ -23,6 +23,10 @@
     NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName : [UIColor cyanColor]};
     
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
+    
+    
+    [[UIToolbar appearance] setBarTintColor:[UIColor blackColor]];
+    
     return YES;
 }
 
