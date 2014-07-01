@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C67E42121963362A00789D7A /* RDAggregateCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C67E42101963362A00789D7A /* RDAggregateCollectionViewCell.m */; };
 		CF062858195E1B330005F178 /* RDGridviewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF062855195E1B330005F178 /* RDGridviewFlowLayout.m */; };
 		CF062859195E1B330005F178 /* RDMapviewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF062857195E1B330005F178 /* RDMapviewLayout.m */; };
 		CF06285C195E1B3C0005F178 /* RDCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = CF06285B195E1B3C0005F178 /* RDCollectionView.m */; };
@@ -112,6 +113,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C67E42101963362A00789D7A /* RDAggregateCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAggregateCollectionViewCell.m; sourceTree = "<group>"; };
+		C67E42111963362A00789D7A /* RDAggregateCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAggregateCollectionViewCell.h; sourceTree = "<group>"; };
 		CF062854195E1B330005F178 /* RDGridviewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDGridviewFlowLayout.h; sourceTree = "<group>"; };
 		CF062855195E1B330005F178 /* RDGridviewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDGridviewFlowLayout.m; sourceTree = "<group>"; };
 		CF062856195E1B330005F178 /* RDMapviewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDMapviewLayout.h; sourceTree = "<group>"; };
@@ -434,6 +437,8 @@
 		CF554EF7195D1D6000F043C3 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				C67E42111963362A00789D7A /* RDAggregateCollectionViewCell.h */,
+				C67E42101963362A00789D7A /* RDAggregateCollectionViewCell.m */,
 				CF554EEF195D121000F043C3 /* VWWAssetCollectionViewCell.h */,
 				CF554EF0195D121000F043C3 /* VWWAssetCollectionViewCell.m */,
 			);
@@ -662,6 +667,7 @@
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,
 				CF16154B195F7E6E00A66C9D /* PhotoEditorCollectionViewCell.m in Sources */,
 				CF236A57195E070200F0CBEB /* VWWWelcomeViewController.m in Sources */,
+				C67E42121963362A00789D7A /* RDAggregateCollectionViewCell.m in Sources */,
 				CF554EFB195D1D9400F043C3 /* VWWFullScreenViewController.m in Sources */,
 				CF423CED195DFBCD009FE860 /* VWWLibraryViewController.m in Sources */,
 				CF062859195E1B330005F178 /* RDMapviewLayout.m in Sources */,

@@ -105,7 +105,8 @@
 //    [_locationManager requestWhenInUseAuthorization];
 }
 -(void)start{
-    [_locationManager startUpdatingLocation];
+    NSLog(@"TODO: Uncomment start");
+//    [_locationManager startUpdatingLocation];
 }
 -(void)stop{
     [_locationManager stopUpdatingLocation];

@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "VWWAssetCollectionViewCell.h"
+#import "RDAggregateCollectionViewCell.h"
 #import "VWWFullScreenViewController.h"
 #import "VWWLibraryViewController.h"
 #import "VWW.h"
@@ -20,8 +21,8 @@
 static NSString *VWWSegueCollectionToFull = @"VWWSegueCollectionToFull";
 static NSString *VWWSegueGridToLibrary = @"VWWSegueGridToLibrary";
 
-static CGFloat ViewControllerCellSize = 106;
-
+static CGFloat SM_IPHONE_SIZE_3 = 70;
+static CGFloat SM_IPHONE_SIZE_4 = 96;
 
 
 @implementation NSIndexSet (Convenience)
@@ -37,8 +38,9 @@ static CGFloat ViewControllerCellSize = 106;
 
 @interface ViewController () <PHPhotoLibraryChangeObserver,
 VWWLibraryViewControllerDelegate,
-VWWAssetCollectionViewCellDelegate,
-RDMapviewLayoutCoordinateDelegate>
+RDAggregateCollectionViewCellDelegate,
+RDMapviewLayoutCoordinateDelegate,
+MKMapViewDelegate>
 
 @property (nonatomic) BOOL hasLoaded;
 
@@ -74,6 +76,7 @@ RDMapviewLayoutCoordinateDelegate>
 @property (weak, nonatomic) IBOutlet UIView *dateView;
 @property (weak, nonatomic) IBOutlet UIButton *libraryButton;
 
+@property (nonatomic, strong) NSMutableArray *aggregates; // an array of NSIndexSets
 @end
 
 @implementation ViewController
@@ -83,6 +86,8 @@ RDMapviewLayoutCoordinateDelegate>
     [super viewDidLoad];
     
     [self setNeedsStatusBarAppearanceUpdate];
+    
+    self.aggregates = [@[]mutableCopy];
     
     self.searchTolerance = [VWWUserDefaults searchTolerance];
     self.searchDay = [VWWUserDefaults searchDay];
@@ -102,31 +107,25 @@ RDMapviewLayoutCoordinateDelegate>
     [self.navigationItem setLeftBarButtonItem:self.toggleButton animated:NO];
 
     
-    
-    
     self.mapviewLayout = [[RDMapviewLayout alloc]init];
     self.mapviewLayout.mapView = self.mapView;
     self.mapviewLayout.coorinateDelegate = self;
     
     self.gridLayout = [[RDGridviewFlowLayout alloc]init];
-//    self.collectionView.collectionViewLayout = self.mapviewLayout;
-//    self.collectionView.mapMode = YES;
-    self.collectionView.collectionViewLayout = self.gridLayout;
-    self.collectionView.mapMode = NO;
+    self.collectionView.collectionViewLayout = self.mapviewLayout;
+    self.collectionView.mapMode = YES;
+//    self.collectionView.collectionViewLayout = self.gridLayout;
+//    self.collectionView.mapMode = NO;
     self.collectionView.backgroundColor = [UIColor clearColor];
 
     self.collectionView.alwaysBounceVertical = YES;
     
     self.mapView.showsUserLocation = YES;
     self.mapView.pitchEnabled = YES;
-    
+    self.mapView.delegate = self;
 
-    
-    
     CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateViewsBasedOnMapRegion:)];
     [link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-
-    
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
@@ -138,8 +137,6 @@ RDMapviewLayoutCoordinateDelegate>
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationItem setHidesBackButton:YES animated:NO];
-    
-    
 }
 
 
@@ -149,12 +146,10 @@ RDMapviewLayoutCoordinateDelegate>
     if(self.hasLoaded == NO){
         self.hasLoaded = YES;
         self.dateView.backgroundColor = [UIColor clearColor];
-//        self.dateView.backgroundColor = [UIColor greenColor ];
         UIVisualEffect *visualEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
         UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc]initWithEffect:visualEffect];
         visualEffectView.frame = self.dateView.bounds;
         visualEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        visualEffectView.constraints =
         [self.dateView addSubview:visualEffectView];
 
         [self.dateView bringSubviewToFront:self.toleranceSlider];
@@ -406,8 +401,6 @@ RDMapviewLayoutCoordinateDelegate>
             self.toggleButton.enabled = YES;
         }];
     }
-    
-    
 }
 
 - (void)updateViewsBasedOnMapRegion:(CADisplayLink *)link
@@ -439,6 +432,9 @@ RDMapviewLayoutCoordinateDelegate>
 -(void)fetchResults{
     VWW_LOG_INFO(@"Refreshing photos");
     [self applyDateContstraintsToOptions];
+    
+    [self.aggregates removeAllObjects];
+    
     if(self.assetCollection){
         self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:self.assetCollection options:self.options];
     } else {
@@ -450,7 +446,8 @@ RDMapviewLayoutCoordinateDelegate>
     NSString *libraryButtonTitle = [NSString stringWithFormat:@"Library (%@)", libraryName];
     [self.libraryButton setTitle:libraryButtonTitle forState:UIControlStateNormal];
     self.title = [NSString stringWithFormat:@"%lu", (unsigned long)(unsigned long)self.assetsFetchResults.count];
-    [self.collectionView reloadData];
+    
+    [self mergeAndSplitAggregates];
     
     MKCoordinateRegion region = [self calculateRegionFromAssets];
     [self.mapView setRegion:region animated:YES];
@@ -490,70 +487,227 @@ RDMapviewLayoutCoordinateDelegate>
     self.options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
 }
 
-#pragma mark - UICollectionViewDataSource
+-(MKCoordinateRegion)calculateRegionFromAssets:(NSArray*)assets{
+    
+    float minLatitude = 180.0, minLongitude = 180.0, maxLatitude = -180.0, maxLongitude = -180.0;
+    
+    for(PHAsset *asset in assets){
+        CLLocationCoordinate2D coordinate = asset.location.coordinate;
+        if(coordinate.latitude == 0 && coordinate.longitude == 0) continue;
+        
+        if(coordinate.latitude < minLatitude){
+            minLatitude = coordinate.latitude;
+        }
+        if(coordinate.latitude > maxLatitude){
+            maxLatitude = coordinate.latitude;
+        }
+        
+        if(coordinate.longitude < minLongitude){
+            minLongitude = coordinate.longitude;
+        }
+        if(coordinate.longitude > maxLongitude){
+            maxLongitude = coordinate.longitude;
+        }
+    }
+    
+    float deltaLatitude = maxLatitude - minLatitude;
+    float deltaLongitude = maxLongitude - minLongitude;
+    MKCoordinateSpan span;
+    // For whatever reason the map won't let me set the region to anything lower than 0.008123,0.008240
+//    if(deltaLatitude < 0.001 && deltaLongitude < 0.001){
+//        span = MKCoordinateSpanMake(0.005, 0.005);
+//    } else {
+        span = MKCoordinateSpanMake(deltaLatitude * 1.5, deltaLongitude * 1.5);
+//    }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    NSInteger count = self.assetsFetchResults.count;
-    return count;
+    float centerLatitude = minLatitude + ((maxLatitude - minLatitude) / 2.0);
+    float centerLongitude = minLongitude + ((maxLongitude - minLongitude) / 2.0);
+    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(centerLatitude, centerLongitude);
+    MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
+    
+    return region;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    VWWAssetCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VWWAssetCollectionViewCell" forIndexPath:indexPath];
-    cell.delegate = self;
+// Big ugly O(x^2) operation.
+-(void)mergeAndSplitAggregates{
+    if(self.assetsFetchResults.count < 2) return;
     
-    PHAsset *asset = self.assetsFetchResults[indexPath.item];
-    CGFloat scale = [UIScreen mainScreen].scale;
-    CGSize size = CGSizeMake(ViewControllerCellSize * scale, ViewControllerCellSize * scale);
+    // We need to keep track of used indexes
+    NSMutableIndexSet *usedIndices = [[NSMutableIndexSet alloc]init];
+    NSMutableArray *aggregates = [@[]mutableCopy];
+    
+    for(NSUInteger x = 0; x < self.assetsFetchResults.count; x++){
+        if([usedIndices containsIndex:x]) continue;
+//        SMCluster *cluster = self.clusters[x];
+        PHAsset *asset = self.assetsFetchResults[x];
+        CGPoint clusterPoint = [self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
+        CGRect clusterRect = CGRectMake(clusterPoint.x - SM_IPHONE_SIZE_3 / 2.0, clusterPoint.y - SM_IPHONE_SIZE_3 / 2.0, SM_IPHONE_SIZE_3, SM_IPHONE_SIZE_3);
+        
+        BOOL foundOverlap = NO;
+        NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc]init];
+        [indexSet addIndex:x];
+        for(NSUInteger y = x+1; y < self.assetsFetchResults.count; y++){
+            if([usedIndices containsIndex:y]) continue;
+            
+            PHAsset *otherAsset = self.assetsFetchResults[y];
+            CGPoint otherClusterPoint = [self.mapView convertCoordinate:otherAsset.location.coordinate toPointToView:self.mapView];
+            CGRect otherClusterRect = CGRectMake(otherClusterPoint.x - SM_IPHONE_SIZE_3 / 2.0, otherClusterPoint.y - SM_IPHONE_SIZE_3 / 2.0, SM_IPHONE_SIZE_3, SM_IPHONE_SIZE_3);
+            
+            if(CGRectIntersectsRect(clusterRect, otherClusterRect)){
+                foundOverlap = YES;
+                [indexSet addIndex:y];
+                [usedIndices addIndex:y];
+            }
+        }
+        [aggregates addObject:indexSet];
+        
+        [usedIndices addIndex:x];
+    }
+    
+    
+    // Now check if new set is different than old set
+    BOOL aggregatesChanged = NO;
+    if(aggregates.count != self.aggregates.count){
+        aggregatesChanged = YES;
+    } else {
+        for(NSUInteger index = 0; index < aggregates.count; index++){
+            NSIndexSet *newIndexSet = [aggregates objectAtIndex:index];
+            NSIndexSet *oldIndexset = [self.aggregates objectAtIndex:index];
+            if([newIndexSet isEqualToIndexSet:oldIndexset] == NO){
+                aggregatesChanged = YES;
+                break;
+            }
+        }
+    }
+    
+    if(aggregatesChanged == NO) return;
+    
+#define SM_RELOAD 1
+    
+#if defined(SM_RELOAD)
+//    NSUInteger counter = 0;
+//    for(NSIndexSet *indexSet in aggregates){
+//        NSMutableString *indexes = [[NSMutableString alloc]init];
+//        [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+//            [indexes appendFormat:@"%ld,", (long)idx];
+//        }];
+//        NSLog(@"indexSet %ld: %@", (long)counter++, indexes.description);
+//    }
+    self.aggregates = aggregates;
+    [self.collectionView reloadData];
+#else
+    
+    NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc]initWithCapacity:self.aggregates.count];
+    for(NSUInteger index = 0; index < self.aggregates.count; index++){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:index];
+        [indexPathsToDelete addObject:indexPath];
+    }
+    
+    NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc]initWithCapacity:aggregates.count];
+    for(NSUInteger index = 0; index < aggregates.count; index++){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:index];
+        [indexPathsToInsert addObject:indexPath];
+    }
+    self.aggregates = aggregates;
+    
+    [self.collectionView performBatchUpdates:^{
+        [self.collectionView deleteItemsAtIndexPaths:indexPathsToDelete];
+        [self.collectionView insertItemsAtIndexPaths:indexPathsToInsert];
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+#endif
+}
 
-    [self.imageManager requestImageForAsset:asset
-                                 targetSize:size
-                                contentMode:PHImageContentModeAspectFill
-                                    options:nil
-                              resultHandler:^(UIImage *image, NSDictionary *info) {
-                                  NSLog(@"info: %@", info);
-                                  cell.image = image;
-                              }];
+#pragma mark UICollectionViewDatasource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv {
+    return self.aggregates.count;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)cv numberOfItemsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    RDAggregateCollectionViewCell *cell = (RDAggregateCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"RDAggregateCollectionViewCell" forIndexPath:indexPath];
+    cell.delegate = self;
+    NSIndexSet *indexSet = self.aggregates[indexPath.section];
     
-    
-    cell.title = [VWWUtility stringFromAssetSource:asset.assetSource];
-    
+    NSArray *assets = [self.assetsFetchResults objectsAtIndexes:indexSet];
+    cell.assets = assets;
+    cell.layer.cornerRadius = cell.frame.size.width / 4.0;
+    cell.backgroundColor = [UIColor grayColor];
+    cell.imageManager = self.imageManager;
+    CLLocationCoordinate2D coordinate = [self mapviewLayout:nil coodinateForSection:indexPath.section];
+    CGPoint point = [self.mapView convertCoordinate:coordinate toPointToView:self.mapView];
+    [self.mapviewLayout isPointWithinBounds:point completionBlock:^(BOOL withinLayout, CGPoint point) {
+        cell.withinLayout = withinLayout;
+    }];
     return cell;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{\
-    return CGSizeMake(106, 106);
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    if(collectionViewLayout == self.mapviewLayout){
+        return  CGSizeMake(SM_IPHONE_SIZE_3, SM_IPHONE_SIZE_3);
+    } else {
+        return  CGSizeMake(SM_IPHONE_SIZE_4, SM_IPHONE_SIZE_4);
+    }
 }
-
-
-
 
 #pragma mark UICollectionViewDelegate
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-
-
-    if(self.collectionView.collectionViewLayout == self.gridLayout){
+- (void)collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSIndexSet *indexSet = self.aggregates[indexPath.section];
+    NSArray *assets = [self.assetsFetchResults objectsAtIndexes:indexSet];
+    
+    if(assets.count == 1){
         [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
-    } else if(self.collectionView.collectionViewLayout == self.mapviewLayout){
-        PHAsset *asset = self.assetsFetchResults[indexPath.item];
-//        if(asset.location.coordinate.latitude != 0 &&
-//           asset.location.coordinate.longitude != 0){
-//            CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
-//            if(CGRectContainsPoint(self.mapView.frame, point)){
-//            } else {
-                // Center in screen
-                CLLocationCoordinate2D coordinate = asset.location.coordinate;
-                [self.mapView setCenterCoordinate:coordinate animated:YES];
-//            }
-//
-//        }
-
+    } else {
+        MKCoordinateRegion region = [self calculateRegionFromAssets:assets];
+        NSLog(@"Current mapView.region: %f,%f", self.mapView.region.span.latitudeDelta, self.mapView.region.span.longitudeDelta);
+        NSLog(@"Calculated map  region: %f,%f", region.span.latitudeDelta, region.span.longitudeDelta);
+        [self.mapView setRegion:region animated:YES];
     }
-
-
 }
+
+
+#pragma mark RDMapviewLayoutCoordinateDelegate
+-(CGSize)mapviewLayout:(RDMapviewLayout*)sender sizeIndexPath:(NSIndexPath*)indexPath{
+    return CGSizeMake(SM_IPHONE_SIZE_3, SM_IPHONE_SIZE_3);
+}
+
+-(CLLocationCoordinate2D)mapviewLayout:(RDMapviewLayout*)sender coodinateForIndexPath:(NSIndexPath*)indexPath{
+    PHAsset *asset = self.assetsFetchResults[indexPath.section];
+    return asset.location.coordinate;
+}
+-(CLLocationCoordinate2D)mapviewLayout:(RDMapviewLayout*)sender coodinateForSection:(NSUInteger)section{
+    NSIndexSet *indexSet = self.aggregates[section];
+    NSArray *assets = [self.assetsFetchResults objectsAtIndexes:indexSet];
+    CLLocationDegrees latitude = 0;
+    CLLocationDegrees longitude = 0;
+    for(PHAsset *asset in assets){
+        latitude += asset.location.coordinate.latitude;
+        longitude += asset.location.coordinate.longitude;
+    }
+    
+    latitude /= (float)indexSet.count;
+    longitude /= (float)indexSet.count;
+    return CLLocationCoordinate2DMake(latitude, longitude);
+}
+
+-(void)mapviewLayout:(RDMapviewLayout*)sender withinLayout:(BOOL)withinLayout forIndexPath:(NSIndexPath*)indexPath{
+    RDAggregateCollectionViewCell *cell = (RDAggregateCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+    cell.withinLayout = withinLayout;
+}
+
+
+#pragma mark MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+    [self mergeAndSplitAggregates];
+}
+
 #pragma mark - Asset Caching
 
 - (void)resetCachedAssets
@@ -661,75 +815,8 @@ RDMapviewLayoutCoordinateDelegate>
     [self fetchResults];
 }
 
-#pragma mark VWWAssetCollectionViewCellDelegate
--(void)assetCollectionViewCellTouchBegan:(VWWAssetCollectionViewCell*)sender{
-    [UIView animateWithDuration:0.1 animations:^{
-        sender.alpha = 0.5;
-        sender.transform = CGAffineTransformMakeScale(1.5, 1.5);
-    }];
-
-}
--(void)assetCollectionViewCellTouchEnded:(VWWAssetCollectionViewCell*)sender{
-    [UIView animateWithDuration:0.1 animations:^{
-        sender.alpha = 1.0;
-        sender.transform = CGAffineTransformIdentity;
-    }];
-
-//    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-//    PHAsset *asset = self.assetsFetchResults[indexPath.item];
-//    if(asset.location.coordinate.latitude != 0 &&
-//       asset.location.coordinate.longitude != 0){
-//        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
-//        if(CGRectContainsPoint(self.mapView.frame, point)){
-//            if(self.collectionView.collectionViewLayout == self.gridLayout){
-//                [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:sender];
-//            }
-//        } else {
-//        // Center in screen
-//        CLLocationCoordinate2D coordinate = asset.location.coordinate;
-//        [self.mapView setCenterCoordinate:coordinate animated:YES];
-//        }
-//    }
-
-}
--(void)assetCollectionViewCellLongPress:(VWWAssetCollectionViewCell*)sender{
-//    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-//    [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
-}
-
--(void)assetCollectionViewCellDoubleTap:(VWWAssetCollectionViewCell*)sender{
-//    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-//    PHAsset *asset = self.assetsFetchResults[indexPath.item];
-//    if(asset.location.coordinate.latitude != 0 &&
-//       asset.location.coordinate.longitude != 0){
-//        //        CGPoint point =[self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
-//        //        if(CGRectContainsPoint(self.mapView.frame, point)){
-//        //            //        [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:cluster];
-//        //        } else {
-//        // Center in screen
-//        CLLocationCoordinate2D coordinate = asset.location.coordinate;
-//        [self.mapView setCenterCoordinate:coordinate animated:YES];
-//        //        }
-//    }
-}
-
-
-
-#pragma mark RDMapviewLayoutCoordinateDelegate
--(CLLocationCoordinate2D)mapviewLayoutCoodinateForIndexPath:(NSIndexPath*)indexPath{
-    PHAsset *asset = self.assetsFetchResults[indexPath.item];
-    return asset.location.coordinate;
-}
-
-
--(CLLocationCoordinate2D)mapviewLayoutCoodinateForSection:(NSUInteger)section{
-    return CLLocationCoordinate2DMake(37.5, -121.0);
-
-}
-
 
 #pragma mark UIAlertViewDelegate
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex == 0){
         
@@ -737,5 +824,15 @@ RDMapviewLayoutCoordinateDelegate>
         [self toggleLayout];
     }
 }
+
+
+#pragma mark RDAggregateCollectionViewCellDelegate
+-(void)aggregateCollectionViewCellLongPress:(RDAggregateCollectionViewCell*)sender{
+    
+}
+-(void)aggregateCollectionViewCellDoubleTapPress:(RDAggregateCollectionViewCell*)sender{
+    
+}
+
 
 @end

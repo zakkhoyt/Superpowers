@@ -70,6 +70,48 @@
                                             <outlet property="label" destination="zSW-3b-X59" id="qqu-Dc-eVP"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell appearanceType="aqua" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RDAggregateCollectionViewCell" id="1xs-Jr-nkJ" customClass="RDAggregateCollectionViewCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="106" height="106"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GOP-bd-Rfl">
+                                                    <rect key="frame" x="0.0" y="0.0" width="106" height="106"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" preferredMaxLayoutWidth="106" translatesAutoresizingMaskIntoConstraints="NO" id="sSV-sR-Y7C">
+                                                    <rect key="frame" x="0.0" y="0.0" width="106" height="106"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <size key="shadowOffset" width="1" height="1"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="sSV-sR-Y7C" firstAttribute="top" secondItem="1xs-Jr-nkJ" secondAttribute="top" id="0bf-Xu-BVg"/>
+                                            <constraint firstAttribute="trailing" secondItem="GOP-bd-Rfl" secondAttribute="trailing" id="8sD-nO-0Wn"/>
+                                            <constraint firstAttribute="bottom" secondItem="sSV-sR-Y7C" secondAttribute="bottom" id="C62-Vl-lHD"/>
+                                            <constraint firstAttribute="trailing" secondItem="sSV-sR-Y7C" secondAttribute="trailing" id="N6X-Ef-oZZ"/>
+                                            <constraint firstItem="sSV-sR-Y7C" firstAttribute="leading" secondItem="1xs-Jr-nkJ" secondAttribute="leading" id="aLx-ia-sVg"/>
+                                            <constraint firstAttribute="bottom" secondItem="GOP-bd-Rfl" secondAttribute="bottom" id="b0o-14-hCI"/>
+                                            <constraint firstItem="GOP-bd-Rfl" firstAttribute="leading" secondItem="1xs-Jr-nkJ" secondAttribute="leading" id="g95-La-6Uy"/>
+                                            <constraint firstAttribute="bottom" secondItem="sSV-sR-Y7C" secondAttribute="bottom" id="h24-Fb-52L"/>
+                                            <constraint firstAttribute="trailing" secondItem="sSV-sR-Y7C" secondAttribute="trailing" id="lC6-j2-CZp"/>
+                                            <constraint firstItem="sSV-sR-Y7C" firstAttribute="top" secondItem="1xs-Jr-nkJ" secondAttribute="top" id="oQ1-9j-0OU"/>
+                                            <constraint firstItem="sSV-sR-Y7C" firstAttribute="leading" secondItem="1xs-Jr-nkJ" secondAttribute="leading" id="pRR-FL-0uL"/>
+                                            <constraint firstItem="GOP-bd-Rfl" firstAttribute="top" secondItem="1xs-Jr-nkJ" secondAttribute="top" id="zdN-KB-ZQe"/>
+                                        </constraints>
+                                        <size key="customSize" width="106" height="106"/>
+                                        <connections>
+                                            <outlet property="countLabel" destination="sSV-sR-Y7C" id="h6c-Iy-wNo"/>
+                                            <outlet property="imageView" destination="GOP-bd-Rfl" id="tvq-Sr-9c8"/>
+                                        </connections>
+                                    </collectionViewCell>
                                 </cells>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="qj6-9a-oOF"/>
