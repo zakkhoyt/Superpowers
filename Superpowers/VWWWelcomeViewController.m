@@ -21,6 +21,13 @@
 @property (nonatomic, strong) VWWLocationController *locationController;
 @property (nonatomic, strong) UIAlertView *alertView;
 @property (nonatomic, strong) UIActionSheet *actionSheet;
+
+
+#pragma mark PhotoCollection research
+@property (nonatomic, copy) PHFetchOptions *options;
+@property (strong) PHFetchResult *assetsFetchResults;
+@property (strong) PHAssetCollection *assetCollection;
+
 @end
 
 @implementation VWWWelcomeViewController
@@ -37,7 +44,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    self.promptButton.hidden = YES;
+    self.promptButton.hidden = NO;
 //    self.startButton.hidden = YES;
         self.locationController = [VWWLocationController sharedInstance];
     
@@ -102,6 +109,12 @@
     }
 }
 
+
+
+
+
+
+
 #pragma mark IBActions
 - (IBAction)startButtonTouchUpInside:(id)sender {
     
@@ -109,15 +122,7 @@
 
 
 - (IBAction)promptButtonTouchUpInside:(UIButton*)sender {
-//    self.imageManager = [[PHCachingImageManager alloc] init];
-//    self.actionSheet = [[UIActionSheet alloc] initWithTitle:@"Select Sharing option:" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:
-//                        @"Share on Facebook",
-//                        @"Share on Twitter",
-//                        @"Share via E-mail",
-//                        @"Save to Camera Roll",
-//                        @"Rate this App",
-//                        nil];
-//    [self.actionSheet showFromRect:sender.frame inView:self.view animated:YES];
+    [self fetchResults];
 }
 
 
@@ -131,5 +136,147 @@
     } repeats:NO];
     
 }
+
+
+#pragma mark - PhotoCollection research
+
+-(void)applyDateContstraintsToOptions{
+    // Fetch all assets, sorted by date created.
+    if(self.options == nil){
+        self.options = [[PHFetchOptions alloc] init];
+    } else {
+        
+    }
+//    self.options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]];
+    
+//    // Calculate start and end dates. Create date with day, month, year
+//    NSCalendar *calendar = [NSCalendar currentCalendar];
+//    NSDateComponents *components = [[NSDateComponents alloc]init];
+//    components.year = self.searchYear;
+//    components.month = self.searchMonth;
+//    components.day = self.searchDay;
+//    NSDate *searchDate = [calendar dateFromComponents:components];
+//    VWW_LOG_INFO(@"searchDate: %@", searchDate);
+//    
+//    
+//    // Subtract tolerance / 2
+//    NSUInteger halfTolerance = self.searchTolerance / 2;
+//    NSTimeInterval offset = 60 * 60 * 24 * halfTolerance;
+//    NSDate *startDate = [searchDate dateByAddingTimeInterval:-offset];
+//    VWW_LOG_INFO(@"startDate: %@", startDate);
+//    
+//    // Add tolerance / 2
+//    NSDate *endDate = [searchDate dateByAddingTimeInterval:offset];
+//    VWW_LOG_INFO(@"endDate: %@", endDate);
+//    
+//    
+//    self.options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
+}
+
+-(void)fetchResults{
+    VWW_LOG_INFO(@"Refreshing photos");
+    [self applyDateContstraintsToOptions];
+    self.imageManager = [[PHCachingImageManager alloc] init];
+
+
+    // *************************************************************************
+    // Fetch moments and then fetch assets of first moment
+    
+//    + (PHFetchResult *)fetchAssetCollectionsWithType:(PHAssetCollectionType)type subtype:(PHAssetCollectionSubtype)subtype options:(PHFetchOptions *)options;
+    PHFetchResult *results = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeMoment subtype:PHAssetCollectionSubtypeAny options:self.options];
+    VWW_LOG_INFO(@"Foudn %ld results", results.count);
+    
+    
+    // PHMoment
+    NSLog(@"Moments");
+    __block NSUInteger totalCount = 0;
+
+    [results enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        PHAssetCollection *assetCollection = (PHAssetCollection*)obj;
+        if(idx == 0){
+            self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:assetCollection options:self.options];
+            [self.assetsFetchResults enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                PHAsset *asset = (PHAsset*)obj;
+                [self.imageManager requestImageForAsset:asset
+                                             targetSize:CGSizeMake(100,100)
+                                            contentMode:PHImageContentModeAspectFill
+                                                options:nil
+                                          resultHandler:^(UIImage *image, NSDictionary *info) {
+                                              image = image;
+                                          }];
+
+            }];
+        }
+        
+        
+        NSLog(@"c:%@ #:%ld t:%@ l:%@ d:%@-%@",
+                     [obj class],
+                     (long)assetCollection.estimatedAssetCount,
+                     assetCollection.localizedTitle,
+                     assetCollection.localizedLocationNames,
+                     assetCollection.startDate.description,
+                     assetCollection.endDate.description);
+        totalCount += assetCollection.estimatedAssetCount;
+//        PHMoment *moment = (PHMoment*)obj;
+    }];
+    NSLog(@"TotalCount: %ld", (long)totalCount);
+  
+    
+    
+////    + (PHFetchResult *)fetchMomentListsWithType:(PHCollectionListType)momentListType options:(PHFetchOptions *)options;
+//    PHFetchResult *results = [PHCollectionList fetchMomentListsWithType:PHCollectionListTypeFolder options:self.options];
+//    VWW_LOG_INFO(@"Foudn %ld results", results.count);
+//    
+//    // PHMoment
+//    [results enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        VWW_LOG_INFO(@"obj class: %@", [obj class]);
+//        //        PHMoment *moment = (PHMoment*)obj;
+//    }];
+
+    
+//    PHFetchResult *results = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:self.options];
+//    VWW_LOG_INFO(@"Foudn %ld results", results.count);
+//
+//
+//    // PHMoment
+//    [results enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        VWW_LOG_INFO(@"obj class: %@", [obj class]);
+////        PHMoment *moment = (PHMoment*)obj;
+//    }];
+    
+    
+    
+    
+    
+//    PHFetchResult *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
+//    [topLevelUserCollections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        PHAssetCollection *assetCollection = (PHAssetCollection*)obj;
+//        VWW_LOG_INFO(@"TopLevel: obj class: %@ - %@ %@", [obj class], assetCollection.localizedTitle, assetCollection.localizedLocationNames);
+//    }];
+//    
+//    
+//    PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+//    [smartAlbums enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        PHAssetCollection *assetCollection = (PHAssetCollection*)obj;
+//        VWW_LOG_INFO(@"SmartAlbums: obj class: %@ - %@ %@", [obj class], assetCollection.localizedTitle, assetCollection.localizedLocationNames);
+//    }];
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end
