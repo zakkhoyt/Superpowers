@@ -190,9 +190,10 @@
     // PHMoment
     NSLog(@"Moments");
     __block NSUInteger totalCount = 0;
-
+    __block NSUInteger momentsCount = 0;
     [results enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         PHAssetCollection *assetCollection = (PHAssetCollection*)obj;
+        momentsCount++;
         if(idx == 0){
             self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:assetCollection options:self.options];
             [self.assetsFetchResults enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -208,18 +209,20 @@
             }];
         }
         
+        CLLocation *location = assetCollection.approximateLocation;
         
-        NSLog(@"c:%@ #:%ld t:%@ l:%@ d:%@-%@",
+        NSLog(@"c:%@ #:%ld t:%@ l:%@ d:%@-%@ L:%@",
                      [obj class],
                      (long)assetCollection.estimatedAssetCount,
                      assetCollection.localizedTitle,
                      assetCollection.localizedLocationNames,
                      assetCollection.startDate.description,
-                     assetCollection.endDate.description);
+                     assetCollection.endDate.description,
+                    location.description);
         totalCount += assetCollection.estimatedAssetCount;
 //        PHMoment *moment = (PHMoment*)obj;
     }];
-    NSLog(@"TotalCount: %ld", (long)totalCount);
+    NSLog(@"MomentsCount: %ld, totalAssetCount: %ld", (long)momentsCount, (long)totalCount);
   
     
     

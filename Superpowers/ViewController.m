@@ -803,6 +803,18 @@ MKMapViewDelegate>
 }
 
 
+-(void)setUIToDate:(NSDate*)date{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay
+                                                       fromDate:date];
+
+    self.searchTolerance = 10;
+    self.searchYear = components.year;
+    self.searchMonth = components.month;
+    self.searchDay = components.day;
+    [self setupSliders];
+}
+
 #pragma mark VWWLibraryViewControllerDelegate
 -(void)libraryViewController:(VWWLibraryViewController*)sender fetchAssetsWithOptions:(PHFetchOptions*)options{
     self.options = options;
@@ -812,7 +824,21 @@ MKMapViewDelegate>
 -(void)libraryViewController:(VWWLibraryViewController*)sender fetchAssetsInAssetCollection:(PHAssetCollection *)assetCollection options:(PHFetchOptions *)options{
     self.options = options;
     self.assetCollection = assetCollection;
-    [self fetchResults];
+//    self.assetsFetchResults = nil;
+//    [self.collectionView reloadData];
+    if(assetCollection.startDate){
+        [self setUIToDate:assetCollection.startDate];
+        [self fetchResults];
+    } else {
+        VWW_LOG_INFO(@"No start date, not setting controls. Perhaps get date of first asset?");
+        [self fetchResults];
+        if(self.assetsFetchResults.count){
+            PHAsset *asset = self.assetsFetchResults[0];
+            [self setUIToDate:asset.creationDate];
+            [self fetchResults];
+        }
+    }
+    
 }
 
 

@@ -14,6 +14,7 @@
 @interface VWWLibraryViewController () <PHPhotoLibraryChangeObserver>
 @property (strong) NSArray *collectionsFetchResults;
 @property (strong) NSArray *collectionsLocalizedTitles;
+@property (strong) PHFetchResult *moments;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @end
 
@@ -21,14 +22,19 @@
 
 static NSString * const AllPhotosReuseIdentifier = @"AllPhotosCell";
 static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
+static NSString * const MomentCellReuseIdentifier = @"MomentCell";
 
 -(void)viewDidLoad{
     [super viewDidLoad];
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     PHFetchResult *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
     self.collectionsFetchResults = @[smartAlbums, topLevelUserCollections];
-    self.collectionsLocalizedTitles = @[NSLocalizedString(@"Smart Albums", @""), NSLocalizedString(@"Albums", @"")];
+    self.collectionsLocalizedTitles = @[NSLocalizedString(@"Smart Albums", @""),
+                                        NSLocalizedString(@"Albums", @""),
+                                        NSLocalizedString(@"Moments", @"")];
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+    
+    self.moments = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeMoment subtype:PHAssetCollectionSubtypeAny options:nil];
 }
 
 
@@ -51,7 +57,7 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1 + self.collectionsFetchResults.count;
+    return 1 + self.collectionsFetchResults.count + 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -59,9 +65,12 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
     NSInteger numberOfRows = 0;
     if (section == 0) {
         numberOfRows = 1; // "All Photos" section
-    } else {
+    } else if(section == 1 ||
+              section == 2) {
         PHFetchResult *fetchResult = self.collectionsFetchResults[section - 1];
         numberOfRows = fetchResult.count;
+    } else {
+        numberOfRows = self.moments.count;
     }
     return numberOfRows;
 }
@@ -74,11 +83,16 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
     if (indexPath.section == 0) {
         cell = [tableView dequeueReusableCellWithIdentifier:AllPhotosReuseIdentifier forIndexPath:indexPath];
         localizedTitle = NSLocalizedString(@"All Photos", @"");
-    } else {
+    } else if(indexPath.section == 1 || indexPath.section == 2) {
         cell = [tableView dequeueReusableCellWithIdentifier:CollectionCellReuseIdentifier forIndexPath:indexPath];
         PHFetchResult *fetchResult = self.collectionsFetchResults[indexPath.section - 1];
         PHCollection *collection = fetchResult[indexPath.row];
         localizedTitle = collection.localizedTitle;
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:MomentCellReuseIdentifier forIndexPath:indexPath];
+        PHAssetCollection *momentCollection = self.moments[indexPath.row];
+        localizedTitle = momentCollection.localizedTitle;
+        cell.detailTextLabel.text = momentCollection.startDate.description;
     }
     cell.textLabel.text = localizedTitle;
     
@@ -88,33 +102,39 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString *title = nil;
-    if (section > 0) {
+    if(section == 0){
+        title = @"All Photos";
+    } else if(section  == 1 || section == 2) {
         title = self.collectionsLocalizedTitles[section - 1];
+    } else if(section == 3){
+        title = @"Moments";
     }
     return title;
 }
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if ([segue.identifier isEqualToString:AllPhotosSegue]) {
+
     if(indexPath.section == 0){
 
         PHFetchOptions *options = [[PHFetchOptions alloc] init];
         [self.delegate libraryViewController:self fetchAssetsWithOptions:options];
         [self.navigationController popViewControllerAnimated:YES];
-    } else if (indexPath.section > 0) {
-//        AAPLAssetGridViewController *assetGridViewController = segue.destinationViewController;
+    } else if (indexPath.section == 1 || indexPath.section == 2){
 
-//        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         PHFetchResult *fetchResult = self.collectionsFetchResults[indexPath.section - 1];
         PHCollection *collection = fetchResult[indexPath.row];
         if ([collection isKindOfClass:[PHAssetCollection class]]) {
             PHAssetCollection *assetCollection = (PHAssetCollection *)collection;
-//            PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:nil];
             [self.delegate libraryViewController:self fetchAssetsInAssetCollection:assetCollection options:nil];
             [self.navigationController popViewControllerAnimated:YES];
-//            assetGridViewController.assetsFetchResults = assetsFetchResult;
-//            assetGridViewController.assetCollection = assetCollection;
+        }
+    } else if(indexPath.section == 3){
+        PHCollection *collection = self.moments[indexPath.row];
+        if ([collection isKindOfClass:[PHAssetCollection class]]) {
+            PHAssetCollection *assetCollection = (PHAssetCollection *)collection;
+            [self.delegate libraryViewController:self fetchAssetsInAssetCollection:assetCollection options:nil];
+            [self.navigationController popViewControllerAnimated:YES];
         }
     }
 }
