@@ -12,9 +12,6 @@
 #import "VWWViewController.h"
 
 @interface VWWFullScreenViewController : VWWViewController
-
 @property (strong) PHAsset *asset;
 @property (strong) PHAssetCollection *assetCollection;
-
-
 @end

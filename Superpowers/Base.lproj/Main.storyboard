@@ -267,12 +267,60 @@
                         <outlet property="yearLabel" destination="gdS-Qq-FBN" id="Ugn-z1-zoT"/>
                         <outlet property="yearSlider" destination="oN2-hw-JFF" id="z1D-hs-ZBk"/>
                         <segue destination="2FE-gh-Md7" kind="show" identifier="VWWSegueGridToLibrary" id="miH-NE-mvb"/>
-                        <segue destination="dNi-KD-cUz" kind="show" identifier="VWWSegueCollectionToFull" id="ADc-s2-Uhc"/>
+                        <segue destination="Wbh-60-VJy" kind="show" identifier="VWWSegueMapToAggregate" id="LaV-Jt-HFp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1811" y="364"/>
+        </scene>
+        <!--Moment View Controller-->
+        <scene sceneID="mfY-ER-h4x">
+            <objects>
+                <viewController id="Wbh-60-VJy" customClass="VWWMomentViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QTg-SB-irW"/>
+                        <viewControllerLayoutGuide type="bottom" id="ybx-HV-CpR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KCN-4M-Ws5">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="vhf-l8-wRm">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="oek-cf-pb2">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="rHu-sb-gB8">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="Wbh-60-VJy" id="8XX-Dd-ac0"/>
+                                    <outlet property="delegate" destination="Wbh-60-VJy" id="7HR-jV-Ne7"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="vhf-l8-wRm" id="xBC-kQ-wHX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EC2-I9-R8J" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2454" y="364"/>
         </scene>
         <!--Welcome View Controller-->
         <scene sceneID="zDg-iu-pN6">
@@ -483,7 +531,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RwF-A4-kuC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2454" y="364"/>
+            <point key="canvasLocation" x="3077" y="364"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="LPZ-Vz-o1s">
@@ -601,7 +649,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o8t-pY-dTV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3031" y="388"/>
+            <point key="canvasLocation" x="3654" y="388"/>
         </scene>
     </scenes>
     <color key="tintColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

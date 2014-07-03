@@ -44,6 +44,7 @@
 		CF730919195F4D2A0062F811 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF730918195F4D2A0062F811 /* MapKit.framework */; };
 		CF730923195F4EB30062F811 /* VWWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CF73091F195F4EB30062F811 /* VWWUtility.m */; };
 		CF730924195F4EB30062F811 /* VWWUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = CF730922195F4EB30062F811 /* VWWUserDefaults.m */; };
+		CFD970CE196504E8002F4BE6 /* VWWMomentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFD970CD196504E8002F4BE6 /* VWWMomentViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -170,6 +171,8 @@
 		CF730920195F4EB30062F811 /* VWWUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUtility.h; sourceTree = "<group>"; };
 		CF730921195F4EB30062F811 /* VWWUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWUserDefaults.h; sourceTree = "<group>"; };
 		CF730922195F4EB30062F811 /* VWWUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWUserDefaults.m; sourceTree = "<group>"; };
+		CFD970CC196504E8002F4BE6 /* VWWMomentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWMomentViewController.h; sourceTree = "<group>"; };
+		CFD970CD196504E8002F4BE6 /* VWWMomentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWMomentViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -416,9 +419,10 @@
 				CF554EF8195D1D7B00F043C3 /* Full */,
 				CF1B5D33195E0066004F722D /* Library */,
 				CF554EF6195D1D5A00F043C3 /* Main */,
-				CF236A58195E078400F0CBEB /* Welcome */,
+				CFD970CB196504C3002F4BE6 /* Moment */,
 				CF16155E1960BAB000A66C9D /* VWWViewController.h */,
 				CF16155F1960BAB000A66C9D /* VWWViewController.m */,
+				CF236A58195E078400F0CBEB /* Welcome */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -504,6 +508,15 @@
 				CF554EF2195D1A4E00F043C3 /* ideas.txt */,
 			);
 			name = Documents;
+			sourceTree = "<group>";
+		};
+		CFD970CB196504C3002F4BE6 /* Moment */ = {
+			isa = PBXGroup;
+			children = (
+				CFD970CC196504E8002F4BE6 /* VWWMomentViewController.h */,
+				CFD970CD196504E8002F4BE6 /* VWWMomentViewController.m */,
+			);
+			name = Moment;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -662,6 +675,7 @@
 				CF16154A195F7E6A00A66C9D /* PhotoEditingViewController.m in Sources */,
 				CF554ED2195D107B00F043C3 /* AppDelegate.m in Sources */,
 				CF730923195F4EB30062F811 /* VWWUtility.m in Sources */,
+				CFD970CE196504E8002F4BE6 /* VWWMomentViewController.m in Sources */,
 				CF400E60195F65B10044E4FB /* VWWLocationController.m in Sources */,
 				CF554EF1195D121000F043C3 /* VWWAssetCollectionViewCell.m in Sources */,
 				CF554ECF195D107B00F043C3 /* main.m in Sources */,

@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "VWWAssetCollectionViewCell.h"
 #import "RDAggregateCollectionViewCell.h"
-#import "VWWFullScreenViewController.h"
+#import "VWWMomentViewController.h"
 #import "VWWLibraryViewController.h"
 #import "VWW.h"
 #import "RDCollectionView.h"
@@ -18,8 +18,9 @@
 
 @import Photos;
 
-static NSString *VWWSegueCollectionToFull = @"VWWSegueCollectionToFull";
+//static NSString *VWWSegueCollectionToFull = @"VWWSegueCollectionToFull";
 static NSString *VWWSegueGridToLibrary = @"VWWSegueGridToLibrary";
+static NSString *VWWSegueMapToAggregate = @"VWWSegueMapToAggregate";
 
 static CGFloat SM_IPHONE_SIZE_3 = 70;
 static CGFloat SM_IPHONE_SIZE_4 = 96;
@@ -98,7 +99,7 @@ MKMapViewDelegate>
     
     self.imageManager = [[PHCachingImageManager alloc] init];
     
-    [self fetchResults];
+//    [self fetchResults];
 
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
     
@@ -167,16 +168,14 @@ MKMapViewDelegate>
         [self.dateView bringSubviewToFront:self.libraryButton];
         self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, self.dateView.frame.size.height, 0);
         
-        
-        [self applyDateContstraintsToOptions];
         [self fetchResults];
-        //self.moments = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeMoment subtype:PHAssetCollectionSubtypeAny options:nil];
-
+        
     }
     
     
     [self.view layoutSubviews];
 }
+
 
 - (void)viewWillDisappear:(BOOL)animated{
     [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
@@ -201,11 +200,9 @@ MKMapViewDelegate>
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if([segue.identifier isEqualToString:VWWSegueCollectionToFull]){
-        NSIndexPath *indexPath = sender;
-        VWWFullScreenViewController *vc = segue.destinationViewController;
-        vc.asset = self.moments[indexPath.item];
-        vc.assetCollection = self.assetCollection;
+    if([segue.identifier isEqualToString:VWWSegueMapToAggregate]){
+        VWWMomentViewController *vc = segue.destinationViewController;
+        vc.moments = sender;
     } else if([segue.identifier isEqualToString:VWWSegueGridToLibrary]){
         VWWLibraryViewController *vc = segue.destinationViewController;
         vc.delegate = self;
@@ -276,18 +273,27 @@ MKMapViewDelegate>
 
 
 - (IBAction)toleranceSliderTouchUpInside:(UISlider*)sender {
+    NSUInteger roundedValue = round(sender.value);
+    sender.value = roundedValue;
+    
     [self toleranceSliderValueChanged:sender];
     [VWWUserDefaults setSearchTolerance:self.searchTolerance];
     [self fetchResults];
 }
 
 - (IBAction)daySliderTouchUpInside:(UISlider*)sender {
+    NSUInteger roundedValue = round(sender.value);
+    sender.value = roundedValue;
+
     [self daySliderValueChanged:sender];
     [VWWUserDefaults setSearchDay:self.searchDay];
     [self fetchResults];
 }
 
 - (IBAction)monthSliderTouchUpInside:(UISlider*)sender {
+    NSUInteger roundedValue = round(sender.value);
+    sender.value = roundedValue;
+
     [self monthSliderValueChanged:sender];
     [self updateDaysSliderForMonthAndYear];
     [VWWUserDefaults setSearchMonth:sender.value];
@@ -295,6 +301,9 @@ MKMapViewDelegate>
 }
 
 - (IBAction)yearSliderTouchUpInside:(UISlider*)sender {
+    NSUInteger roundedValue = round(sender.value);
+    sender.value = roundedValue;
+
     [self yearSliderValueChanged:sender];
     [VWWUserDefaults setSearchYear:sender.value];
     [self fetchResults];
@@ -304,7 +313,7 @@ MKMapViewDelegate>
 #pragma mark Private methods
 
 
--(MKCoordinateRegion)calculateRegionFromAssets{
+-(MKCoordinateRegion)calculateRegionFromMoments{
 
     // If no coordinates, do nothing
     if(self.moments.count == 0){
@@ -459,7 +468,7 @@ MKMapViewDelegate>
     
     [self mergeAndSplitAggregates];
     
-    MKCoordinateRegion region = [self calculateRegionFromAssets];
+    MKCoordinateRegion region = [self calculateRegionFromMoments];
     [self.mapView setRegion:region animated:YES];
 
 }
@@ -637,6 +646,9 @@ MKMapViewDelegate>
 #endif
 }
 
+
+
+
 #pragma mark UICollectionViewDatasource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv {
     return self.aggregates.count;
@@ -653,10 +665,10 @@ MKMapViewDelegate>
     NSIndexSet *indexSet = self.aggregates[indexPath.section];
     
     NSArray *moments = [self.moments objectsAtIndexes:indexSet];
+    cell.imageManager = self.imageManager;
     cell.moments = moments;
     cell.layer.cornerRadius = cell.frame.size.width / 4.0;
     cell.backgroundColor = [UIColor grayColor];
-    cell.imageManager = self.imageManager;
     CLLocationCoordinate2D coordinate = [self mapviewLayout:nil coodinateForSection:indexPath.section];
     CGPoint point = [self.mapView convertCoordinate:coordinate toPointToView:self.mapView];
     [self.mapviewLayout isPointWithinBounds:point completionBlock:^(BOOL withinLayout, CGPoint point) {
@@ -677,17 +689,117 @@ MKMapViewDelegate>
 
 - (void)collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 //    NSIndexSet *indexSet = self.aggregates[indexPath.section];
-//    NSArray *assets = [self.assetsFetchResults objectsAtIndexes:indexSet];
+//    NSArray *moments = [self.moments objectsAtIndexes:indexSet];
 //    
-//    if(assets.count == 1){
+//    if(moments.count == 1){
 //        [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
 //    } else {
-//        MKCoordinateRegion region = [self calculateRegionFromAssets:assets];
+//        MKCoordinateRegion region = [self calculateRegionFromMoments];
 //        NSLog(@"Current mapView.region: %f,%f", self.mapView.region.span.latitudeDelta, self.mapView.region.span.longitudeDelta);
 //        NSLog(@"Calculated map  region: %f,%f", region.span.latitudeDelta, region.span.longitudeDelta);
 //        [self.mapView setRegion:region animated:YES];
 //    }
+    
+    // I've made a little truth table for this event
+    //----------------------------------------------------------------------------
+    // cluster.count | PointIsCentered | Action to take
+    //----------------------------------------------------------------------------
+    // 1 | YES | Detail screen
+    // N | YES | Zoom or Aggregate screen
+    // 1 | NO | Center on Map
+    // N | NO | Center on Map
+    //----------------------------------------------------------------------------
+    
+    
+    // calculateRegionFromClusters
+    NSIndexSet *indexSet = self.aggregates[indexPath.section];
+    NSArray *moments = [self.moments objectsAtIndexes:indexSet];
+    
+    // We can only zoom in so far. If we are maxed out and the cluster we tapped is in the center of the map
+    CLLocationCoordinate2D coordinate = [self coordinateFromMoments:moments];
+    CGPoint point = [self.mapView convertCoordinate:coordinate toPointToView:self.mapView];
+    const CGFloat kBorder = 20.0;
+    BOOL pointIsCentered = point.x > kBorder;
+    pointIsCentered = pointIsCentered && point.x < self.view.bounds.size.width - kBorder;
+    pointIsCentered = pointIsCentered && point.y > kBorder;
+    pointIsCentered = pointIsCentered && point.y < self.view.bounds.size.height - kBorder;
+    
+    if(moments.count == 0){
+        VWW_LOG_ERROR(@"User touched an aggregate cell but there are no clusters");
+    } else if(moments.count == 1){
+        if(pointIsCentered){
+//            [self performSegueWithIdentifier:RDSegueRadiusNearByToDetail sender:clusters[0]];
+        } else {
+            [self.mapView setCenterCoordinate:coordinate animated:YES];
+        }
+    } else {
+        if(pointIsCentered){
+            if(self.mapView.region.span.latitudeDelta < 0.009 &&
+               self.mapView.region.span.longitudeDelta < 0.009){
+//                [self performSegueWithIdentifier:RDSegueNearbyToAggregate sender:moments];
+            } else {
+                MKCoordinateRegion region = [self calculateRegionFromMoments:moments];
+                VWW_LOG_DEBUG(@"Current region: %f,%f", self.mapView.region.span.latitudeDelta, self.mapView.region.span.longitudeDelta);
+                VWW_LOG_DEBUG(@"Calculated region: %f,%f", region.span.latitudeDelta, region.span.longitudeDelta);
+                [self.mapView setRegion:region animated:YES];
+            }
+        } else {
+            [self.mapView setCenterCoordinate:coordinate animated:YES];
+        }
+    }
 }
+
+
+-(MKCoordinateRegion)calculateRegionFromMoments:(NSArray*)moments{
+    
+    float minLatitude = 180.0, minLongitude = 180.0, maxLatitude = -180.0, maxLongitude = -180.0;
+    
+    
+    for(PHAssetCollection *moment in moments){
+        CLLocationCoordinate2D coordinate = moment.approximateLocation.coordinate;
+        if(coordinate.latitude == 0 && coordinate.longitude == 0) continue;
+        
+        if(coordinate.latitude < minLatitude){
+            minLatitude = coordinate.latitude;
+        }
+        if(coordinate.latitude > maxLatitude){
+            maxLatitude = coordinate.latitude;
+        }
+        
+        if(coordinate.longitude < minLongitude){
+            minLongitude = coordinate.longitude;
+        }
+        if(coordinate.longitude > maxLongitude){
+            maxLongitude = coordinate.longitude;
+        }
+    }
+    
+    float deltaLatitude = maxLatitude - minLatitude;
+    float deltaLongitude = maxLongitude - minLongitude;
+    MKCoordinateSpan span = MKCoordinateSpanMake(deltaLatitude * 1.5, deltaLongitude * 1.5);
+    float centerLatitude = minLatitude + ((maxLatitude - minLatitude) / 2.0);
+    float centerLongitude = minLongitude + ((maxLongitude - minLongitude) / 2.0);
+    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(centerLatitude, centerLongitude);
+    MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
+    
+    return region;
+}
+
+
+
+-(CLLocationCoordinate2D)coordinateFromMoments:(NSArray*)moments{
+    CLLocationDegrees latitude = 0;
+    CLLocationDegrees longitude = 0;
+    for(PHAssetCollection *moment in moments){
+        latitude += moment.approximateLocation.coordinate.latitude;
+        longitude += moment.approximateLocation.coordinate.longitude;
+    }
+    
+    latitude /= (float)moments.count;
+    longitude /= (float)moments.count;
+    return CLLocationCoordinate2DMake(latitude, longitude);
+}
+
 
 
 #pragma mark RDMapviewLayoutCoordinateDelegate
