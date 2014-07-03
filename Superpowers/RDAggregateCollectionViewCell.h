@@ -17,7 +17,7 @@
 @end
 
 @interface RDAggregateCollectionViewCell : UICollectionViewCell
-@property (nonatomic, strong) NSArray *assets;
+@property (nonatomic, strong) NSArray *moments;
 @property (nonatomic) BOOL withinLayout;
 @property (nonatomic, weak) id <RDAggregateCollectionViewCellDelegate> delegate;
 @property (strong) PHCachingImageManager *imageManager;

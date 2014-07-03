@@ -123,6 +123,7 @@
                                 <subviews>
                                     <slider appearanceType="aqua" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="31" translatesAutoresizingMaskIntoConstraints="NO" id="39n-cg-zD9">
                                         <rect key="frame" x="18" y="52" width="444" height="37"/>
+                                        <color key="maximumTrackTintColor" red="0.21176470588235294" green="0.88627450980392153" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="toleranceSliderTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QDS-Kn-MpB"/>
                                             <action selector="toleranceSliderValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="P9f-sA-1dq"/>

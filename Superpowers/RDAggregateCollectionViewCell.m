@@ -42,18 +42,19 @@
     return self;
 }
 
--(void)setAssets:(NSArray *)assets{
-    _assets = assets;
-    if(_assets.count){
+-(void)setMoments:(NSArray *)moments{
+    _moments = moments;
+    if(_moments.count){
         
-        self.countLabel.text = [NSString stringWithFormat:@"%ld",(long)_assets.count];
+        self.countLabel.text = [NSString stringWithFormat:@"%ld",(long)_moments.count];
         
         __weak RDAggregateCollectionViewCell *weakSelf = self;
         self.imageView.image = nil;
         self.grayImageView.alpha = 0;
         //    self.grayImageView.hidden = YES;
 //        SMCluster *cluster = clusters[0];
-        PHAsset *asset = _assets[0];
+        PHAssetCollection *moment = _moments[0];
+        PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:moment options:nil];
 //        [[SMAssetController sharedInstance] appleAssetForURL:cluster.coverAsset.uriLocal completion:^(ALAsset *asset) {
 //            UIImage *image = [UIImage imageWithCGImage:asset.thumbnail];
 //            weakSelf.imageView.image = image;
@@ -63,20 +64,25 @@
 //        } errorBlock:^(NSError *error) {
 //            SM_LOG_ERROR(@"Failed to find image for local asset");
 //        }];
-        [self.imageManager requestImageForAsset:asset
-                                     targetSize:self.bounds.size
-                                    contentMode:PHImageContentModeAspectFill
-                                        options:nil
-                                  resultHandler:^(UIImage *image, NSDictionary *info) {
-                                      weakSelf.imageView.image = image;
-                                  }];
+        
+        [result enumerateObjectsAtIndexes:[NSIndexSet indexSetWithIndex:0] options:NSEnumerationConcurrent usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            PHAsset *asset = (PHAsset*)obj;
+            [self.imageManager requestImageForAsset:asset
+                                         targetSize:self.bounds.size
+                                        contentMode:PHImageContentModeAspectFill
+                                            options:nil
+                                      resultHandler:^(UIImage *image, NSDictionary *info) {
+                                          weakSelf.imageView.image = image;
+                                      }];
+        }];
+        
 
     } else {
         self.countLabel.text = @"0";
         
     }
     
-    self.debugLabel.text = [NSString stringWithFormat:@"%ld", (unsigned long)_assets.count];
+    self.debugLabel.text = [NSString stringWithFormat:@"%ld", (unsigned long)_moments.count];
     
     [self updateOffscreen];
 

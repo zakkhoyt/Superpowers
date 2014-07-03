@@ -44,7 +44,8 @@ MKMapViewDelegate>
 
 @property (nonatomic) BOOL hasLoaded;
 
-@property (strong) PHFetchResult *assetsFetchResults;
+@property (strong) PHFetchResult *moments;
+//@property (strong) PHFetchResult *assetsFetchResults;
 @property (strong) PHAssetCollection *assetCollection;
 @property (strong) PHCachingImageManager *imageManager;
 
@@ -88,6 +89,7 @@ MKMapViewDelegate>
     [self setNeedsStatusBarAppearanceUpdate];
     
     self.aggregates = [@[]mutableCopy];
+    
     
     self.searchTolerance = [VWWUserDefaults searchTolerance];
     self.searchDay = [VWWUserDefaults searchDay];
@@ -164,7 +166,14 @@ MKMapViewDelegate>
         
         [self.dateView bringSubviewToFront:self.libraryButton];
         self.mapviewLayout.contentInset = UIEdgeInsetsMake([UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height, 0, self.dateView.frame.size.height, 0);
+        
+        
+        [self applyDateContstraintsToOptions];
+        [self fetchResults];
+        //self.moments = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeMoment subtype:PHAssetCollectionSubtypeAny options:nil];
+
     }
+    
     
     [self.view layoutSubviews];
 }
@@ -181,7 +190,7 @@ MKMapViewDelegate>
 #pragma mark IBActions
 
 -(void)toggleButtonTouchUpInside:(id)sender{
-    if(self.assetsFetchResults.count >= 100 &&
+    if(self.moments.count >= 100 &&
        self.collectionView.collectionViewLayout == self.gridLayout){
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Are you sure?" message:@"You have more than 100 photos. This can cause performance problems" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yep, do it", nil];
         [alertView show];
@@ -195,7 +204,7 @@ MKMapViewDelegate>
     if([segue.identifier isEqualToString:VWWSegueCollectionToFull]){
         NSIndexPath *indexPath = sender;
         VWWFullScreenViewController *vc = segue.destinationViewController;
-        vc.asset = self.assetsFetchResults[indexPath.item];
+        vc.asset = self.moments[indexPath.item];
         vc.assetCollection = self.assetCollection;
     } else if([segue.identifier isEqualToString:VWWSegueGridToLibrary]){
         VWWLibraryViewController *vc = segue.destinationViewController;
@@ -298,16 +307,16 @@ MKMapViewDelegate>
 -(MKCoordinateRegion)calculateRegionFromAssets{
 
     // If no coordinates, do nothing
-    if(self.assetsFetchResults.count == 0){
+    if(self.moments.count == 0){
         return self.mapView.region;
     }
     
     
     float minLatitude = 180.0, minLongitude = 180.0, maxLatitude = -180.0, maxLongitude = -180.0;
 
-    for(PHAsset *asset in self.assetsFetchResults){
-        if(asset.location == nil) continue;
-        CLLocationCoordinate2D coordinate = asset.location.coordinate;
+    for(PHAssetCollection *moment in self.moments){
+        if(moment.approximateLocation == nil) continue;
+        CLLocationCoordinate2D coordinate = moment.approximateLocation.coordinate;
         if(coordinate.latitude < minLatitude){
             minLatitude = coordinate.latitude;
         }
@@ -435,17 +444,18 @@ MKMapViewDelegate>
     
     [self.aggregates removeAllObjects];
     
-    if(self.assetCollection){
-        self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:self.assetCollection options:self.options];
-    } else {
-        self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:self.options];
-    }
+//    if(self.assetCollection){
+//        self.assetsFetchResults = [PHAsset fetchAssetsInAssetCollection:self.assetCollection options:self.options];
+//    } else {
+//        self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:self.options];
+//    }
+    self.moments = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeMoment subtype:PHAssetCollectionSubtypeAny options:self.options];
     
     // Update UI
-    NSString *libraryName = self.assetCollection.localizedTitle ? self.assetCollection.localizedTitle : @"All Photos";
+    NSString *libraryName = self.assetCollection.localizedTitle ? self.assetCollection.localizedTitle : @"N/A";
     NSString *libraryButtonTitle = [NSString stringWithFormat:@"Library (%@)", libraryName];
     [self.libraryButton setTitle:libraryButtonTitle forState:UIControlStateNormal];
-    self.title = [NSString stringWithFormat:@"%lu", (unsigned long)(unsigned long)self.assetsFetchResults.count];
+    self.title = [NSString stringWithFormat:@"%lu", (unsigned long)(unsigned long)self.moments.count];
     
     [self mergeAndSplitAggregates];
     
@@ -461,7 +471,7 @@ MKMapViewDelegate>
     } else {
         
     }
-    self.options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]];
+//    self.options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]];
 
     // Calculate start and end dates. Create date with day, month, year
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -484,7 +494,8 @@ MKMapViewDelegate>
     VWW_LOG_INFO(@"endDate: %@", endDate);
     
     
-    self.options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
+//    self.options.predicate = [NSPredicate predicateWithFormat:@"dateCreated >= %@ AND dateCreated  <= %@", startDate, endDate];
+        self.options.predicate = [NSPredicate predicateWithFormat:@"startDate >= %@ AND endDate  <= %@", startDate, endDate];
 }
 
 -(MKCoordinateRegion)calculateRegionFromAssets:(NSArray*)assets{
@@ -530,27 +541,33 @@ MKMapViewDelegate>
 
 // Big ugly O(x^2) operation.
 -(void)mergeAndSplitAggregates{
-    if(self.assetsFetchResults.count < 2) return;
+    if(self.moments == nil || self.moments.count == 0){
+        [self.aggregates removeAllObjects];
+        [self.collectionView reloadData];
+        return;
+    }
+    
+    
     
     // We need to keep track of used indexes
     NSMutableIndexSet *usedIndices = [[NSMutableIndexSet alloc]init];
     NSMutableArray *aggregates = [@[]mutableCopy];
     
-    for(NSUInteger x = 0; x < self.assetsFetchResults.count; x++){
+    for(NSUInteger x = 0; x < self.moments.count; x++){
         if([usedIndices containsIndex:x]) continue;
 //        SMCluster *cluster = self.clusters[x];
-        PHAsset *asset = self.assetsFetchResults[x];
-        CGPoint clusterPoint = [self.mapView convertCoordinate:asset.location.coordinate toPointToView:self.mapView];
+        PHAssetCollection *moment = self.moments[x];
+        CGPoint clusterPoint = [self.mapView convertCoordinate:moment.approximateLocation.coordinate toPointToView:self.mapView];
         CGRect clusterRect = CGRectMake(clusterPoint.x - SM_IPHONE_SIZE_3 / 2.0, clusterPoint.y - SM_IPHONE_SIZE_3 / 2.0, SM_IPHONE_SIZE_3, SM_IPHONE_SIZE_3);
         
         BOOL foundOverlap = NO;
         NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc]init];
         [indexSet addIndex:x];
-        for(NSUInteger y = x+1; y < self.assetsFetchResults.count; y++){
+        for(NSUInteger y = x+1; y < self.moments.count; y++){
             if([usedIndices containsIndex:y]) continue;
             
-            PHAsset *otherAsset = self.assetsFetchResults[y];
-            CGPoint otherClusterPoint = [self.mapView convertCoordinate:otherAsset.location.coordinate toPointToView:self.mapView];
+            PHAssetCollection *otherMoment = self.moments[y];
+            CGPoint otherClusterPoint = [self.mapView convertCoordinate:otherMoment.approximateLocation.coordinate toPointToView:self.mapView];
             CGRect otherClusterRect = CGRectMake(otherClusterPoint.x - SM_IPHONE_SIZE_3 / 2.0, otherClusterPoint.y - SM_IPHONE_SIZE_3 / 2.0, SM_IPHONE_SIZE_3, SM_IPHONE_SIZE_3);
             
             if(CGRectIntersectsRect(clusterRect, otherClusterRect)){
@@ -635,8 +652,8 @@ MKMapViewDelegate>
     cell.delegate = self;
     NSIndexSet *indexSet = self.aggregates[indexPath.section];
     
-    NSArray *assets = [self.assetsFetchResults objectsAtIndexes:indexSet];
-    cell.assets = assets;
+    NSArray *moments = [self.moments objectsAtIndexes:indexSet];
+    cell.moments = moments;
     cell.layer.cornerRadius = cell.frame.size.width / 4.0;
     cell.backgroundColor = [UIColor grayColor];
     cell.imageManager = self.imageManager;
@@ -659,17 +676,17 @@ MKMapViewDelegate>
 #pragma mark UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSIndexSet *indexSet = self.aggregates[indexPath.section];
-    NSArray *assets = [self.assetsFetchResults objectsAtIndexes:indexSet];
-    
-    if(assets.count == 1){
-        [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
-    } else {
-        MKCoordinateRegion region = [self calculateRegionFromAssets:assets];
-        NSLog(@"Current mapView.region: %f,%f", self.mapView.region.span.latitudeDelta, self.mapView.region.span.longitudeDelta);
-        NSLog(@"Calculated map  region: %f,%f", region.span.latitudeDelta, region.span.longitudeDelta);
-        [self.mapView setRegion:region animated:YES];
-    }
+//    NSIndexSet *indexSet = self.aggregates[indexPath.section];
+//    NSArray *assets = [self.assetsFetchResults objectsAtIndexes:indexSet];
+//    
+//    if(assets.count == 1){
+//        [self performSegueWithIdentifier:VWWSegueCollectionToFull sender:indexPath];
+//    } else {
+//        MKCoordinateRegion region = [self calculateRegionFromAssets:assets];
+//        NSLog(@"Current mapView.region: %f,%f", self.mapView.region.span.latitudeDelta, self.mapView.region.span.longitudeDelta);
+//        NSLog(@"Calculated map  region: %f,%f", region.span.latitudeDelta, region.span.longitudeDelta);
+//        [self.mapView setRegion:region animated:YES];
+//    }
 }
 
 
@@ -679,17 +696,23 @@ MKMapViewDelegate>
 }
 
 -(CLLocationCoordinate2D)mapviewLayout:(RDMapviewLayout*)sender coodinateForIndexPath:(NSIndexPath*)indexPath{
-    PHAsset *asset = self.assetsFetchResults[indexPath.section];
-    return asset.location.coordinate;
+//    PHAsset *asset = self.assetsFetchResults[indexPath.section];
+//    return asset.location.coordinate;
+    PHAssetCollection *moment = self.moments[indexPath.section];
+    return moment.approximateLocation.coordinate;
 }
 -(CLLocationCoordinate2D)mapviewLayout:(RDMapviewLayout*)sender coodinateForSection:(NSUInteger)section{
+    if(self.aggregates.count == 0){
+        return CLLocationCoordinate2DMake(0, 0);
+    }
+    
     NSIndexSet *indexSet = self.aggregates[section];
-    NSArray *assets = [self.assetsFetchResults objectsAtIndexes:indexSet];
+    NSArray *moments = [self.moments objectsAtIndexes:indexSet];
     CLLocationDegrees latitude = 0;
     CLLocationDegrees longitude = 0;
-    for(PHAsset *asset in assets){
-        latitude += asset.location.coordinate.latitude;
-        longitude += asset.location.coordinate.longitude;
+    for(PHAssetCollection *moment in moments){
+        latitude += moment.approximateLocation.coordinate.latitude;
+        longitude += moment.approximateLocation.coordinate.longitude;
     }
     
     latitude /= (float)indexSet.count;
@@ -767,11 +790,11 @@ MKMapViewDelegate>
     dispatch_async(dispatch_get_main_queue(), ^{
         
         // check if there are changes to the assets (insertions, deletions, updates)
-        PHFetchResultChangeDetails *collectionChanges = [changeInstance changeDetailsForFetchResult:self.assetsFetchResults];
+        PHFetchResultChangeDetails *collectionChanges = [changeInstance changeDetailsForFetchResult:self.moments];
         if (collectionChanges) {
             
             // get the new fetch result
-            self.assetsFetchResults = [collectionChanges fetchResultAfterChanges];
+            self.moments = [collectionChanges fetchResultAfterChanges];
             
             UICollectionView *collectionView = self.collectionView;
             
@@ -822,22 +845,22 @@ MKMapViewDelegate>
     [self fetchResults];
 }
 -(void)libraryViewController:(VWWLibraryViewController*)sender fetchAssetsInAssetCollection:(PHAssetCollection *)assetCollection options:(PHFetchOptions *)options{
-    self.options = options;
-    self.assetCollection = assetCollection;
-//    self.assetsFetchResults = nil;
-//    [self.collectionView reloadData];
-    if(assetCollection.startDate){
-        [self setUIToDate:assetCollection.startDate];
-        [self fetchResults];
-    } else {
-        VWW_LOG_INFO(@"No start date, not setting controls. Perhaps get date of first asset?");
-        [self fetchResults];
-        if(self.assetsFetchResults.count){
-            PHAsset *asset = self.assetsFetchResults[0];
-            [self setUIToDate:asset.creationDate];
-            [self fetchResults];
-        }
-    }
+//    self.options = options;
+//    self.assetCollection = assetCollection;
+////    self.assetsFetchResults = nil;
+////    [self.collectionView reloadData];
+//    if(assetCollection.startDate){
+//        [self setUIToDate:assetCollection.startDate];
+//        [self fetchResults];
+//    } else {
+//        VWW_LOG_INFO(@"No start date, not setting controls. Perhaps get date of first asset?");
+//        [self fetchResults];
+//        if(self.assetsFetchResults.count){
+//            PHAsset *asset = self.assetsFetchResults[0];
+//            [self setUIToDate:asset.creationDate];
+//            [self fetchResults];
+//        }
+//    }
     
 }
 
